@@ -3,8 +3,18 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { FadeUp, ImageReveal, Lines, Parallax } from "@/components/motion";
+import { useWarmImages } from "@/components/useWarmImages";
+
+const WARM = [
+  "/images/siobhan-arch.jpg",
+  "/images/siobhan-drafting.jpg",
+  "/images/team-lisa.jpg",
+  "/images/team-majic.jpg",
+  "/images/watercolor-3.jpg",
+];
 
 export default function CultureView() {
+  useWarmImages(WARM);
   return (
     <>
       {/* ————— the principal — a cover, not a split ————— */}

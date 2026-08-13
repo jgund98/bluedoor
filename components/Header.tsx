@@ -37,9 +37,13 @@ export default function Header() {
     };
   }, [open]);
 
-  // home opens on the navy doors — the header reads in bone until the first
-  // scroll; every other page opens on bone and reads in umber
-  const onDark = pathname === "/" && !scrolled && !open;
+  // home opens on the navy doors and the portal lives on navy — the header
+  // reads in bone there until scroll; every other page reads in umber.
+  const onDark =
+    (pathname === "/" || pathname.startsWith("/portal")) && !scrolled && !open;
+  // over the closed doors the medallion IS the identity — hide the wordmark
+  // only there; the navy logo disc hides on any navy ground
+  const hideWordmark = pathname === "/" && !scrolled && !open;
 
   return (
     <>
@@ -70,8 +74,8 @@ export default function Header() {
             />
             <span
               className={`label hidden tracking-[0.3em] transition-all duration-500 sm:block ${
-                onDark ? "text-bone opacity-0" : "text-umber opacity-100"
-              }`}
+                onDark ? "text-bone" : "text-umber"
+              } ${hideWordmark ? "opacity-0" : "opacity-100"}`}
             >
               Bluedoor&nbsp;Building
             </span>

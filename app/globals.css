@@ -76,6 +76,7 @@ body {
 .img-frame {
   overflow: hidden;
   position: relative;
+  background: color-mix(in srgb, var(--color-sand) 40%, var(--color-linen));
 }
 .img-frame img {
   display: block;

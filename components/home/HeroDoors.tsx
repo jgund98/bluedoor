@@ -8,6 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useRef } from "react";
+import { preload } from "react-dom";
 import { site } from "@/lib/site";
 import { EASE } from "@/components/motion";
 
@@ -73,7 +74,11 @@ function DoorPanel({ side }: { side: "left" | "right" }) {
   );
 }
 
-/** The settled hero everyone reaches: the hall, the words, the company kept. */
+/**
+ * The settled hero: the doors have parted, but their geometry remains —
+ * a dedication plaque of the same stile-and-rail hairlines, hung on the
+ * hall's exact axis. The words become part of the architecture.
+ */
 function Arrived({
   asMotion,
   style,
@@ -84,33 +89,38 @@ function Arrived({
   const Wrapper = asMotion ? motion.div : "div";
   return (
     <Wrapper
-      className="absolute inset-0 z-20 flex flex-col justify-end"
+      className="absolute inset-0 z-20 flex flex-col"
       style={style as never}
     >
-      <div className="veil-bl px-5 pb-8 pt-24 md:pb-10">
-        <div className="mx-auto w-full max-w-[1520px] md:px-5">
-          <p className="label-wide on-photo mb-5 tracking-[0.5em] text-bone">
-            Boutique Custom Home Builder
-            <span className="hidden sm:inline">&ensp;·&ensp;Palm Beach, Florida</span>
-          </p>
-          <h1 className="display on-photo max-w-4xl text-[8.6vw] leading-[1.06] text-bone sm:text-5xl md:text-7xl">
-            Homes of lasting
-            <br />
-            beauty and distinction.
-          </h1>
-          <div className="mt-7 flex flex-wrap items-center gap-4 md:mt-9 md:gap-6">
-            <Link
-              href="/build-with-bluedoor"
-              className="label bg-bone px-7 py-4 text-navy transition-colors duration-500 hover:bg-navy hover:text-bone md:px-8"
-            >
-              Build with Bluedoor
-            </Link>
-            <Link
-              href="/portfolio"
-              className="label border-b border-bone/50 pb-1.5 text-bone transition-colors hover:border-bone"
-            >
-              Explore the Portfolio
-            </Link>
+      <div className="flex flex-1 items-end justify-center px-5 pb-10 pt-20 md:pb-14">
+        <div className="relative w-full max-w-xl">
+          {/* the door's inner panel, left standing at the foot of the stair */}
+          <div className="absolute -inset-3 border border-bone/35 md:-inset-4" />
+          <div className="relative border border-bone/25 bg-espresso/10 px-6 py-8 text-center backdrop-blur-[3px] md:px-12 md:py-10">
+            <p className="label-wide on-photo tracking-[0.5em] text-bone">
+              Boutique Custom Home Builder
+            </p>
+            <div className="mx-auto mt-3 h-px w-14 bg-bone/40" />
+            <h1 className="display on-photo balance mt-6 text-[2.1rem] leading-[1.08] text-bone sm:text-4xl md:text-5xl">
+              Homes of lasting beauty and&nbsp;distinction.
+            </h1>
+            <p className="serif-body on-photo mt-4 text-lg italic text-bone/95">
+              Palm Beach, Florida
+            </p>
+            <div className="mt-7 flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-7">
+              <Link
+                href="/build-with-bluedoor"
+                className="label whitespace-nowrap bg-bone px-8 py-4 text-navy transition-colors duration-500 hover:bg-navy hover:text-bone"
+              >
+                Build with Bluedoor
+              </Link>
+              <Link
+                href="/portfolio"
+                className="label on-photo whitespace-nowrap border-b border-bone/50 pb-1.5 text-bone transition-colors hover:border-bone"
+              >
+                Explore the Portfolio
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -122,6 +132,8 @@ function Arrived({
 }
 
 export default function HeroDoors() {
+  // the hall must be standing before the doors ever crack
+  preload("/images/hero-stairhall.jpg", { as: "image", fetchPriority: "high" });
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
 

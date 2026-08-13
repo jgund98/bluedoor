@@ -4,6 +4,7 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { FadeUp, ImageReveal, Lines, Parallax } from "@/components/motion";
 import PageHero from "@/components/PageHero";
+import { useWarmImages } from "@/components/useWarmImages";
 
 const JOURNEY = [
   {
@@ -48,7 +49,15 @@ const PILLARS = [
 
 const VOICES = ["Owner", "Architect", "Designer", "Engineer", "Vendors", "City Officials"];
 
+const WARM = [
+  ...JOURNEY.map((j) => j.src),
+  "/images/siobhan-site.jpg",
+  "/images/watercolor-5.jpg",
+  "/images/logo.png",
+];
+
 export default function ProcessView() {
+  useWarmImages(WARM);
   return (
     <>
       <PageHero

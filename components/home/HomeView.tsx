@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { site } from "@/lib/site";
 import { FadeUp, Lines, Parallax } from "@/components/motion";
 import { SectionMark, HandOff } from "@/components/SectionMark";
+import { useWarmImages } from "@/components/useWarmImages";
 import DoorReveal from "./DoorReveal";
 import HeroDoors from "./HeroDoors";
 import ReelsGallery from "./ReelsGallery";
@@ -16,7 +17,19 @@ const SERVICE_ANCHOR = [
   "items-end justify-start",
 ] as const;
 
+// pre-warm the showpieces once the page is idle, so no reveal ever
+// starts before its photograph is in the cache
+const WARM = [
+  "/images/aerial-oceanfront.jpg",
+  "/images/estate-bougainvillea.jpg",
+  "/images/kitchen-marble.jpg",
+  "/images/loggia-ocean.jpg",
+  "/images/siobhan-arch.jpg",
+  "/videos/palmbeach-poster.jpg",
+];
+
 export default function HomeView() {
+  useWarmImages(WARM, 1200);
   return (
     <>
       {/* ————————————————— HERO — the site loads as the blue door ————————————————— */}

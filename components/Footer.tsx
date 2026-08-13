@@ -57,18 +57,10 @@ export default function Footer() {
         </div>
 
         <div className="rule-light mt-16" />
-        <div className="mt-7 flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
+        <div className="mt-7">
           <p className="text-xs text-bone/45">
             © {new Date().getFullYear()} {site.legalName} · Palm Beach, Florida
           </p>
-          <a
-            href="https://www.epicdevsolutions.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-bone/45 transition-colors hover:text-bone/80"
-          >
-            Site by Epic Dev Solutions
-          </a>
         </div>
       </div>
     </footer>

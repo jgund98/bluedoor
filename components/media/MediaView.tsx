@@ -3,11 +3,22 @@
 import { site } from "@/lib/site";
 import { FadeUp, Lines } from "@/components/motion";
 import PageHero from "@/components/PageHero";
+import { useWarmImages } from "@/components/useWarmImages";
 
 const SHEET =
   "border border-umber/10 bg-white p-2 shadow-[0_30px_65px_-30px_rgba(53,48,42,0.55)]";
 
+const WARM = [
+  "/images/press-housebeautiful.jpg",
+  "/images/press-builders.jpg",
+  "/images/press-lhm.jpg",
+  "/images/press-lhm2.jpg",
+  "/images/press-tailormade.jpg",
+  "/images/press-modernluxury.jpg",
+];
+
 export default function MediaView() {
+  useWarmImages(WARM);
   const [hb, builders, modernLuxury, lhmCover] = site.publications;
 
   return (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { FadeUp, ImageReveal, Lines } from "@/components/motion";
 import PageHero from "@/components/PageHero";
+import { useWarmImages } from "@/components/useWarmImages";
 
 type Piece = {
   src: string;
@@ -82,7 +83,10 @@ const CHAPTERS: Chapter[] = [
   },
 ];
 
+const ALL_SRCS = CHAPTERS.flatMap((c) => c.pieces.map((p) => p.src));
+
 export default function PortfolioView() {
+  useWarmImages(ALL_SRCS);
   return (
     <>
       <PageHero
