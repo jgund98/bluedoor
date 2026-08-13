@@ -103,7 +103,7 @@ body {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 46s linear infinite;
+  animation: marquee 75s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {

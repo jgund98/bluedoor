@@ -29,9 +29,9 @@ const MARQUEE = (
           ...site.collaborators.interiors,
           ...site.collaborators.landscape,
         ].map((firm, i) => (
-          <span key={i} className="label flex items-center text-bone/80">
-            <span className="whitespace-nowrap px-7">{firm.name}</span>
-            <span aria-hidden className="text-bone/40">
+          <span key={i} className="flex items-center text-[10px] font-medium uppercase tracking-[0.32em] text-bone/55">
+            <span className="whitespace-nowrap px-8">{firm.name}</span>
+            <span aria-hidden className="text-bone/20">
               ·
             </span>
           </span>
@@ -92,22 +92,31 @@ function Arrived({
       className="absolute inset-0 z-20 flex flex-col"
       style={style as never}
     >
-      <div className="flex flex-1 items-end justify-center px-5 pb-10 pt-20 md:pb-14">
+      <div className="flex flex-1 items-end justify-center px-5 pb-16 pt-20 md:pb-24">
         <div className="relative w-full max-w-xl">
-          {/* the door's inner panel, left standing at the foot of the stair */}
-          <div className="absolute -inset-3 border border-bone/35 md:-inset-4" />
-          <div className="relative border border-bone/25 bg-espresso/10 px-6 py-8 text-center backdrop-blur-[3px] md:px-12 md:py-10">
-            <p className="label-wide on-photo tracking-[0.5em] text-bone">
+          {/* not a card — a veil in the air: the image softens behind the
+              words and feathers back to full clarity at the edges */}
+          <div
+            aria-hidden
+            className="absolute -inset-x-16 -inset-y-10 bg-espresso/[0.13] backdrop-blur-[5px]"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(ellipse 88% 90% at center, black 42%, transparent 90%)",
+              maskImage:
+                "radial-gradient(ellipse 88% 90% at center, black 42%, transparent 90%)",
+            }}
+          />
+          <div className="relative px-2 py-2 text-center">
+            <p className="on-photo text-[9px] font-medium uppercase tracking-[0.55em] text-bone/80">
               Boutique Custom Home Builder
             </p>
-            <div className="mx-auto mt-3 h-px w-14 bg-bone/40" />
-            <h1 className="display on-photo balance mt-6 text-[2.1rem] leading-[1.08] text-bone sm:text-4xl md:text-5xl">
+            <h1 className="display on-photo balance mt-5 text-[2.1rem] leading-[1.08] text-bone sm:text-4xl md:text-5xl">
               Homes of lasting beauty and&nbsp;distinction.
             </h1>
-            <p className="serif-body on-photo mt-4 text-lg italic text-bone/95">
+            <p className="serif-body on-photo mt-3 text-base italic text-bone/85">
               Palm Beach, Florida
             </p>
-            <div className="mt-7 flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-7">
+            <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
               <Link
                 href="/build-with-bluedoor"
                 className="label whitespace-nowrap bg-bone px-8 py-4 text-navy transition-colors duration-500 hover:bg-navy hover:text-bone"
@@ -116,7 +125,7 @@ function Arrived({
               </Link>
               <Link
                 href="/portfolio"
-                className="label on-photo whitespace-nowrap border-b border-bone/50 pb-1.5 text-bone transition-colors hover:border-bone"
+                className="on-photo whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.3em] text-bone/85 underline decoration-bone/40 underline-offset-8 transition-colors hover:text-bone hover:decoration-bone"
               >
                 Explore the Portfolio
               </Link>
@@ -124,7 +133,7 @@ function Arrived({
           </div>
         </div>
       </div>
-      <div className="overflow-hidden border-t border-bone/20 bg-espresso/40 py-3.5 backdrop-blur-sm md:py-4">
+      <div className="overflow-hidden border-t border-bone/10 bg-espresso/25 py-3.5 backdrop-blur-sm md:py-4">
         {MARQUEE}
       </div>
     </Wrapper>
