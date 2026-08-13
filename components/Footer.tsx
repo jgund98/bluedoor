@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-espresso text-bone">
+    <footer className="relative bg-[#141922] text-bone">
       <div className="mx-auto max-w-[1520px] px-5 pb-10 pt-20 md:px-10 md:pt-28">
         <div className="grid gap-14 md:grid-cols-[1.4fr_1fr_1fr] md:gap-10">
           <div>

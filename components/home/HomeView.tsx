@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { site } from "@/lib/site";
 import { FadeUp, Lines, Parallax } from "@/components/motion";
@@ -361,33 +362,86 @@ export default function HomeView() {
           <HandOff align="center">The Palm Beaches are waiting.</HandOff>
         </div>
       </section>
-      <section className="relative overflow-hidden bg-espresso">
-        <FinaleVideo />
-        <div className="absolute inset-0 bg-espresso/15" />
-        <div className="veil-b absolute inset-0" />
-        <div className="relative mx-auto flex min-h-[80vh] max-w-[1520px] flex-col items-center justify-center px-5 py-24 text-center md:min-h-[92vh] md:px-10">
-          <Lines
-            as="h2"
-            className="display on-photo balance text-[2.6rem] text-bone sm:text-5xl md:text-7xl"
-            lines={["Build with Bluedoor."]}
-          />
-          <FadeUp delay={0.12}>
-            <p className="serif-body on-photo mt-7 max-w-lg text-xl italic text-bone/95">
-              {site.address.street} · {site.address.city}, {site.address.state} — across from the
-              Norton Museum of&nbsp;Art
+      {/* the closing scene: a title card over Palm Beach, dissolving into
+          the midnight of the footer */}
+      <ClosingScene />
+    </>
+  );
+}
+
+/**
+ * The last 100vh the visitor holds: the island drifting below, graded to
+ * navy-charcoal so the houses become texture; the words lower-left, like a
+ * film's final card; the whole scene darkening into the footer as they leave.
+ */
+function ClosingScene() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end end"],
+  });
+  // the veil settles as the scene arrives; the scene sinks into midnight as it leaves
+  const veilOpacity = useTransform(scrollYProgress, (v) =>
+    v <= 0.15 ? 0.2 : v >= 0.55 ? 0.55 : 0.2 + ((v - 0.15) / 0.4) * 0.35
+  );
+  const midnightOpacity = useTransform(scrollYProgress, (v) =>
+    v <= 0.82 ? 0 : Math.min(1, ((v - 0.82) / 0.18) * 0.9)
+  );
+
+  return (
+    <section ref={ref} className="relative overflow-hidden bg-[#141922]">
+      <FinaleVideo />
+      {/* the cinematic grade — houses as texture, not content */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 bg-[#141922]"
+        style={{ opacity: veilOpacity }}
+      />
+      <div className="veil-bl pointer-events-none absolute inset-0" />
+
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1520px] flex-col justify-end px-5 pb-[16vh] md:px-10 md:pb-[18vh]">
+        <div className="max-w-3xl md:ml-[4%]">
+          <FadeUp y={26}>
+            <p className="label-wide on-photo tracking-[0.5em] text-bone/75">
+              Palm Beach, Florida
             </p>
           </FadeUp>
-          <FadeUp delay={0.2}>
+          <FadeUp delay={0.15} y={26}>
+            <h2 className="display on-photo balance mt-6 text-[2.6rem] leading-[1.06] text-bone sm:text-5xl md:text-7xl">
+              Build something worthy of the&nbsp;setting.
+            </h2>
+          </FadeUp>
+          <FadeUp delay={0.3} y={26}>
+            <p className="serif-body on-photo mt-6 max-w-lg text-lg italic leading-relaxed text-bone/85 md:text-xl">
+              Homes conceived with intention, built without&nbsp;compromise.
+            </p>
+          </FadeUp>
+          <FadeUp delay={0.45} y={26}>
             <Link
               href="/build-with-bluedoor"
-              className="label mt-10 inline-block bg-bone px-10 py-5 text-navy transition-colors duration-500 hover:bg-navy hover:text-bone"
+              className="group mt-10 inline-flex items-baseline gap-3"
             >
-              Begin the Conversation
+              <span className="on-photo relative text-[11px] font-medium uppercase tracking-[0.34em] text-bone">
+                Begin the Conversation
+                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-100 bg-bone/45 transition-transform duration-700 ease-out group-hover:scale-x-0" />
+                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-right scale-x-0 bg-bone transition-transform duration-700 ease-out group-hover:scale-x-100" />
+              </span>
+              <span
+                aria-hidden
+                className="on-photo text-bone/80 transition-transform duration-500 group-hover:translate-x-1.5"
+              >
+                →
+              </span>
             </Link>
           </FadeUp>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* the dissolve into the footer's midnight */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 bg-[#141922]"
+        style={{ opacity: midnightOpacity }}
+      />
+    </section>
   );
 }
 
