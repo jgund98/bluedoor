@@ -42,6 +42,7 @@ export default function Footer() {
                 { href: "/culture", label: "Culture" },
                 { href: "/media", label: "Publications" },
                 { href: "/build-with-bluedoor", label: "Build with Bluedoor" },
+                { href: "/portal", label: "Client Portal" },
               ].map((l) => (
                 <Link
                   key={l.href}

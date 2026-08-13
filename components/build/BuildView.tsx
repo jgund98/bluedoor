@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { site } from "@/lib/site";
@@ -31,7 +32,7 @@ export default function BuildView() {
 
       {/* the conversation — a panel resting on the scene */}
       <div className="relative mx-auto flex max-w-[1520px] justify-center px-0 pb-0 pt-24 sm:px-6 sm:pb-14 sm:pt-32 md:justify-end md:px-10 md:pt-36">
-        <div className="grain relative w-full bg-bone/[0.97] px-5 pb-16 pt-12 shadow-[0_40px_90px_-40px_rgba(34,30,24,0.7)] sm:max-w-xl sm:px-10 sm:pb-14 md:max-w-2xl md:px-14">
+        <div className="grain relative w-full bg-bone px-5 pb-16 pt-12 shadow-[0_40px_90px_-40px_rgba(34,30,24,0.7)] sm:max-w-xl sm:px-10 sm:pb-14 md:max-w-2xl md:px-14">
         <FadeUp>
           <p className="label mb-7 text-navy">Build with Bluedoor</p>
         </FadeUp>
@@ -54,8 +55,8 @@ export default function BuildView() {
                 <img src="/images/logo.png" alt="" className="mx-auto h-16 w-16" />
                 <p className="display mt-7 text-3xl text-umber">Thank you.</p>
                 <p className="serif-body mt-4 text-lg italic leading-relaxed text-umber/75">
-                  Your inquiry is in our hands. Someone from the studio — not an
-                  autoresponder — will be in touch&nbsp;shortly.
+                  Your inquiry has been received, and a member of our team will
+                  be in touch&nbsp;shortly.
                 </p>
               </motion.div>
             ) : (
@@ -134,16 +135,27 @@ export default function BuildView() {
                     Across from the Norton Museum of&nbsp;Art
                   </p>
                 </div>
-                <div>
-                  <p className="label mb-3 text-taupe">Follow the Work</p>
-                  <a
-                    href={site.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="label inline-block border-b border-navy/40 pb-1 text-navy transition-colors hover:border-navy"
-                  >
-                    {site.instagramHandle}
-                  </a>
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <p className="label mb-3 text-taupe">Follow the Work</p>
+                    <a
+                      href={site.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="label inline-block border-b border-navy/40 pb-1 text-navy transition-colors hover:border-navy"
+                    >
+                      {site.instagramHandle}
+                    </a>
+                  </div>
+                  <div>
+                    <p className="label mb-3 text-taupe">Already Building?</p>
+                    <Link
+                      href="/portal"
+                      className="label inline-block border-b border-navy/40 pb-1 text-navy transition-colors hover:border-navy"
+                    >
+                      Client Portal
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

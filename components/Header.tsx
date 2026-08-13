@@ -37,9 +37,9 @@ export default function Header() {
     };
   }, [open]);
 
-  // every page now opens on bone (the home hero is a gallery plate),
-  // so the header always reads in umber; only the menu overlay goes light
-  const onDark = false;
+  // home opens on the navy doors — the header reads in bone until the first
+  // scroll; every other page opens on bone and reads in umber
+  const onDark = pathname === "/" && !scrolled && !open;
 
   return (
     <>

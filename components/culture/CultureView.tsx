@@ -20,9 +20,9 @@ export default function CultureView() {
           />
           <FadeUp delay={0.15}>
             <p className="serif-body balance mt-8 max-w-2xl text-xl italic leading-[1.5] text-umber/85 md:text-2xl">
-              She started as a laborer. She ends every project with a home the
-              pages write about — and a job site clean enough to prove
-              how it was&nbsp;built.
+              She started as a laborer, immersing herself in the fundamentals
+              of the industry. Today, every Bluedoor project is completed with
+              unmatched craftsmanship and&nbsp;care.
             </p>
           </FadeUp>
         </div>
@@ -34,12 +34,12 @@ export default function CultureView() {
           <img
             src="/images/siobhan-arch.jpg"
             alt="Siobhan Zerilla standing beneath a coquina arch on an active Bluedoor site"
-            className="h-[120%] w-full -translate-y-[8%] object-cover object-[center_30%]"
+            className="h-[120%] w-full -translate-y-[8%] object-cover object-[center_46%]"
           />
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-t from-espresso/40 via-transparent to-transparent" />
-        <div className="relative min-h-[68vh] md:min-h-[86vh]" />
-        <p className="serif-body absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[15px] italic text-bone/80">
+        <div className="absolute inset-0 bg-gradient-to-t from-espresso/55 via-transparent to-transparent" />
+        <div className="relative min-h-[62vh] md:min-h-[82vh]" />
+        <p className="serif-body absolute bottom-7 left-5 text-[15px] italic text-bone/85 md:left-10">
           On site — beneath an arch her team raised
         </p>
       </section>
@@ -122,8 +122,9 @@ export default function CultureView() {
           </FadeUp>
           <FadeUp delay={0.06}>
             <p className="serif-body mt-8 max-w-2xl text-xl italic leading-relaxed text-umber/80">
-              Behind Siobhan, a studio that runs the numbers, the paperwork, and
-              the logistics with the same precision the field demands.
+              Behind Siobhan, a team that brings precision and expertise to
+              every detail of the business — upholding Bluedoor's commitment to
+              its highest standards of quality and&nbsp;integrity.
             </p>
           </FadeUp>
 

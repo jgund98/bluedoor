@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 import { FadeUp, Lines, Parallax } from "@/components/motion";
 import { SectionMark, HandOff } from "@/components/SectionMark";
 import DoorReveal from "./DoorReveal";
-import HeroArch from "./HeroArch";
+import HeroDoors from "./HeroDoors";
 import ReelsGallery from "./ReelsGallery";
 
 // text anchors rotate so no two service plates compose alike
@@ -18,8 +18,8 @@ const SERVICE_ANCHOR = [
 export default function HomeView() {
   return (
     <>
-      {/* ————————————————— HERO — the arch blooms open ————————————————— */}
-      <HeroArch />
+      {/* ————————————————— HERO — the site loads as the blue door ————————————————— */}
+      <HeroDoors />
 
       {/* ————————————————— I · COMMITMENT ————————————————— */}
       {/* The chapter opening, set on the page's centre line. Left-aligned it
@@ -185,7 +185,7 @@ export default function HomeView() {
           {/* the names above are the same ones the magazines credit below */}
           <div className="mt-24 md:mt-32">
             <HandOff align="center" tone="light">
-              Work made this way tends to get written about.
+              A standard recognized in the most respected design publications.
             </HandOff>
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function HomeView() {
 
           {/* finished pages above; unfinished work below */}
           <div className="mt-16 md:mt-20">
-            <HandOff align="center">That is the finished page. This is this week.</HandOff>
+            <HandOff align="center">And on site, the work continues daily.</HandOff>
           </div>
         </div>
       </section>
@@ -300,7 +300,7 @@ export default function HomeView() {
             src="/images/siobhan-arch.jpg"
             alt="Siobhan Zerilla standing beneath a coquina arch mid-construction"
             loading="lazy"
-            className="h-[115%] w-full -translate-y-[6%] object-cover object-[62%_30%]"
+            className="h-[115%] w-full -translate-y-[6%] object-cover object-[62%_52%]"
           />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-r from-espresso/80 via-espresso/30 to-transparent" />
@@ -331,27 +331,35 @@ export default function HomeView() {
       </section>
 
       {/* ————————————————— FINALE ————————————————— */}
-      <section className="relative overflow-hidden">
-        <Parallax amount={60} className="absolute inset-0">
-          <img
-            src="/images/door-arched.jpg"
-            alt="An arched entry door framed in bougainvillea"
-            className="h-[120%] w-full -translate-y-[8%] object-cover"
-            loading="lazy"
-          />
-        </Parallax>
-        <div className="absolute inset-0 bg-espresso/45" />
-        <div className="relative mx-auto flex min-h-[88vh] max-w-[1520px] flex-col items-center justify-center px-5 py-28 text-center md:px-10">
+      {/* a breath of bone between the principal's portrait and the coast */}
+      <section className="grain relative bg-bone">
+        <div className="mx-auto flex max-w-[1520px] flex-col items-center px-5 pb-14 pt-20 text-center md:pt-24">
           <FadeUp>
-            <p className="label-wide mb-7 text-bone/85">The First Step Is a Conversation</p>
+            <p className="label-wide mb-6 text-navy">The First Step Is a Conversation</p>
           </FadeUp>
+          <HandOff align="center">The Palm Beaches are waiting.</HandOff>
+        </div>
+      </section>
+      <section className="relative overflow-hidden bg-espresso">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/videos/palmbeach-aerial.mp4"
+          poster="/videos/palmbeach-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+        />
+        <div className="absolute inset-0 bg-espresso/40" />
+        <div className="relative mx-auto flex min-h-[80vh] max-w-[1520px] flex-col items-center justify-center px-5 py-24 text-center md:min-h-[92vh] md:px-10">
           <Lines
             as="h2"
             className="display balance text-5xl text-bone md:text-7xl"
             lines={["Build with Bluedoor."]}
           />
           <FadeUp delay={0.12}>
-            <p className="serif-body mt-7 max-w-lg text-xl italic text-bone/85">
+            <p className="serif-body mt-7 max-w-lg text-xl italic text-bone/90">
               {site.address.street} · {site.address.city}, {site.address.state} — across from the
               Norton Museum of&nbsp;Art
             </p>

@@ -51,7 +51,7 @@ const CHAPTERS: Chapter[] = [
       { src: "/images/estate-bougainvillea.jpg", alt: "A restored estate behind bougainvillea in bloom", caption: "A landmark, in bloom", span: "wide" },
       { src: "/images/gate-pineapple.jpg", alt: "Restored garden gate with pineapple finials", caption: "The garden gate" },
       { src: "/images/house-shingle.jpg", alt: "A restored shingle residence", caption: "A century home, renewed" },
-      { src: "/images/house-stone.jpg", alt: "Stone residence with deep entry porch", caption: "Stone and shade" },
+      { src: "/images/house-stone.jpg", alt: "Stone residence with deep entry porch", caption: "Stone and shade", span: "wide" },
       { src: "/images/watercolor-2.jpg", alt: "Watercolor study of a historic residence", caption: "The watercolor study", paper: true },
       { src: "/images/watercolor-4.jpg", alt: "Watercolor rendering of a restored estate", caption: "Recorded in watercolor", paper: true },
     ],
@@ -68,15 +68,15 @@ const CHAPTERS: Chapter[] = [
       { src: "/images/living-ocean.jpg", alt: "Living room opening to the ocean horizon", caption: "The horizon room" },
       { src: "/images/kitchen-brass.jpg", alt: "Kitchen with brass stools and scalloped pendants", caption: "Brass and morning light" },
       { src: "/images/dining-modern.jpg", alt: "Dining room beneath a sculptural chandelier", caption: "The dining room" },
+      { src: "/images/console-vases.jpg", alt: "Console with sculptural ceramics", caption: "Console detail" },
       { src: "/images/hallway-gallery.jpg", alt: "A gallery hallway in white oak and glass", caption: "The gallery hall", span: "wide" },
       { src: "/images/pantry-blue.jpg", alt: "A blue butler's pantry with rattan cabinetry", caption: "The butler's pantry" },
-      { src: "/images/greatroom.jpg", alt: "Great room with soaring ceilings", caption: "The great room" },
-      { src: "/images/living-coastal.jpg", alt: "A light-filled coastal living room", caption: "Layered, light-filled" },
       { src: "/images/bunkroom-green.jpg", alt: "A green bunk room with patterned tile", caption: "The bunk room" },
+      { src: "/images/greatroom.jpg", alt: "Great room with soaring ceilings", caption: "The great room", span: "wide" },
+      { src: "/images/living-coastal.jpg", alt: "A light-filled coastal living room", caption: "Layered, light-filled" },
       { src: "/images/hall-door.jpg", alt: "Stair hall with towering black entry door", caption: "The tall door" },
       { src: "/images/kitchen-scallop.jpg", alt: "Kitchen with scalloped pendants and island seating", caption: "Scallops and stone" },
       { src: "/images/kitchen-living.jpg", alt: "Kitchen flowing into the living room, ocean beyond", caption: "One room to the sea" },
-      { src: "/images/console-vases.jpg", alt: "Console with sculptural ceramics", caption: "The quiet moment" },
       { src: "/images/loggia-stone.jpg", alt: "A stone loggia at dusk", caption: "The stone loggia", span: "wide" },
     ],
   },
@@ -87,7 +87,7 @@ export default function PortfolioView() {
     <>
       <PageHero
         label="Our Portfolio"
-        lines={["The work speaks", "in stone and light."]}
+        lines={["Refined craftsmanship,", "peerless detail."]}
         intro={site.copy.portfolioIntro}
       />
 
@@ -172,8 +172,7 @@ export default function PortfolioView() {
         <div className="mx-auto flex max-w-[1520px] flex-col items-center px-5 py-24 text-center md:px-10 md:py-32">
           <FadeUp>
             <p className="serif-body balance max-w-2xl text-2xl italic leading-[1.45] text-bone/90 md:text-3xl">
-              Witness the artistry that sets us apart — then let&nbsp;us build it
-              for&nbsp;you.
+              Witness the artistry that sets us&nbsp;apart.
             </p>
           </FadeUp>
           <FadeUp delay={0.12}>

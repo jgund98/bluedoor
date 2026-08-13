@@ -32,7 +32,8 @@ export function FadeUp({
 }
 
 /**
- * Headline whose lines rise out of a mask, one after another.
+ * Headline whose words rise out of a per-line mask and settle upright —
+ * type being set, one word after the next.
  * IMPORTANT: the viewport observer lives on the (never-clipped) heading —
  * a fully-masked child can never intersect, so it must not observe itself.
  */
@@ -49,6 +50,7 @@ export function Lines({
 }) {
   const reduce = useReducedMotion();
   const MotionTag = motion[Tag];
+  let wordCount = 0;
   return (
     <MotionTag
       className={className}
@@ -57,22 +59,62 @@ export function Lines({
       viewport={{ once: true, amount: 0.4 }}
     >
       {lines.map((line, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-          <motion.span
-            className="block will-change-transform"
-            variants={{
-              hidden: { y: "110%" },
-              show: {
-                y: 0,
-                transition: { duration: 1.0, delay: delay + i * 0.12, ease: EASE },
-              },
-            }}
-          >
-            {line}
-          </motion.span>
+        <span key={i} className="block overflow-hidden pb-[0.1em] -mb-[0.1em]">
+          {line.split(" ").map((word, w) => {
+            const order = wordCount++;
+            return (
+              <span key={w} className="inline-block whitespace-pre">
+                <motion.span
+                  className="inline-block origin-bottom-left will-change-transform"
+                  variants={{
+                    hidden: { y: "115%", rotate: 2.4 },
+                    show: {
+                      y: 0,
+                      rotate: 0,
+                      transition: {
+                        duration: 0.95,
+                        delay: delay + order * 0.05,
+                        ease: EASE,
+                      },
+                    },
+                  }}
+                >
+                  {word}
+                  {w < line.split(" ").length - 1 ? " " : ""}
+                </motion.span>
+              </span>
+            );
+          })}
         </span>
       ))}
     </MotionTag>
+  );
+}
+
+/**
+ * A long serif statement that arrives out of soft focus — reserved for the
+ * few full-sentence set pieces (commitment, pull quotes), never body copy.
+ */
+export function Statement({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.p
+      className={className}
+      initial={reduce ? false : { opacity: 0, y: 30, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 1.2, delay, ease: EASE }}
+    >
+      {children}
+    </motion.p>
   );
 }
 

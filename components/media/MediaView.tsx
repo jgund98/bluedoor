@@ -114,7 +114,8 @@ export default function MediaView() {
           <FadeUp delay={0.2}>
             <p className="mx-auto mt-8 max-w-xl text-[15.5px] font-light leading-relaxed text-umber/70">
               From the Builders to Know profile to the Coastal Collection cover,
-              the Palm Beaches' own pages keep returning to Bluedoor's&nbsp;work.
+              the Palm Beaches' own pages continue to celebrate the Bluedoor
+              Building&nbsp;standard.
             </p>
           </FadeUp>
           <FadeUp delay={0.24}>

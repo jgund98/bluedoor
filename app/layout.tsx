@@ -3,7 +3,6 @@ import { Cormorant_Garamond, Figtree, Marcellus } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Entrance from "@/components/Entrance";
 import { site } from "@/lib/site";
 
 const marcellus = Marcellus({
@@ -85,7 +84,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Entrance />
         <Header />
         <main>{children}</main>
         <Footer />

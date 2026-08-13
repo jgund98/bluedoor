@@ -9,22 +9,22 @@ const JOURNEY = [
   {
     src: "/images/watercolor-1.jpg",
     step: "The Vision",
-    caption: "It begins as a watercolor — the home, imagined.",
+    caption: "Identifying your unique vision.",
   },
   {
     src: "/images/blueprint.jpg",
     step: "The Plan",
-    caption: "Masterful planning, drawn to the inch.",
+    caption: "Meticulous attention to detail and masterful planning.",
   },
   {
     src: "/images/siobhan-measuring.jpg",
     step: "The Build",
-    caption: "Supervised daily, measured personally.",
+    caption: "Daily monitoring of the site, in person.",
   },
   {
     src: "/images/greatroom.jpg",
     step: "The Home",
-    caption: "Finished to the standard the pages write about.",
+    caption: "Completed with unmatched craftsmanship and care.",
   },
 ];
 
@@ -66,7 +66,7 @@ export default function ProcessView() {
           <Lines
             as="h2"
             className="display max-w-3xl text-4xl text-umber md:text-6xl"
-            lines={["From watercolor", "to welcome home."]}
+            lines={["From concept", "to completion."]}
           />
           <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 md:gap-8">
             {JOURNEY.map((stage, i) => (
@@ -134,7 +134,7 @@ export default function ProcessView() {
           <Lines
             as="h2"
             className="display balance text-4xl text-bone md:text-5xl"
-            lines={["Every voice, filtered", "through one door."]}
+            lines={["Seamless communication", "across the project."]}
           />
           <FadeUp delay={0.1}>
             <p className="mt-8 max-w-2xl text-[17px] font-light leading-relaxed text-bone/75">
@@ -147,8 +147,8 @@ export default function ProcessView() {
             <div className="relative mx-auto mt-14 flex max-w-lg flex-col items-center">
               <div className="grid w-full grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
                 {VOICES.map((voice, i) => (
-                  <FadeUp key={voice} delay={0.18 + i * 0.06}>
-                    <p className="label border border-bone/20 px-3 py-3 text-center text-bone/75">
+                  <FadeUp key={voice} delay={0.18 + i * 0.06} className="h-full">
+                    <p className="flex h-full min-h-[52px] items-center justify-center whitespace-nowrap border border-bone/20 px-2 text-center text-[10px] font-medium uppercase tracking-[0.18em] text-bone/75">
                       {voice}
                     </p>
                   </FadeUp>
@@ -177,7 +177,7 @@ export default function ProcessView() {
           <Lines
             as="h2"
             className="display text-4xl text-umber md:text-5xl"
-            lines={["Never unsupervised.", "Never unclear."]}
+            lines={["We do not leave", "projects unsupervised."]}
           />
           <FadeUp delay={0.1}>
             <p className="mt-8 max-w-3xl text-[16.5px] font-light leading-relaxed text-umber/80">
