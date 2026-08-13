@@ -69,8 +69,8 @@ export default function Header() {
               }`}
             />
             <span
-              className={`label hidden tracking-[0.3em] transition-colors duration-500 sm:block ${
-                onDark ? "text-bone" : "text-umber"
+              className={`label hidden tracking-[0.3em] transition-all duration-500 sm:block ${
+                onDark ? "text-bone opacity-0" : "text-umber opacity-100"
               }`}
             >
               Bluedoor&nbsp;Building
@@ -96,6 +96,18 @@ export default function Header() {
                 )}
               </Link>
             ))}
+            <span
+              aria-hidden
+              className={`hidden h-4 w-px xl:block ${onDark ? "bg-bone/30" : "bg-umber/20"}`}
+            />
+            <Link
+              href="/portal"
+              className={`label hidden transition-colors duration-500 xl:block ${
+                onDark ? "text-bone/90 hover:text-bone" : "text-umber/80 hover:text-umber"
+              }`}
+            >
+              Client Login
+            </Link>
             <Link
               href="/build-with-bluedoor"
               className={`label border px-6 py-3 transition-all duration-500 ${
@@ -179,14 +191,19 @@ export default function Header() {
                 <br />
                 {site.address.city}, {site.address.state}
               </p>
-              <a
-                href={site.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="label text-bone/80"
-              >
-                Instagram
-              </a>
+              <div className="flex flex-col items-end gap-3">
+                <a
+                  href={site.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="label text-bone/80"
+                >
+                  Instagram
+                </a>
+                <Link href="/portal" className="label text-bone/60">
+                  Client Login
+                </Link>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bone: #f7f3eb;
-  --color-linen: #f1eae0;
+  --color-bone: #fbf9f4;
+  --color-linen: #f6f1e9;
   --color-sand: #e6dcca;
   --color-clay: #c9b99f;
   --color-taupe: #8a7b63;
@@ -143,19 +143,43 @@ body {
   text-wrap: balance;
 }
 
-/* ————— type set on photography ————— */
-/* an engraved double shadow: a tight contact line plus a wide soft pool —
-   invisible as an effect, decisive for legibility on bright imagery */
+/* ————— the Bluedoor readability system ————— */
+/* Rule: never make the text louder — make the photography quieter exactly
+   where the text needs to speak, and nowhere else. */
+
+/* type set on photography: a ~0.5px warm-dark edge plus a wide diffuse pool.
+   No hard drop shadow — at reading distance it reads as sharpened, not shadowed */
 .on-photo {
+  -webkit-text-stroke: 0.45px rgba(34, 30, 24, 0.3);
+  paint-order: stroke fill;
   text-shadow:
-    0 1px 3px rgba(34, 30, 24, 0.55),
-    0 6px 28px rgba(34, 30, 24, 0.5);
+    0 2px 26px rgba(30, 32, 36, 0.55),
+    0 0 80px rgba(30, 32, 36, 0.32);
 }
 
-/* etched-glass plaque for text over the very brightest imagery */
-.glass-plaque {
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background: rgba(34, 30, 24, 0.28);
-  border: 1px solid rgba(247, 243, 235, 0.16);
+/* localized cinematic veils: a charcoal-navy exposure reduction anchored to
+   the copy zone, feathered to nothing well before the image's focal area */
+.veil-bl {
+  background: radial-gradient(
+    115% 95% at 16% 98%,
+    rgba(25, 30, 38, 0.52),
+    rgba(25, 30, 38, 0.26) 42%,
+    rgba(25, 30, 38, 0) 68%
+  );
+}
+.veil-br {
+  background: radial-gradient(
+    115% 95% at 84% 98%,
+    rgba(25, 30, 38, 0.52),
+    rgba(25, 30, 38, 0.26) 42%,
+    rgba(25, 30, 38, 0) 68%
+  );
+}
+.veil-b {
+  background: radial-gradient(
+    130% 85% at 50% 100%,
+    rgba(25, 30, 38, 0.5),
+    rgba(25, 30, 38, 0.24) 45%,
+    rgba(25, 30, 38, 0) 70%
+  );
 }

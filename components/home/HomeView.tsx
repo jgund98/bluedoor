@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { site } from "@/lib/site";
 import { FadeUp, Lines, Parallax } from "@/components/motion";
 import { SectionMark, HandOff } from "@/components/SectionMark";
@@ -89,8 +90,8 @@ export default function HomeView() {
                 className="h-[120%] w-full -translate-y-[8%] object-cover"
               />
             </Parallax>
-            {/* grounded only where the words sit — the photo stays airy above */}
-            <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-espresso/70 via-espresso/25 to-transparent" />
+            {/* the veil: exposure falls only where the words live */}
+            <div className={`absolute inset-0 ${i === 1 ? "veil-br" : "veil-bl"}`} />
             <div
               className={`relative mx-auto flex min-h-[88vh] max-w-[1520px] px-5 pb-14 pt-24 md:min-h-[92vh] md:px-10 md:pb-20 ${SERVICE_ANCHOR[i]}`}
             >
@@ -172,9 +173,16 @@ export default function HomeView() {
                 <FadeUp key={title} delay={col * 0.1}>
                   <p className="label mb-6 text-bone/50">{title}</p>
                   <ul className="flex flex-col gap-3.5">
-                    {names.map((n) => (
-                      <li key={n} className="serif-body text-lg leading-snug text-bone/85">
-                        {n}
+                    {names.map((firm) => (
+                      <li key={firm.name}>
+                        <a
+                          href={firm.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="serif-body border-b border-transparent text-lg leading-snug text-bone/85 transition-colors duration-300 hover:border-bone/50 hover:text-bone"
+                        >
+                          {firm.name}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -304,8 +312,7 @@ export default function HomeView() {
             className="h-[115%] w-full -translate-y-[6%] object-cover object-[62%_52%]"
           />
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-r from-espresso/80 via-espresso/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-espresso/60 via-transparent to-transparent" />
+        <div className="veil-bl absolute inset-0" />
         <div className="relative mx-auto flex min-h-[96vh] max-w-[1520px] flex-col justify-end px-5 pb-16 pt-28 md:px-10 md:pb-24">
           <FadeUp>
             <SectionMark numeral="V" label="The Principal" tone="light" className="mb-6" />
@@ -342,17 +349,9 @@ export default function HomeView() {
         </div>
       </section>
       <section className="relative overflow-hidden bg-espresso">
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          src="/videos/palmbeach-aerial.mp4"
-          poster="/videos/palmbeach-poster.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="none"
-        />
-        <div className="absolute inset-0 bg-espresso/40" />
+        <FinaleVideo />
+        <div className="absolute inset-0 bg-espresso/15" />
+        <div className="veil-b absolute inset-0" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-[1520px] flex-col items-center justify-center px-5 py-24 text-center md:min-h-[92vh] md:px-10">
           <Lines
             as="h2"
@@ -376,5 +375,35 @@ export default function HomeView() {
         </div>
       </section>
     </>
+  );
+}
+
+/** The coastline, moving — playback begins the moment the band enters view. */
+function FinaleVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className="absolute inset-0 h-full w-full object-cover"
+      src="/videos/palmbeach-aerial.mp4"
+      poster="/videos/palmbeach-poster.jpg"
+      muted
+      loop
+      playsInline
+      preload="metadata"
+    />
   );
 }

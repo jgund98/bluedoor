@@ -27,9 +27,9 @@ const MARQUEE = (
           ...site.collaborators.architects,
           ...site.collaborators.interiors,
           ...site.collaborators.landscape,
-        ].map((name, i) => (
+        ].map((firm, i) => (
           <span key={i} className="label flex items-center text-bone/80">
-            <span className="whitespace-nowrap px-7">{name}</span>
+            <span className="whitespace-nowrap px-7">{firm.name}</span>
             <span aria-hidden className="text-bone/40">
               ·
             </span>
@@ -87,9 +87,9 @@ function Arrived({
       className="absolute inset-0 z-20 flex flex-col justify-end"
       style={style as never}
     >
-      <div className="bg-gradient-to-t from-espresso/65 via-espresso/20 to-transparent px-5 pb-8 pt-24 md:pb-10">
+      <div className="veil-bl px-5 pb-8 pt-24 md:pb-10">
         <div className="mx-auto w-full max-w-[1520px] md:px-5">
-          <p className="label-wide on-photo mb-5 text-bone/85">
+          <p className="label-wide on-photo mb-5 tracking-[0.5em] text-bone">
             Boutique Custom Home Builder
             <span className="hidden sm:inline">&ensp;·&ensp;Palm Beach, Florida</span>
           </p>

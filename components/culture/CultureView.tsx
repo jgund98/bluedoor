@@ -34,7 +34,7 @@ export default function CultureView() {
           <img
             src="/images/siobhan-arch.jpg"
             alt="Siobhan Zerilla standing beneath a coquina arch on an active Bluedoor site"
-            className="h-[120%] w-full -translate-y-[8%] object-cover object-[center_46%]"
+            className="h-[120%] w-full -translate-y-[8%] object-cover object-[center_60%]"
           />
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-t from-espresso/55 via-transparent to-transparent" />
