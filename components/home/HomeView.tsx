@@ -73,7 +73,7 @@ export default function HomeView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display max-w-3xl text-4xl text-umber md:text-6xl"
+            className="display max-w-3xl text-[2rem] text-umber sm:text-4xl md:text-6xl"
             lines={["Elevating your vision", "with our expertise."]}
           />
         </div>
@@ -89,21 +89,22 @@ export default function HomeView() {
                 className="h-[120%] w-full -translate-y-[8%] object-cover"
               />
             </Parallax>
-            <div className="absolute inset-0 bg-gradient-to-t from-espresso/75 via-espresso/10 to-espresso/20" />
+            {/* grounded only where the words sit — the photo stays airy above */}
+            <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-espresso/70 via-espresso/25 to-transparent" />
             <div
               className={`relative mx-auto flex min-h-[88vh] max-w-[1520px] px-5 pb-14 pt-24 md:min-h-[92vh] md:px-10 md:pb-20 ${SERVICE_ANCHOR[i]}`}
             >
               <div className={`max-w-xl ${i === 1 ? "md:flex md:flex-col md:items-end" : ""}`}>
                 <FadeUp>
-                  <p className="display text-2xl text-bone/65">{`0${i + 1}`}</p>
+                  <p className="display on-photo text-2xl text-bone/70">{`0${i + 1}`}</p>
                 </FadeUp>
                 <Lines
                   as="h3"
-                  className="display mt-4 text-4xl text-bone md:text-6xl"
+                  className="display on-photo mt-4 text-[2.1rem] text-bone sm:text-4xl md:text-6xl"
                   lines={[service.name]}
                 />
                 <FadeUp delay={0.1}>
-                  <p className="mt-6 max-w-lg text-[16.5px] font-light leading-relaxed text-bone/90">
+                  <p className="on-photo mt-6 max-w-lg text-[16.5px] font-light leading-relaxed text-bone/95">
                     {service.copy}
                   </p>
                 </FadeUp>
@@ -137,7 +138,7 @@ export default function HomeView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display max-w-4xl text-4xl text-bone md:text-[3.8rem]"
+            className="display max-w-4xl text-[1.9rem] text-bone sm:text-4xl md:text-[3.8rem]"
             lines={["Uncompromising quality,", "unparalleled expertise."]}
           />
           <div className="mt-10 grid gap-8 md:mt-12 md:grid-cols-2 md:gap-20">
@@ -201,7 +202,7 @@ export default function HomeView() {
               </FadeUp>
               <Lines
                 as="h2"
-                className="display max-w-2xl text-4xl text-umber md:text-5xl"
+                className="display max-w-2xl text-[1.9rem] text-umber sm:text-4xl md:text-5xl"
                 lines={["Recognized by the pages", "that define the craft."]}
               />
             </div>
@@ -311,11 +312,11 @@ export default function HomeView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display text-5xl text-bone md:text-7xl"
+            className="display on-photo text-[2.6rem] text-bone sm:text-5xl md:text-7xl"
             lines={["Siobhan Zerilla"]}
           />
           <FadeUp delay={0.1}>
-            <p className="serif-body mt-8 max-w-2xl text-xl italic leading-[1.5] text-bone/90 md:text-2xl">
+            <p className="serif-body on-photo mt-8 max-w-2xl text-xl italic leading-[1.5] text-bone/95 md:text-2xl">
               “{site.principal.quote}”
             </p>
           </FadeUp>
@@ -355,11 +356,11 @@ export default function HomeView() {
         <div className="relative mx-auto flex min-h-[80vh] max-w-[1520px] flex-col items-center justify-center px-5 py-24 text-center md:min-h-[92vh] md:px-10">
           <Lines
             as="h2"
-            className="display balance text-5xl text-bone md:text-7xl"
+            className="display on-photo balance text-[2.6rem] text-bone sm:text-5xl md:text-7xl"
             lines={["Build with Bluedoor."]}
           />
           <FadeUp delay={0.12}>
-            <p className="serif-body mt-7 max-w-lg text-xl italic text-bone/90">
+            <p className="serif-body on-photo mt-7 max-w-lg text-xl italic text-bone/95">
               {site.address.street} · {site.address.city}, {site.address.state} — across from the
               Norton Museum of&nbsp;Art
             </p>

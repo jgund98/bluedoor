@@ -59,10 +59,14 @@ export default function Header() {
               if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
+            {/* over the closed doors the medallion IS the logo — the header
+                mark only fades in once the doors begin to open */}
             <img
               src="/images/logo.png"
               alt="Bluedoor Building"
-              className="h-12 w-12 md:h-14 md:w-14"
+              className={`h-12 w-12 transition-all duration-500 md:h-14 md:w-14 ${
+                onDark ? "scale-90 opacity-0" : "scale-100 opacity-100"
+              }`}
             />
             <span
               className={`label hidden tracking-[0.3em] transition-colors duration-500 sm:block ${

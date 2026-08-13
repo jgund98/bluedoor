@@ -110,7 +110,7 @@ export default function ProcessView() {
               <FadeUp
                 key={pillar.name}
                 delay={i * 0.1}
-                className={`border-umber/12 py-10 md:px-10 md:py-4 ${
+                className={`border-umber/12 py-10 md:px-10 md:py-6 ${
                   i > 0 ? "border-t md:border-l md:border-t-0" : ""
                 } ${i === 0 ? "md:pl-0" : ""}`}
               >
@@ -133,7 +133,7 @@ export default function ProcessView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display balance text-4xl text-bone md:text-5xl"
+            className="display balance text-[1.85rem] text-bone sm:text-4xl md:text-5xl"
             lines={["Seamless communication", "across the project."]}
           />
           <FadeUp delay={0.1}>
@@ -176,7 +176,7 @@ export default function ProcessView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display text-4xl text-umber md:text-5xl"
+            className="display text-[1.85rem] text-umber sm:text-4xl md:text-5xl"
             lines={["We do not leave", "projects unsupervised."]}
           />
           <FadeUp delay={0.1}>
@@ -206,7 +206,7 @@ export default function ProcessView() {
           </FadeUp>
           <Lines
             as="h2"
-            className="display balance text-4xl text-umber md:text-5xl"
+            className="display balance text-[1.8rem] text-umber sm:text-4xl md:text-5xl"
             lines={["A seamless transition,", "and a guidebook to match."]}
           />
           <FadeUp delay={0.1}>
@@ -215,7 +215,7 @@ export default function ProcessView() {
             </p>
           </FadeUp>
           <FadeUp delay={0.16}>
-            <div className="mt-14 w-[250px] rotate-[-1.5deg] border border-umber/10 bg-white p-3 pb-12 shadow-[0_30px_65px_-30px_rgba(53,48,42,0.5)] transition-transform duration-700 ease-out hover:rotate-0 md:w-[310px]">
+            <div className="mt-14 w-[280px] rotate-[-1.5deg] border border-umber/10 bg-white p-3.5 pb-12 shadow-[0_30px_65px_-30px_rgba(53,48,42,0.5)] transition-transform duration-700 ease-out hover:rotate-0 md:w-[420px]">
               <img
                 src="/images/watercolor-5.jpg"
                 alt="Watercolor of a completed Bluedoor residence — the cover of its guidebook"

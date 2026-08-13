@@ -92,7 +92,7 @@ export const site = {
       image: "/images/press-lhm.jpg",
     },
   ],
-  bio: "A boutique custom home builder specializing in new construction and renovation of luxury homes.",
+  bio: "A boutique custom home builder specializing in new construction and renovation of luxury homes.",
   reels: [
     {
       src: "/reels/arch-stairs.mp4",

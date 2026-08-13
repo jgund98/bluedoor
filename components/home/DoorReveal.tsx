@@ -125,11 +125,11 @@ export default function DoorReveal() {
 
         {/* the line that names the site */}
         <motion.div
-          className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center bg-gradient-to-t from-espresso/60 to-transparent px-6 pb-[10vh] pt-32 text-center"
+          className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center bg-gradient-to-t from-espresso/55 to-transparent px-6 pb-[10vh] pt-32 text-center"
           style={{ opacity: captionOpacity, y: captionY, visibility: captionVisibility }}
         >
-          <p className="label-wide mb-5 text-bone/80">Bluedoor Building</p>
-          <p className="display balance text-4xl text-bone md:text-6xl">
+          <p className="label-wide on-photo mb-5 text-bone/85">Bluedoor Building</p>
+          <p className="display on-photo balance text-[2rem] text-bone sm:text-4xl md:text-6xl">
             Every home begins at the blue&nbsp;door.
           </p>
           <Link

@@ -19,7 +19,7 @@ export default function PageHero({
         </FadeUp>
         <Lines
           as="h1"
-          className="display balance max-w-4xl text-[2.6rem] leading-[1.05] text-umber md:text-7xl"
+          className="display balance max-w-4xl text-[2.05rem] leading-[1.08] text-umber sm:text-[2.6rem] sm:leading-[1.05] md:text-7xl"
           lines={lines}
         />
         {intro && (

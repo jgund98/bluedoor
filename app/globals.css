@@ -142,3 +142,20 @@ body {
 .balance {
   text-wrap: balance;
 }
+
+/* ————— type set on photography ————— */
+/* an engraved double shadow: a tight contact line plus a wide soft pool —
+   invisible as an effect, decisive for legibility on bright imagery */
+.on-photo {
+  text-shadow:
+    0 1px 3px rgba(34, 30, 24, 0.55),
+    0 6px 28px rgba(34, 30, 24, 0.5);
+}
+
+/* etched-glass plaque for text over the very brightest imagery */
+.glass-plaque {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(34, 30, 24, 0.28);
+  border: 1px solid rgba(247, 243, 235, 0.16);
+}

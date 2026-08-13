@@ -189,7 +189,7 @@ export default function ReelsGallery() {
             </FadeUp>
             <Lines
               as="h2"
-              className="display max-w-2xl text-4xl text-umber md:text-5xl"
+              className="display max-w-2xl text-[1.9rem] text-umber sm:text-4xl md:text-5xl"
               lines={["Through the arches,", "the work in motion."]}
             />
           </div>
@@ -239,7 +239,7 @@ export default function ReelsGallery() {
               </FadeUp>
               <Lines
                 as="h2"
-                className="display max-w-2xl text-4xl text-umber md:text-5xl"
+                className="display max-w-2xl text-[1.9rem] text-umber sm:text-4xl md:text-5xl"
                 lines={["Through the arches,", "the work in motion."]}
               />
             </div>

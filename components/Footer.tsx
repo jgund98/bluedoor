@@ -65,10 +65,9 @@ export default function Footer() {
             href="https://www.epicdevsolutions.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 opacity-60 transition-opacity hover:opacity-100"
+            className="text-xs text-bone/45 transition-colors hover:text-bone/80"
           >
-            <span className="text-xs text-bone/70">Site by</span>
-            <img src="/images/epic-logo-dark.png" alt="Epic Dev Solutions" className="h-5" />
+            Site by Epic Dev Solutions
           </a>
         </div>
       </div>

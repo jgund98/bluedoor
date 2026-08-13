@@ -39,7 +39,7 @@ export default function CultureView() {
         </Parallax>
         <div className="absolute inset-0 bg-gradient-to-t from-espresso/55 via-transparent to-transparent" />
         <div className="relative min-h-[62vh] md:min-h-[82vh]" />
-        <p className="serif-body absolute bottom-7 left-5 text-[15px] italic text-bone/85 md:left-10">
+        <p className="serif-body on-photo absolute bottom-7 left-5 text-[15px] italic text-bone/90 md:left-10">
           On site — beneath an arch her team raised
         </p>
       </section>
@@ -153,7 +153,7 @@ export default function CultureView() {
       <section className="bg-linen">
         <div className="mx-auto flex max-w-[1520px] flex-col items-center px-5 py-20 text-center md:px-10 md:py-28">
           <FadeUp>
-            <div className="w-[240px] rotate-[1.5deg] border border-umber/10 bg-white p-3 pb-12 shadow-[0_30px_65px_-30px_rgba(53,48,42,0.5)] transition-transform duration-700 ease-out hover:rotate-0 md:w-[300px]">
+            <div className="w-[280px] rotate-[1.5deg] border border-umber/10 bg-white p-3.5 pb-12 shadow-[0_30px_65px_-30px_rgba(53,48,42,0.5)] transition-transform duration-700 ease-out hover:rotate-0 md:w-[420px]">
               <img
                 src="/images/watercolor-3.jpg"
                 alt="Watercolor of a Bluedoor residence, from the studio wall"

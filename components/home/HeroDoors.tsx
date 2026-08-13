@@ -7,7 +7,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { site } from "@/lib/site";
 import { EASE } from "@/components/motion";
 
@@ -87,10 +87,13 @@ function Arrived({
       className="absolute inset-0 z-20 flex flex-col justify-end"
       style={style as never}
     >
-      <div className="bg-gradient-to-t from-espresso/70 via-espresso/25 to-transparent px-5 pb-8 pt-24 md:pb-10">
+      <div className="bg-gradient-to-t from-espresso/65 via-espresso/20 to-transparent px-5 pb-8 pt-24 md:pb-10">
         <div className="mx-auto w-full max-w-[1520px] md:px-5">
-          <p className="label-wide mb-5 text-bone/85">Palm Beach, Florida</p>
-          <h1 className="display max-w-4xl text-[10.5vw] leading-[1.04] text-bone sm:text-5xl md:text-7xl">
+          <p className="label-wide on-photo mb-5 text-bone/85">
+            Boutique Custom Home Builder
+            <span className="hidden sm:inline">&ensp;·&ensp;Palm Beach, Florida</span>
+          </p>
+          <h1 className="display on-photo max-w-4xl text-[8.6vw] leading-[1.06] text-bone sm:text-5xl md:text-7xl">
             Homes of lasting
             <br />
             beauty and distinction.
@@ -121,16 +124,6 @@ function Arrived({
 export default function HeroDoors() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const [isDesktop, setIsDesktop] = useState(true);
-  const [mobileOpened, setMobileOpened] = useState(false);
-
-  useEffect(() => {
-    const measure = () =>
-      setIsDesktop(window.matchMedia("(min-width: 768px)").matches);
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -176,93 +169,10 @@ export default function HeroDoors() {
     v > 0.45 ? "visible" : "hidden"
   );
 
-  /* ————— touch: a timed opening, then a settled photo-first hero ————— */
-  if (!isDesktop) {
-    const opened = mobileOpened || !!reduce;
-    return (
-      <section className="relative h-[100svh] min-h-[560px] overflow-hidden bg-espresso">
-        <motion.img
-          src="/images/hero-stairhall.jpg"
-          alt="A coquina stone stair hall in a Bluedoor oceanfront estate"
-          className="absolute inset-0 h-full w-full object-cover"
-          fetchPriority="high"
-          initial={reduce ? false : { scale: 1.14 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 3.2, delay: 1.1, ease: EASE }}
-        />
-
-        {/* settled content */}
-        <motion.div
-          className="absolute inset-0 z-20 flex flex-col justify-end"
-          initial={reduce ? false : { opacity: 0, y: 26 }}
-          animate={opened ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: EASE }}
-        >
-          <div className="bg-gradient-to-t from-espresso/75 via-espresso/30 to-transparent px-5 pb-7 pt-24">
-            <p className="label-wide mb-4 text-bone/85">Palm Beach, Florida</p>
-            <h1 className="display text-[11vw] leading-[1.05] text-bone">
-              Homes of lasting
-              <br />
-              beauty and distinction.
-            </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Link
-                href="/build-with-bluedoor"
-                className="label bg-bone px-6 py-3.5 text-navy"
-              >
-                Build with Bluedoor
-              </Link>
-              <Link
-                href="/portfolio"
-                className="label border-b border-bone/50 pb-1 text-bone"
-              >
-                The Portfolio
-              </Link>
-            </div>
-          </div>
-          <div className="overflow-hidden border-t border-bone/20 bg-espresso/40 py-3 backdrop-blur-sm">
-            {MARQUEE}
-          </div>
-        </motion.div>
-
-        {/* the doors, opening on their own */}
-        {!reduce && (
-          <>
-            <motion.div
-              className="absolute inset-y-0 left-0 z-30 w-1/2 bg-navy will-change-transform"
-              initial={{ x: 0 }}
-              animate={{ x: "-102%" }}
-              transition={{ duration: 1.7, delay: 0.9, ease: [0.7, 0, 0.28, 1] }}
-              onAnimationComplete={() => setMobileOpened(true)}
-            >
-              <DoorPanel side="left" />
-            </motion.div>
-            <motion.div
-              className="absolute inset-y-0 right-0 z-30 w-1/2 bg-navy will-change-transform"
-              initial={{ x: 0 }}
-              animate={{ x: "102%" }}
-              transition={{ duration: 1.7, delay: 0.9, ease: [0.7, 0, 0.28, 1] }}
-            >
-              <DoorPanel side="right" />
-            </motion.div>
-            <motion.img
-              src="/images/logo.png"
-              alt=""
-              className="absolute left-1/2 top-1/2 z-40 w-[128px] -translate-x-1/2 -translate-y-1/2 rounded-full shadow-[0_0_0_1px_rgba(247,243,235,0.3),0_0_70px_rgba(0,0,0,0.45)]"
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: [0, 1, 1, 0], scale: [0.92, 1, 1, 1.3] }}
-              transition={{ duration: 1.9, times: [0, 0.25, 0.5, 1], ease: EASE }}
-            />
-          </>
-        )}
-      </section>
-    );
-  }
-
-  /* ————— reduced motion on desktop: the settled hero, no theatre ————— */
+  /* ————— reduced motion: the settled hero, no theatre ————— */
   if (reduce) {
     return (
-      <section className="relative h-screen min-h-[620px] overflow-hidden bg-espresso">
+      <section className="relative h-[100svh] min-h-[560px] overflow-hidden bg-espresso">
         <img
           src="/images/hero-stairhall.jpg"
           alt="A coquina stone stair hall in a Bluedoor oceanfront estate"
@@ -274,10 +184,10 @@ export default function HeroDoors() {
     );
   }
 
-  /* ————— desktop: the scroll opens the door ————— */
+  /* ————— the scroll opens the door — every device ————— */
   return (
-    <section ref={ref} className="relative h-[300vh] bg-espresso">
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <section ref={ref} className="relative h-[220vh] bg-espresso md:h-[300vh]">
+      <div className="sticky top-0 h-[100svh] overflow-hidden md:h-screen">
         {/* the hall beyond */}
         <motion.img
           src="/images/hero-stairhall.jpg"
@@ -327,7 +237,7 @@ export default function HeroDoors() {
           <motion.img
             src="/images/logo.png"
             alt="Bluedoor Building"
-            className="w-[168px] rounded-full shadow-[0_0_0_1px_rgba(247,243,235,0.35),0_0_80px_rgba(0,0,0,0.5)]"
+            className="w-[min(420px,30vw)] rounded-full shadow-[0_0_0_1px_rgba(247,243,235,0.35),0_0_120px_rgba(0,0,0,0.5)]"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
@@ -339,6 +249,14 @@ export default function HeroDoors() {
           className="absolute inset-x-0 bottom-0 z-50 flex flex-col items-center pb-9"
           style={{ opacity: whisperOpacity }}
         >
+          <motion.p
+            className="serif-body mb-4 px-6 text-center text-lg italic text-bone/85"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.9 }}
+          >
+            A boutique custom home builder — Palm Beach,&nbsp;Florida
+          </motion.p>
           <motion.p
             className="label-wide text-bone/75"
             initial={{ opacity: 0 }}
