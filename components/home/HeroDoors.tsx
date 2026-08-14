@@ -193,7 +193,7 @@ export default function HeroDoors() {
   /* ————— reduced motion: the settled hero, no theatre ————— */
   if (reduce) {
     return (
-      <section className="relative h-[100svh] min-h-[560px] overflow-hidden bg-espresso">
+      <section className="relative h-[100dvh] min-h-[560px] overflow-hidden bg-bone">
         <img
           src="/images/hero-stairhall.jpg"
           alt="A coquina stone stair hall in a Bluedoor oceanfront estate"
@@ -207,8 +207,8 @@ export default function HeroDoors() {
 
   /* ————— the scroll opens the door — every device ————— */
   return (
-    <section ref={ref} className="relative h-[220vh] bg-espresso md:h-[300vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden md:h-screen">
+    <section ref={ref} className="relative h-[220vh] bg-bone md:h-[300vh]">
+      <div className="sticky top-0 h-[100dvh] overflow-hidden md:h-screen">
         {/* the hall beyond */}
         <motion.img
           src="/images/hero-stairhall.jpg"
