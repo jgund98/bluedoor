@@ -27,6 +27,12 @@ const WARM = [
   "/images/loggia-ocean.jpg",
   "/images/siobhan-arch.jpg",
   "/videos/palmbeach-poster.jpg",
+  "/reels/arch-stairs-poster.jpg",
+  "/reels/interior-ocean-poster.jpg",
+  "/reels/coast-aerial-poster.jpg",
+  "/reels/cabana-poster.jpg",
+  "/reels/soso-progress-poster.jpg",
+  "/reels/stone-facade-poster.jpg",
 ];
 
 export default function HomeView() {
@@ -126,7 +132,7 @@ export default function HomeView() {
                 <FadeUp delay={0.16}>
                   <Link
                     href={`/portfolio#${service.slug}`}
-                    className="label mt-8 inline-block border-b border-bone/60 pb-1.5 text-bone transition-colors hover:border-bone"
+                    className="on-photo mt-8 inline-block text-[11px] font-medium uppercase tracking-[0.34em] text-bone underline decoration-bone/40 underline-offset-8 transition-colors hover:decoration-bone"
                   >
                     See the Work
                   </Link>
@@ -344,7 +350,7 @@ export default function HomeView() {
           <FadeUp delay={0.16}>
             <Link
               href="/culture"
-              className="label mt-10 inline-block w-fit border border-bone/70 bg-bone/5 px-8 py-4 text-bone backdrop-blur-sm transition-colors duration-500 hover:bg-bone hover:text-navy"
+              className="on-photo mt-10 inline-block w-fit text-[11px] font-medium uppercase tracking-[0.34em] text-bone underline decoration-bone/40 underline-offset-8 transition-colors hover:decoration-bone"
             >
               Meet Siobhan
             </Link>
@@ -353,17 +359,8 @@ export default function HomeView() {
       </section>
 
       {/* ————————————————— FINALE ————————————————— */}
-      {/* a breath of bone between the principal's portrait and the coast */}
-      <section className="grain relative bg-bone">
-        <div className="mx-auto flex max-w-[1520px] flex-col items-center px-5 pb-14 pt-20 text-center md:pt-24">
-          <FadeUp>
-            <p className="label-wide mb-6 text-navy">The First Step Is a Conversation</p>
-          </FadeUp>
-          <HandOff align="center">The Palm Beaches are waiting.</HandOff>
-        </div>
-      </section>
-      {/* the closing scene: a title card over Palm Beach, dissolving into
-          the midnight of the footer */}
+      {/* her words above are the last voice on the page; this is only the
+          call — a title card over Palm Beach, dissolving into the footer */}
       <ClosingScene />
     </>
   );
@@ -417,14 +414,9 @@ function ClosingScene() {
             </h2>
           </FadeUp>
           <FadeUp delay={0.3} y={26}>
-            <p className="serif-body on-photo mt-6 max-w-lg text-lg italic leading-relaxed text-bone/85 md:text-xl">
-              Homes conceived with intention, built without&nbsp;compromise.
-            </p>
-          </FadeUp>
-          <FadeUp delay={0.45} y={26}>
             <Link
               href="/build-with-bluedoor"
-              className="group mt-10 inline-flex items-baseline gap-3"
+              className="group mt-9 inline-flex items-baseline gap-3"
             >
               <span className="on-photo relative text-[11px] font-medium uppercase tracking-[0.34em] text-bone">
                 Begin the Conversation

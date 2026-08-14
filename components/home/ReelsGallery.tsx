@@ -70,7 +70,8 @@ function ReelVideo({
         if (!sound) video.play().catch(() => {});
         setSound(!sound);
       }}
-      className="group relative block h-full w-full overflow-hidden rounded-t-full border border-umber/15 bg-espresso"
+      className="group relative block h-full w-full overflow-hidden rounded-t-full border border-umber/15 bg-cover bg-center"
+      style={{ backgroundImage: `url(${poster})` }}
     >
       <video
         ref={ref}
@@ -79,7 +80,7 @@ function ReelVideo({
         muted
         loop
         playsInline
-        preload="none"
+        preload="metadata"
         className="absolute inset-0 h-full w-full object-cover"
       />
       <span

@@ -15,9 +15,9 @@ const NAV = [
 ] as const;
 
 /**
- * A solid ivory bar at every scroll position — a gallery frame for the
- * photography, never chrome floating on it. Generous at rest, it tailors
- * itself down ~18% once the visitor begins to read.
+ * Over the navy doors the header floats transparent, its chrome in bone;
+ * the first scroll inverts it into the solid ivory gallery bar, tailored
+ * down ~18% with the logo. Every other page opens on the ivory bar.
  */
 export default function Header() {
   const pathname = usePathname();
@@ -42,6 +42,10 @@ export default function Header() {
     };
   }, [open]);
 
+  // over navy grounds (the closed doors, the portal) the header floats
+  // transparent in bone until the first scroll inverts it to solid ivory
+  const onDark =
+    (pathname === "/" || pathname.startsWith("/portal")) && !scrolled && !open;
   // over the closed doors the centered medallion IS the identity —
   // the header's own mark waits until the doors begin to open
   const hideMark = pathname === "/" && !scrolled && !open;
@@ -50,7 +54,9 @@ export default function Header() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-          open ? "border-b border-transparent bg-transparent" : "border-b border-umber/[0.08] bg-bone"
+          open || onDark
+            ? "border-b border-transparent bg-transparent"
+            : "border-b border-umber/[0.08] bg-bone"
         }`}
       >
         <div
@@ -74,9 +80,9 @@ export default function Header() {
               } ${hideMark ? "scale-90 opacity-0" : "scale-100 opacity-100"}`}
             />
             <span
-              className={`label hidden tracking-[0.3em] text-umber transition-opacity duration-500 sm:block ${
-                hideMark ? "opacity-0" : "opacity-100"
-              }`}
+              className={`label hidden tracking-[0.3em] transition-all duration-500 sm:block ${
+                onDark ? "text-bone" : "text-umber"
+              } ${hideMark ? "opacity-0" : "opacity-100"}`}
             >
               Bluedoor&nbsp;Building
             </span>
@@ -87,24 +93,39 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="label relative pb-1 tracking-[0.35em] text-umber/70 transition-colors duration-500 hover:text-umber"
+                className={`label relative pb-1 tracking-[0.35em] transition-colors duration-500 ${
+                  onDark ? "text-bone/85 hover:text-bone" : "text-umber/70 hover:text-umber"
+                }`}
               >
                 {item.label}
                 {pathname.startsWith(item.href) && (
-                  <span className="absolute -bottom-0.5 left-0 h-px w-full bg-navy/70" />
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-px w-full ${
+                      onDark ? "bg-bone/70" : "bg-navy/70"
+                    }`}
+                  />
                 )}
               </Link>
             ))}
-            <span aria-hidden className="hidden h-3 w-px bg-umber/15 xl:block" />
+            <span
+              aria-hidden
+              className={`hidden h-3 w-px xl:block ${onDark ? "bg-bone/25" : "bg-umber/15"}`}
+            />
             <Link
               href="/portal"
-              className="hidden text-[10px] font-medium uppercase tracking-[0.32em] text-umber/40 transition-colors duration-500 hover:text-umber/80 xl:block"
+              className={`hidden text-[10px] font-medium uppercase tracking-[0.32em] transition-colors duration-500 xl:block ${
+                onDark ? "text-bone/55 hover:text-bone" : "text-umber/40 hover:text-umber/80"
+              }`}
             >
               Client Login
             </Link>
             <Link
               href="/build-with-bluedoor"
-              className="label border border-navy bg-navy px-5 py-2 text-bone transition-all duration-500 hover:bg-navy-deep"
+              className={`label border px-5 py-2 transition-all duration-500 ${
+                onDark
+                  ? "border-bone/70 bg-transparent text-bone hover:bg-bone hover:text-navy"
+                  : "border-navy bg-navy text-bone hover:bg-navy-deep"
+              }`}
             >
               Build with Bluedoor
             </Link>
@@ -118,12 +139,12 @@ export default function Header() {
             <span className="relative block h-3 w-7">
               <span
                 className={`absolute left-0 top-0 h-px w-full transition-all duration-400 ${
-                  open ? "top-1/2 rotate-45 bg-bone" : "bg-umber"
+                  open ? "top-1/2 rotate-45 bg-bone" : onDark ? "bg-bone" : "bg-umber"
                 }`}
               />
               <span
                 className={`absolute bottom-0 left-0 h-px w-full transition-all duration-400 ${
-                  open ? "bottom-auto top-1/2 -rotate-45 bg-bone" : "bg-umber"
+                  open ? "bottom-auto top-1/2 -rotate-45 bg-bone" : onDark ? "bg-bone" : "bg-umber"
                 }`}
               />
             </span>

@@ -134,7 +134,7 @@ export default function DoorReveal() {
           </p>
           <Link
             href="/portfolio"
-            className="label mt-9 border border-bone/70 bg-bone/5 px-9 py-4 text-bone backdrop-blur-sm transition-colors duration-500 hover:bg-bone hover:text-navy"
+            className="on-photo mt-9 text-[11px] font-medium uppercase tracking-[0.34em] text-bone underline decoration-bone/40 underline-offset-8 transition-colors hover:decoration-bone"
           >
             Explore the Portfolio
           </Link>

@@ -92,7 +92,7 @@ function Arrived({
       className="absolute inset-0 z-20 flex flex-col"
       style={style as never}
     >
-      <div className="flex flex-1 items-end justify-center px-5 pb-16 pt-20 md:pb-24">
+      <div className="flex flex-1 items-center justify-center px-5 pb-8 pt-20 md:items-end md:pb-24">
         <div className="relative w-full max-w-xl">
           {/* not a card — a veil in the air: the image softens behind the
               words and feathers back to full clarity at the edges */}
@@ -258,7 +258,7 @@ export default function HeroDoors() {
           <motion.img
             src="/images/logo.png"
             alt="Bluedoor Building"
-            className="w-[min(420px,30vw)] rounded-full shadow-[0_0_0_1px_rgba(247,243,235,0.35),0_0_120px_rgba(0,0,0,0.5)]"
+            className="w-[min(420px,58vw)] rounded-full shadow-[0_0_0_1px_rgba(247,243,235,0.35),0_0_120px_rgba(0,0,0,0.5)] md:w-[min(420px,30vw)]"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
