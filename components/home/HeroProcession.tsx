@@ -4,17 +4,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import { heroRail, heroRailMobile, written } from "@/lib/site";
-import { DoorLeaf } from "@/components/Door";
 
 // Measure before the browser paints, so the stage never shows one frame at
 // the wrong size. Falls back to useEffect where there is no DOM.
 const useMeasure = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
- * One screen. Her houses glide past behind an arched opening, the door
- * standing open at the jambs, and nothing moves but the procession. The
- * blue door has its moment at the foot of the page; up here the site
- * simply holds still and lets the work go by.
+ * One screen. Her houses glide past behind a clean arched opening, and
+ * nothing moves but the procession. The blue door has its moment at the
+ * foot of the page; up here the site holds still and lets the work go by.
  */
 export default function HeroProcession() {
   const stage = useRef<HTMLDivElement>(null);
@@ -36,9 +34,7 @@ export default function HeroProcession() {
   }, []);
 
   const rail = box.mobile ? heroRailMobile : heroRail;
-  // Each plate has to be wider than the opening, or a seam parks in the
-  // middle of the arch and reads as a mistake.
-  const plateW = box.mobile ? Math.round(box.w * 0.84) : Math.round(box.w * 0.46);
+  const plateW = box.mobile ? Math.round(box.w * 0.6) : Math.round(box.w * 0.4);
   const railW = rail.length * plateW;
 
   const apW = box.mobile ? Math.round(box.w * 0.7) : Math.min(Math.round(box.w * 0.3), 440);
@@ -67,43 +63,12 @@ export default function HeroProcession() {
     return () => io.disconnect();
   }, []);
 
-  // A house rests centred in the opening, then the procession glides on to
-  // the next one. Not a conveyor — a considered turn of the page.
-  const HOLD = 4200;
-  const GLIDE = 1600;
-  const at = (i: number) => box.w / 2 - plateW / 2 - (i + 1) * plateW;
-  const index = useRef(0);
-  const moving = useRef(false);
-  const mark = useRef(0);
-
-  useAnimationFrame((t) => {
+  useAnimationFrame((_, delta) => {
     if (!onStage.current || !railW) return;
-    if (!mark.current) {
-      mark.current = t;
-      x.set(at(0));
-      return;
-    }
-    const elapsed = t - mark.current;
-
-    if (!moving.current) {
-      if (elapsed >= HOLD) {
-        moving.current = true;
-        mark.current = t;
-      }
-      return;
-    }
-
-    const k = elapsed / GLIDE;
-    if (k >= 1) {
-      index.current = (index.current + 1) % rail.length;
-      x.set(at(index.current));
-      moving.current = false;
-      mark.current = t;
-      return;
-    }
-    const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-    const from = at(index.current);
-    x.set(from + (at(index.current + 1) - from) * eased);
+    const d = delta > 64 ? 64 : delta; // a dropped frame must not jump the rail
+    let next = x.get() - ((box.mobile ? 20 : 30) * d) / 1000;
+    if (next <= -railW) next += railW;
+    x.set(next);
   });
 
   return (
@@ -157,23 +122,6 @@ export default function HeroProcession() {
           }}
         />
 
-        {/* the leaves, standing just open against the jambs */}
-        {box.ready && (
-          <div className="pointer-events-none absolute inset-0" style={{ perspective: 2600 }}>
-            <div
-              className="absolute bottom-0"
-              style={{ left: insetX - apW * 0.44 - 10, width: apW * 0.44, height: apH }}
-            >
-              <DoorLeaf side="left" hinge="right" turn={74} width="100%" />
-            </div>
-            <div
-              className="absolute bottom-0"
-              style={{ right: insetX - apW * 0.44 - 10, width: apW * 0.44, height: apH }}
-            >
-              <DoorLeaf side="right" hinge="left" turn={-74} width="100%" />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* the lockup */}
