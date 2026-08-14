@@ -151,11 +151,11 @@ body {
 /* type set on photography: a ~0.5px warm-dark edge plus a wide diffuse pool.
    No hard drop shadow — at reading distance it reads as sharpened, not shadowed */
 .on-photo {
-  -webkit-text-stroke: 0.45px rgba(34, 30, 24, 0.3);
+  -webkit-text-stroke: 0.55px rgba(34, 30, 24, 0.34);
   paint-order: stroke fill;
   text-shadow:
-    0 2px 26px rgba(30, 32, 36, 0.55),
-    0 0 80px rgba(30, 32, 36, 0.32);
+    0 2px 26px rgba(30, 32, 36, 0.62),
+    0 0 80px rgba(30, 32, 36, 0.38);
 }
 
 /* localized cinematic veils: a charcoal-navy exposure reduction anchored to

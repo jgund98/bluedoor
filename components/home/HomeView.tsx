@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
 import { site } from "@/lib/site";
 import { FadeUp, Lines, Parallax } from "@/components/motion";
 import { SectionMark, HandOff } from "@/components/SectionMark";
@@ -26,7 +24,6 @@ const WARM = [
   "/images/kitchen-marble.jpg",
   "/images/loggia-ocean.jpg",
   "/images/siobhan-arch.jpg",
-  "/videos/palmbeach-poster.jpg",
   "/reels/arch-stairs-poster.jpg",
   "/reels/interior-ocean-poster.jpg",
   "/reels/coast-aerial-poster.jpg",
@@ -152,8 +149,16 @@ export default function HomeView() {
       <DoorReveal />
 
       {/* ————————————————— III · WHY / COLLABORATIONS ————————————————— */}
-      <section className="relative bg-espresso text-bone">
-        <div className="mx-auto max-w-[1520px] px-5 py-24 md:px-10 md:py-36">
+      <section className="relative overflow-hidden bg-espresso text-bone">
+        {/* the stone loggia at dusk, graded to texture — atmosphere, not content */}
+        <img
+          src="/images/loggia-stone.jpg"
+          alt=""
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-espresso/60 via-espresso/30 to-espresso/85" />
+        <div className="relative mx-auto max-w-[1520px] px-5 py-24 md:px-10 md:py-36">
           <FadeUp>
             <SectionMark numeral="III" label={site.copy.whyLabel} tone="light" className="mb-8" />
           </FadeUp>
@@ -333,9 +338,11 @@ export default function HomeView() {
           />
         </Parallax>
         <div className="veil-bl absolute inset-0" />
+        {/* the scene settles into the footer's midnight — no seam, no reset */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-[#141922]" />
         <div className="relative mx-auto flex min-h-[96vh] max-w-[1520px] flex-col justify-end px-5 pb-16 pt-28 md:px-10 md:pb-24">
           <FadeUp>
-            <SectionMark numeral="V" label="The Principal" tone="light" className="mb-6" />
+            <SectionMark numeral="V" label="The Principal" tone="light" className="on-photo mb-6" />
           </FadeUp>
           <Lines
             as="h2"
@@ -358,117 +365,7 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* ————————————————— FINALE ————————————————— */}
-      {/* her words above are the last voice on the page; this is only the
-          call — a title card over Palm Beach, dissolving into the footer */}
-      <ClosingScene />
+
     </>
-  );
-}
-
-/**
- * The last 100vh the visitor holds: the island drifting below, graded to
- * navy-charcoal so the houses become texture; the words lower-left, like a
- * film's final card; the whole scene darkening into the footer as they leave.
- */
-function ClosingScene() {
-  const ref = useRef<HTMLElement>(null);
-  // entrance: the grade settles while the scene scrolls into view
-  const { scrollYProgress: enterProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end end"],
-  });
-  const veilOpacity = useTransform(enterProgress, (v) =>
-    v <= 0.2 ? 0.18 : v >= 0.85 ? 0.52 : 0.18 + ((v - 0.2) / 0.65) * 0.34
-  );
-  // exit: midnight rises ONLY as the footer actually enters beneath —
-  // never while the visitor is still reading the card
-  const { scrollYProgress: leaveProgress } = useScroll({
-    target: ref,
-    offset: ["end end", "end start"],
-  });
-  const midnightOpacity = useTransform(leaveProgress, (v) =>
-    Math.min(0.92, v * 1.35)
-  );
-
-  return (
-    <section ref={ref} className="relative overflow-hidden bg-[#141922]">
-      <FinaleVideo />
-      {/* the cinematic grade — houses as texture, not content */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 bg-[#141922]"
-        style={{ opacity: veilOpacity }}
-      />
-      <div className="veil-bl pointer-events-none absolute inset-0" />
-
-      <div className="relative mx-auto flex min-h-[100svh] max-w-[1520px] flex-col justify-end px-5 pb-[16vh] md:px-10 md:pb-[18vh]">
-        <div className="max-w-3xl md:ml-[4%]">
-          <FadeUp y={26}>
-            <p className="label-wide on-photo tracking-[0.5em] text-bone/75">
-              Palm Beach, Florida
-            </p>
-          </FadeUp>
-          <FadeUp delay={0.15} y={26}>
-            <h2 className="display on-photo balance mt-6 text-[2.6rem] leading-[1.06] text-bone sm:text-5xl md:text-7xl">
-              Build something worthy of the&nbsp;setting.
-            </h2>
-          </FadeUp>
-          <FadeUp delay={0.3} y={26}>
-            <Link
-              href="/build-with-bluedoor"
-              className="group mt-9 inline-flex items-baseline gap-3"
-            >
-              <span className="on-photo relative text-[11px] font-medium uppercase tracking-[0.34em] text-bone">
-                Begin the Conversation
-                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-100 bg-bone/45 transition-transform duration-700 ease-out group-hover:scale-x-0" />
-                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-right scale-x-0 bg-bone transition-transform duration-700 ease-out group-hover:scale-x-100" />
-              </span>
-              <span
-                aria-hidden
-                className="on-photo text-bone/80 transition-transform duration-500 group-hover:translate-x-1.5"
-              >
-                →
-              </span>
-            </Link>
-          </FadeUp>
-        </div>
-      </div>
-
-      {/* the dissolve into the footer's midnight */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 bg-[#141922]"
-        style={{ opacity: midnightOpacity }}
-      />
-    </section>
-  );
-}
-
-/** The coastline, moving — playback begins the moment the band enters view. */
-function FinaleVideo() {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
-      { threshold: 0.2 }
-    );
-    io.observe(video);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <video
-      ref={ref}
-      className="absolute inset-0 h-full w-full object-cover"
-      src="/videos/palmbeach-aerial.mp4"
-      poster="/videos/palmbeach-poster.jpg"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-    />
   );
 }

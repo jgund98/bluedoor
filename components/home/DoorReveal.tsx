@@ -73,16 +73,36 @@ export default function DoorReveal() {
     return (
       <section className="bg-linen">
         <div className="mx-auto flex max-w-[1520px] flex-col items-center px-5 py-20 text-center md:py-28">
-          <FadeUp>
-            <div className="img-frame w-[86vw] max-w-[440px] rounded-t-full">
-              <img
+          {/* the arch blooms open once as it arrives — the desktop moment,
+              in miniature, without touching the page's scroll */}
+          <motion.div
+            className="w-[86vw] max-w-[440px]"
+            initial={reduce ? "open" : "closed"}
+            whileInView="open"
+            viewport={{ once: true, amount: 0.35 }}
+          >
+            <motion.div
+              className="overflow-hidden rounded-t-full bg-sand/40"
+              variants={{
+                closed: { clipPath: "inset(18% 16% 0% 16% round 999px 999px 0 0)" },
+                open: {
+                  clipPath: "inset(0% 0% 0% 0% round 999px 999px 0 0)",
+                  transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+            >
+              <motion.img
                 src="/images/loggia-ocean.jpg"
                 alt="An oceanfront living room opening onto the Atlantic"
                 loading="lazy"
                 className="aspect-[9/12] w-full object-cover"
+                variants={{
+                  closed: { scale: 1.22 },
+                  open: { scale: 1, transition: { duration: 1.9, ease: [0.22, 1, 0.36, 1] } },
+                }}
               />
-            </div>
-          </FadeUp>
+            </motion.div>
+          </motion.div>
           <FadeUp delay={0.1}>
             <p className="display balance mt-10 max-w-md text-3xl text-umber">
               Every home begins at the blue&nbsp;door.
@@ -125,10 +145,23 @@ export default function DoorReveal() {
 
         {/* the line that names the site */}
         <motion.div
-          className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center veil-b px-6 pb-[10vh] pt-32 text-center"
+          className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center px-6 pb-[10vh] pt-32 text-center"
           style={{ opacity: captionOpacity, y: captionY, visibility: captionVisibility }}
         >
-          <p className="label-wide on-photo mb-5 text-bone/85">Bluedoor Building</p>
+          {/* the image quiets only behind the words — the hero's veil, reused */}
+          <div className="relative flex flex-col items-center">
+            <div
+              aria-hidden
+              className="absolute -inset-x-40 -inset-y-14 bg-espresso/25 backdrop-blur-[7px]"
+              style={{
+                WebkitMaskImage:
+                  'radial-gradient(ellipse 68% 88% at center, black 30%, transparent 78%)',
+                maskImage:
+                  'radial-gradient(ellipse 68% 88% at center, black 30%, transparent 78%)',
+              }}
+            />
+            <div className="relative flex flex-col items-center">
+          <p className="label-wide on-photo mb-5 text-bone">Bluedoor Building</p>
           <p className="display on-photo balance text-[2rem] text-bone sm:text-4xl md:text-6xl">
             Every home begins at the blue&nbsp;door.
           </p>
@@ -138,6 +171,8 @@ export default function DoorReveal() {
           >
             Explore the Portfolio
           </Link>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

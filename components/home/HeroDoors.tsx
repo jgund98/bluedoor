@@ -98,12 +98,12 @@ function Arrived({
               words and feathers back to full clarity at the edges */}
           <div
             aria-hidden
-            className="absolute -inset-x-16 -inset-y-10 bg-espresso/[0.13] backdrop-blur-[5px]"
+            className="absolute -inset-x-16 -inset-y-10 bg-espresso/20 backdrop-blur-[7px]"
             style={{
               WebkitMaskImage:
-                "radial-gradient(ellipse 88% 90% at center, black 42%, transparent 90%)",
+                "radial-gradient(ellipse 92% 94% at center, black 50%, transparent 92%)",
               maskImage:
-                "radial-gradient(ellipse 88% 90% at center, black 42%, transparent 90%)",
+                "radial-gradient(ellipse 92% 94% at center, black 50%, transparent 92%)",
             }}
           />
           <div className="relative px-2 py-2 text-center">
