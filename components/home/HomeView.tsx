@@ -6,7 +6,7 @@ import { FadeUp, Lines, Parallax } from "@/components/motion";
 import { SectionMark, HandOff } from "@/components/SectionMark";
 import { useWarmImages } from "@/components/useWarmImages";
 import DoorReveal from "./DoorReveal";
-import HeroDoors from "./HeroDoors";
+import HeroArch from "./HeroArch";
 import ReelsGallery from "./ReelsGallery";
 
 // text anchors rotate so no two service plates compose alike
@@ -36,8 +36,8 @@ export default function HomeView() {
   useWarmImages(WARM, 1200);
   return (
     <>
-      {/* ————————————————— HERO — the site loads as the blue door ————————————————— */}
-      <HeroDoors />
+      {/* ————————————————— HERO — the editorial arch, blooming open ————————————————— */}
+      <HeroArch />
 
       {/* ————————————————— I · COMMITMENT ————————————————— */}
       {/* The chapter opening, set on the page's centre line. Left-aligned it

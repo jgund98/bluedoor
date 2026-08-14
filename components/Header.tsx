@@ -42,13 +42,10 @@ export default function Header() {
     };
   }, [open]);
 
-  // over navy grounds (the closed doors, the portal) the header floats
-  // transparent in bone until the first scroll inverts it to solid ivory
-  const onDark =
-    (pathname === "/" || pathname.startsWith("/portal")) && !scrolled && !open;
-  // over the closed doors the centered medallion IS the identity —
-  // the header's own mark waits until the doors begin to open
-  const hideMark = pathname === "/" && !scrolled && !open;
+  // only the portal opens on navy — its header floats transparent in bone
+  // until scroll; home and every other page open on the ivory bar
+  const onDark = pathname.startsWith("/portal") && !scrolled && !open;
+  const hideMark = false;
 
   return (
     <>
