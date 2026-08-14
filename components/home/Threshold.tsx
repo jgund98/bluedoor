@@ -34,9 +34,14 @@ export default function Threshold() {
     if (!el) return;
     const measure = () => {
       const r = el.getBoundingClientRect();
-      if (r.width && r.height) {
-        setBox({ w: r.width, h: r.height, mobile: r.width < 1024, ready: true });
-      }
+      if (!r.width || !r.height) return;
+      setBox((prev) => {
+        const mobile = r.width < 1024;
+        // Same as the hero: a phone's stage changes height as the URL bar
+        // collapses, and re-laying the door out mid-scroll reads as a glitch.
+        if (prev.ready && mobile && Math.round(r.width) === Math.round(prev.w)) return prev;
+        return { w: r.width, h: r.height, mobile, ready: true };
+      });
     };
     measure();
     const ro = new ResizeObserver(measure);

@@ -105,32 +105,56 @@ export default function CulturePage() {
       <section className="bg-chalk py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <div className="flex items-center gap-5">
-            <span className="label shrink-0 text-navy/75">The Studio</span>
+            <span className="label shrink-0 text-navy/75">How she runs a project</span>
             <span className="hair h-px flex-1" />
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-12 lg:mt-14 lg:grid-cols-12 lg:gap-14">
-            {site.team.map((m, i) => (
-              <Reveal
-                key={m.name}
-                delay={i * 0.08}
-                className={i === 0 ? "lg:col-span-5" : "lg:col-span-5 lg:col-start-7"}
-              >
-                <div className="flex gap-6">
-                  <div className="h-[104px] w-[88px] shrink-0 overflow-hidden plate ring-1 ring-navy/12 lg:h-[128px] lg:w-[108px]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: "50% 34%" }} />
-                  </div>
-                  <div>
-                    <h3 className="display text-[19px] text-ink lg:text-[21px]">{m.name}</h3>
-                    <span className="label mt-2 block text-navy/70">{m.title}</span>
-                  </div>
+          <div className="mt-10 grid grid-cols-1 items-center gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-6">
+              <Reveal>
+                <h2>
+                  <span className="display block text-[clamp(27px,6.4vw,32px)] text-ink lg:text-[clamp(30px,2.4vw,40px)]">
+                    Daily on the site,
+                  </span>
+                  <span className="answer mt-0.5 block text-[clamp(29px,6.8vw,34px)] text-navy lg:mt-1 lg:text-[clamp(32px,2.6vw,44px)]">
+                    not from an office.
+                  </span>
+                </h2>
+              </Reveal>
+
+              <Reveal delay={0.08}>
+                <div className="mt-9 border-t border-navy/20 pt-7">
+                  <span className="label block text-navy/70">{site.copy.supervisionLabel}</span>
+                  <p className="prose-lux mt-4 text-[16px] lg:text-[17px]">
+                    {site.copy.supervision}
+                  </p>
                 </div>
-                <p className="prose-lux mt-5 max-w-[420px] text-[15px] leading-[1.66] lg:text-[15px]">
-                  {m.short}
+              </Reveal>
+
+              <Reveal delay={0.14}>
+                <div className="mt-8 border-t border-navy/20 pt-7">
+                  <span className="label block text-navy/70">The hand-off</span>
+                  <p className="prose-lux mt-4 text-[16px] lg:text-[17px]">{site.copy.handOff}</p>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-5 lg:col-start-8">
+              <RevealPlate className="portal aspect-[4/5] overflow-hidden plate ring-1 ring-navy/12">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/loggia-stone.jpg"
+                  alt="A stone colonnade under construction"
+                  loading="lazy"
+                  style={{ objectPosition: "50% 52%" }}
+                />
+              </RevealPlate>
+              <Reveal delay={0.1}>
+                <p className="answer mt-4 text-[15px] leading-[1.45] text-ink/50">
+                  A site she is on most days, mid-construction.
                 </p>
               </Reveal>
-            ))}
+            </div>
           </div>
         </div>
       </section>
