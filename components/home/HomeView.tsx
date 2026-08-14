@@ -376,16 +376,22 @@ export default function HomeView() {
  */
 function ClosingScene() {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
+  // entrance: the grade settles while the scene scrolls into view
+  const { scrollYProgress: enterProgress } = useScroll({
     target: ref,
     offset: ["start end", "end end"],
   });
-  // the veil settles as the scene arrives; the scene sinks into midnight as it leaves
-  const veilOpacity = useTransform(scrollYProgress, (v) =>
-    v <= 0.15 ? 0.2 : v >= 0.55 ? 0.55 : 0.2 + ((v - 0.15) / 0.4) * 0.35
+  const veilOpacity = useTransform(enterProgress, (v) =>
+    v <= 0.2 ? 0.18 : v >= 0.85 ? 0.52 : 0.18 + ((v - 0.2) / 0.65) * 0.34
   );
-  const midnightOpacity = useTransform(scrollYProgress, (v) =>
-    v <= 0.82 ? 0 : Math.min(1, ((v - 0.82) / 0.18) * 0.9)
+  // exit: midnight rises ONLY as the footer actually enters beneath —
+  // never while the visitor is still reading the card
+  const { scrollYProgress: leaveProgress } = useScroll({
+    target: ref,
+    offset: ["end end", "end start"],
+  });
+  const midnightOpacity = useTransform(leaveProgress, (v) =>
+    Math.min(0.92, v * 1.35)
   );
 
   return (
