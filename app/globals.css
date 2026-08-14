@@ -21,7 +21,7 @@
 
   --font-display: var(--font-marcellus), "Times New Roman", serif;
   --font-serif: var(--font-cormorant), "Times New Roman", serif;
-  --font-script: var(--font-italianno), cursive;
+  --font-script: var(--font-pinyon), cursive;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -82,8 +82,8 @@ body {
 .script {
   font-family: var(--font-script);
   font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: 0.01em;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
 }
 
 .prose-lux {

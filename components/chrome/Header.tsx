@@ -217,7 +217,7 @@ function DoorIndex({ onClose }: { onClose: () => void }) {
         <img
           src="/images/logo.png"
           alt=""
-          className="mb-9 w-[46px] rounded-full ring-1 ring-porcelain/25 lg:mb-12 lg:w-[54px]"
+          className="mb-9 w-[94px] rounded-full ring-1 ring-porcelain/25 lg:mb-12 lg:w-[108px]"
         />
 
         <nav className="w-full max-w-[520px]">

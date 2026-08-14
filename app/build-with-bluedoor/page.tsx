@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
-import { Reveal, RevealPlate } from "@/components/motion";
+import { Reveal, RevealPlate, Signature } from "@/components/motion";
 import Enquiry from "@/components/build/Enquiry";
 
 export const metadata: Metadata = {
@@ -81,9 +81,9 @@ export default function BuildPage() {
             {/* signed */}
             <Reveal delay={0.2}>
               <div className="mt-12 lg:mt-16">
-                <span className="script block whitespace-nowrap text-[clamp(54px,12vw,72px)] text-navy lg:text-[86px]">
+                <Signature className="script block whitespace-nowrap text-[clamp(48px,11vw,66px)] text-navy lg:text-[78px]">
                   Siobhan Zerilla
-                </span>
+                </Signature>
                 <span className="label mt-1 block text-ink/45">
                   {site.principal.title}, {site.name}
                 </span>

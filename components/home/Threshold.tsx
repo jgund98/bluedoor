@@ -49,9 +49,16 @@ export default function Threshold() {
     return () => ro.disconnect();
   }, []);
 
+  /**
+   * Everything vertical is a percentage of the stage, never a pixel taken
+   * from a measurement. The door is positioned from the bottom by CSS,
+   * which follows the live height; a pixel clip computed from a measured
+   * height does not, and on a phone the two drift apart the moment the URL
+   * bar collapses — which is what let the room show above the doors.
+   */
   const doorW = box.mobile ? Math.min(box.w * 0.66, 340) : Math.min(box.w * 0.27, 386);
-  const doorH = Math.round(box.h * (box.mobile ? 0.5 : 0.56));
-  const sill = Math.round(box.h * (box.mobile ? 0.1 : 0.09));
+  const doorHPct = box.mobile ? 50 : 56;
+  const sillPct = box.mobile ? 10 : 9;
 
   /* the leaves swing */
   const swing = useTransform(p, (v) => easeInOut(seg(v, 0.06, 0.44)));
@@ -62,16 +69,17 @@ export default function Threshold() {
   /* the doorway opens onto the whole screen */
   const bloom = useTransform(p, (v) => easeOut(seg(v, 0.34, 0.72)));
   const insetX = useTransform(bloom, (b) => (box.w - lerp(doorW, box.w, b)) / 2);
-  const insetTop = useTransform(bloom, (b) => box.h - lerp(doorH, box.h, b) - lerp(sill, 0, b));
-  const insetBottom = useTransform(bloom, (b) => lerp(sill, 0, b));
+  const insetTop = useTransform(bloom, (b) => lerp(100 - doorHPct - sillPct, 0, b));
+  const insetBottom = useTransform(bloom, (b) => lerp(sillPct, 0, b));
   const rx = useTransform(bloom, (b) => lerp(doorW / 2, 0, b));
-  const ry = useTransform(bloom, (b) => lerp(doorH * 0.3, 0, b));
-  const clip = useMotionTemplate`inset(${insetTop}px ${insetX}px ${insetBottom}px ${insetX}px round ${rx}px ${rx}px 2px 2px / ${ry}px ${ry}px 0px 0px)`;
+  const ry = useTransform(bloom, (b) => lerp(doorHPct * 0.3, 0, b));
+  const clip = useMotionTemplate`inset(${insetTop}% ${insetX}px ${insetBottom}% ${insetX}px round ${rx}px ${rx}px 2px 2px / ${ry}% ${ry}% 0px 0px)`;
 
   /* The doorway should look level into the room, not down at the floor —
      the picture rides down so the opening frames its middle, and settles
      as the opening grows to fill the screen. */
-  const lookY = useTransform(bloom, (b) => (box.h - lerp(doorH, box.h, b)) / 2 - lerp(sill, 0, b) / 2);
+  const lookY = useTransform(bloom, (b) => lerp((100 - doorHPct) / 2 - sillPct / 2, 0, b));
+  const look = useMotionTemplate`translateY(${lookY}%)`;
 
   const frameFade = useTransform(p, (v) => 1 - seg(v, 0.36, 0.52));
   const groundFade = useTransform(p, (v) => 1 - seg(v, 0.4, 0.66));
@@ -98,7 +106,7 @@ export default function Threshold() {
           }`}
           style={{ clipPath: clip, WebkitClipPath: clip }}
         >
-          <motion.div className="absolute inset-0" style={{ y: lookY }}>
+          <motion.div className="absolute inset-0" style={{ transform: look }}>
             <motion.img
               src={BEYOND}
               alt="A stone colonnade, under construction"
@@ -114,7 +122,12 @@ export default function Threshold() {
         {box.ready && (
           <motion.div
             className="absolute left-1/2 -translate-x-1/2"
-            style={{ width: doorW, height: doorH, bottom: sill, opacity: frameFade }}
+            style={{
+              width: doorW,
+              height: doorHPct + "%",
+              bottom: sillPct + "%",
+              opacity: frameFade,
+            }}
           >
             <div className="absolute -bottom-5 left-1/2 h-8 w-[118%] -translate-x-1/2 rounded-[50%] bg-umber/25 blur-xl" />
 

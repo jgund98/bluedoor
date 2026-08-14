@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
-import { Reveal, RevealPlate } from "@/components/motion";
+import { Reveal, RevealPlate, Signature } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Culture — Siobhan Zerilla and the studio",
@@ -23,8 +23,10 @@ export default function CulturePage() {
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <Reveal>
             <span className="label text-navy/75">The Principal</span>
-            <h1 className="script mt-4 block whitespace-nowrap text-[clamp(78px,16vw,124px)] text-navy lg:mt-3 lg:text-[clamp(132px,12vw,200px)]">
-              Siobhan Zerilla
+            <h1 className="mt-4 lg:mt-3">
+              <Signature className="script block whitespace-nowrap text-[clamp(66px,14vw,108px)] text-navy lg:text-[clamp(116px,10.4vw,176px)]">
+                Siobhan Zerilla
+              </Signature>
             </h1>
           </Reveal>
 

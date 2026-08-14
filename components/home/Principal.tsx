@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { site, written } from "@/lib/site";
-import { Reveal, RevealPlate } from "@/components/motion";
+import { Reveal, RevealPlate, Signature } from "@/components/motion";
 
 export default function Principal() {
   return (
@@ -11,9 +11,9 @@ export default function Principal() {
         {/* her name, written across the full measure */}
         <Reveal>
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-            <span className="script block whitespace-nowrap text-[clamp(64px,13vw,98px)] text-navy lg:text-[clamp(96px,8.6vw,140px)]">
+            <Signature className="script block whitespace-nowrap text-[clamp(58px,12vw,88px)] text-navy lg:text-[clamp(88px,7.8vw,126px)]">
               Siobhan Zerilla
-            </span>
+            </Signature>
             <span className="label mt-3 shrink-0 text-ink/50 lg:mb-6 lg:mt-0">
               {site.principal.title} — Bluedoor Building
             </span>
