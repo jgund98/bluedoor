@@ -24,7 +24,7 @@ export default function CulturePage() {
           <Reveal>
             <span className="label text-navy/75">The Principal</span>
             <h1 className="mt-4 lg:mt-3">
-              <Signature className="script block whitespace-nowrap text-[clamp(66px,14vw,108px)] text-navy lg:text-[clamp(116px,10.4vw,176px)]">
+              <Signature className="script block whitespace-nowrap text-[clamp(52px,11vw,80px)] text-navy lg:text-[clamp(86px,7.4vw,124px)]">
                 Siobhan Zerilla
               </Signature>
             </h1>
