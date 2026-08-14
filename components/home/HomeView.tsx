@@ -18,6 +18,7 @@ import ReelsGallery from "./ReelsGallery";
 // pre-warm the showpieces once the page is idle, so no reveal ever
 // starts before its photograph is in the cache
 const WARM = [
+  "/images/detail-stone-column.jpg",
   "/images/aerial-oceanfront.jpg",
   "/images/estate-bougainvillea.jpg",
   "/images/watercolor-2.jpg",
@@ -43,22 +44,32 @@ export default function HomeView() {
       {/* ————— the signature: the arch blooms open ————— */}
       <HeroArch />
 
-      {/* ————— the commitment, set like a dedication page ————— */}
+      {/* ————— the dedication page: a statement and a designed void ————— */}
       <section className="grain relative bg-bone">
-        <div className="mx-auto max-w-[1520px] px-5 pb-24 pt-24 md:px-10 md:pb-36 md:pt-40">
-          <p className={`${MICRO} text-taupe`}>Our Commitment</p>
-          <p className="serif-body mt-8 max-w-3xl text-[1.6rem] leading-[1.48] text-umber md:text-[2.2rem]">
-            {site.copy.commitment}
-          </p>
-          <div className="mt-10 flex max-w-3xl justify-end">
-            <p className={`${MICRO} text-taupe`}>
+        <div className="relative mx-auto min-h-[72vh] max-w-[1520px] px-5 pb-20 pt-24 md:min-h-[86vh] md:px-10 md:pt-40">
+          <div className="max-w-xl">
+            <p className={`${MICRO} text-taupe`}>Our Commitment</p>
+            <p className="serif-body mt-8 text-[1.5rem] leading-[1.5] text-umber md:text-[1.9rem]">
+              {site.copy.commitment}
+            </p>
+            <p className={`${MICRO} mt-10 text-taupe`}>
               Palm Beach&ensp;·&ensp;Est. by Siobhan Zerilla
             </p>
+          </div>
+          {/* across the void, one small window of stone */}
+          <div className="mt-14 flex justify-end md:absolute md:bottom-0 md:right-[8%] md:mt-0">
+            <div className="w-[62%] max-w-[240px] overflow-hidden rounded-tl-[110px] md:w-[240px]">
+              <ImageReveal
+                src="/images/detail-stone-column.jpg"
+                alt="Coquina column detail in a Bluedoor garden"
+                className="aspect-[3/4] w-full"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ————— the disciplines: three spreads of one monograph ————— */}
+      {/* ————— the disciplines: three negative-space spreads ————— */}
       <section className="overflow-hidden bg-bone">
         <div className="mx-auto max-w-[1520px] px-5 md:px-10">
           <p className={`${MICRO} text-taupe`}>Our Services</p>
@@ -69,93 +80,90 @@ export default function HomeView() {
           />
         </div>
 
-        {/* spread 01 — the image runs off the page */}
-        <div className="mt-16 md:mt-24">
-          <div className="mx-auto grid max-w-[1520px] items-end gap-10 px-0 md:grid-cols-12 md:gap-0 md:px-10">
-            <div className="order-2 px-5 md:order-1 md:col-span-4 md:px-0 md:pb-6">
-              <p className="display text-[5.5rem] leading-none text-sand md:text-[8rem]">01</p>
-              <h3 className="display mt-2 text-[1.8rem] text-umber md:text-4xl">
-                {site.services[0].name}
-              </h3>
-              <p className="mt-5 max-w-sm text-[15.5px] font-light leading-relaxed text-umber/80">
-                {site.services[0].copy}
-              </p>
-              <Link href="/portfolio#luxury-residential" className={`${LINK_LIGHT} mt-7`}>
-                See the Work
-              </Link>
-            </div>
-            <div className="order-1 md:order-2 md:col-span-8">
-              {/* bleeds past the grid to the right edge of the viewport */}
-              <div className="md:-mr-[calc((100vw-min(100vw,1520px))/2+2.5rem)]">
-                <ImageReveal
-                  src={site.services[0].image}
-                  alt={site.services[0].name}
-                  className="aspect-[16/10] w-full md:aspect-[16/9]"
-                />
-              </div>
+        {/* 01 — an inset frame with one arch-born corner; 40% of the page stays ivory */}
+        <div className="relative mx-auto max-w-[1520px] px-5 pt-16 md:min-h-[94vh] md:px-10 md:pt-24">
+          <div className="relative z-10 max-w-xs">
+            <p className="display text-[5rem] leading-none text-sand md:text-[7rem]">01</p>
+            <h3 className="display mt-2 text-[1.7rem] text-umber md:text-3xl">
+              {site.services[0].name}
+            </h3>
+            <p className="mt-5 text-[15px] font-light leading-relaxed text-umber/80">
+              {site.services[0].copy}
+            </p>
+            <Link href="/portfolio#luxury-residential" className={`${LINK_LIGHT} mt-7`}>
+              See the Work
+            </Link>
+          </div>
+          <div className="mt-10 flex justify-end md:absolute md:right-[6%] md:top-[26%] md:mt-0 md:block md:w-[56%]">
+            <div className="w-[92%] overflow-hidden rounded-tl-[160px] md:w-full">
+              <ImageReveal
+                src={site.services[0].image}
+                alt={site.services[0].name}
+                className="aspect-[16/10] w-full"
+              />
             </div>
           </div>
         </div>
 
-        {/* spread 02 — matted photography floating in ivory */}
-        <div className="mt-24 md:mt-40">
-          <div className="mx-auto grid max-w-[1520px] gap-12 px-5 md:grid-cols-12 md:gap-0 md:px-10">
-            <div className="relative md:col-span-6 md:col-start-2">
-              <div className="border border-umber/10 bg-white p-2.5 md:mr-16">
-                <ImageReveal
-                  src={site.services[1].image}
-                  alt={site.services[1].name}
-                  className="aspect-[4/3] w-full"
-                />
-              </div>
-              {/* a smaller study resting on the mat's corner */}
-              <div className="absolute -bottom-10 right-0 hidden w-44 border border-umber/10 bg-white p-2 md:block lg:w-56">
-                <ImageReveal
-                  src="/images/watercolor-2.jpg"
-                  alt="Watercolor study of a historic residence"
-                  className="aspect-[3/4] w-full"
-                />
-              </div>
+        {/* 02 — a contained portrait; the void carries only its numeral */}
+        <div className="relative mx-auto max-w-[1520px] px-5 pt-24 md:min-h-[108vh] md:px-10 md:pt-36">
+          <p
+            aria-hidden
+            className="display pointer-events-none absolute right-[8%] top-[14%] hidden select-none text-[15rem] leading-none text-sand/70 md:block"
+          >
+            02
+          </p>
+          <div className="relative md:absolute md:left-[10%] md:top-[20%] md:w-[32%]">
+            <div className="border border-umber/10 bg-white p-2.5">
+              <ImageReveal
+                src={site.services[1].image}
+                alt={site.services[1].name}
+                className="aspect-[3/4] w-full"
+              />
             </div>
-            <div className="md:col-span-4 md:col-start-9 md:pt-10 md:text-right">
-              <p className="display text-[5.5rem] leading-none text-sand md:text-[8rem]">02</p>
-              <h3 className="display mt-2 text-[1.8rem] text-umber md:text-4xl">
-                {site.services[1].name}
-              </h3>
-              <p className="mt-5 text-[15.5px] font-light leading-relaxed text-umber/80 md:ml-auto md:max-w-sm">
-                {site.services[1].copy}
-              </p>
-              <Link href="/portfolio#historic-renovation" className={`${LINK_LIGHT} mt-7`}>
-                See the Work
-              </Link>
+            <div className="absolute -bottom-10 -right-8 hidden w-40 border border-umber/10 bg-white p-2 md:block lg:w-48">
+              <ImageReveal
+                src="/images/watercolor-2.jpg"
+                alt="Watercolor study of a historic residence"
+                className="aspect-[3/4] w-full"
+              />
             </div>
+          </div>
+          <div className="ml-auto mt-10 max-w-xs text-right md:absolute md:bottom-[14%] md:right-[8%] md:mt-0">
+            <p className="display text-[5rem] leading-none text-sand md:hidden">02</p>
+            <h3 className="display mt-2 text-[1.7rem] text-umber md:mt-0 md:text-3xl">
+              {site.services[1].name}
+            </h3>
+            <p className="mt-5 text-[15px] font-light leading-relaxed text-umber/80">
+              {site.services[1].copy}
+            </p>
+            <Link href="/portfolio#historic-renovation" className={`${LINK_LIGHT} mt-7`}>
+              See the Work
+            </Link>
           </div>
         </div>
 
-        {/* spread 03 — the release: one wide room, the name crossing its edge */}
-        <div className="mt-24 pb-24 md:mt-44 md:pb-36">
-          <div className="mx-auto max-w-[1520px] px-5 md:px-10">
-            <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-5">
-              <p className="display text-[5.5rem] leading-none text-sand md:text-[8rem]">03</p>
-              <h3 className="display relative z-10 mb-5 text-[1.8rem] text-umber md:-mb-7 md:mb-0 md:text-4xl">
-                {site.services[2].name}
-              </h3>
-            </div>
+        {/* 03 — the photograph escapes the page; the words keep a framed plane */}
+        <div className="relative mx-auto max-w-[1520px] pb-24 pt-24 md:min-h-[92vh] md:pb-36 md:pt-32">
+          <div className="ml-auto w-[88%] overflow-hidden rounded-bl-[140px] md:absolute md:right-0 md:top-[10%] md:h-[48vh] md:w-[58%]">
+            <ImageReveal
+              src={site.services[2].image}
+              alt={site.services[2].name}
+              className="aspect-[16/10] w-full md:h-full"
+              imgClassName="md:h-full md:w-full md:object-cover"
+            />
           </div>
-          <ImageReveal
-            src={site.services[2].image}
-            alt={site.services[2].name}
-            className="h-[46vh] w-full md:h-[68vh]"
-          />
-          <div className="mx-auto max-w-[1520px] px-5 md:px-10">
-            <div className="mt-7 flex flex-col gap-5 md:ml-auto md:max-w-md md:text-right">
-              <p className="text-[15.5px] font-light leading-relaxed text-umber/80">
-                {site.services[2].copy}
-              </p>
-              <Link href="/portfolio#quality-interiors" className={`${LINK_LIGHT} md:self-end`}>
-                See the Work
-              </Link>
-            </div>
+          <div className="relative z-10 mx-5 -mt-8 border border-umber/15 bg-bone px-7 pb-14 pt-9 md:absolute md:bottom-[12%] md:left-[6%] md:mx-0 md:mt-0 md:w-[40%] md:px-12 md:pb-24 md:pt-12">
+            <p className="display text-[5rem] leading-none text-sand md:text-[7rem]">03</p>
+            <h3 className="display mt-2 text-[1.7rem] text-umber md:text-3xl">
+              {site.services[2].name}
+            </h3>
+            <p className="mt-5 max-w-sm text-[15px] font-light leading-relaxed text-umber/80">
+              {site.services[2].copy}
+            </p>
+            <Link href="/portfolio#quality-interiors" className={`${LINK_LIGHT} mt-7`}>
+              See the Work
+            </Link>
           </div>
         </div>
       </section>
@@ -163,51 +171,59 @@ export default function HomeView() {
       {/* ————— event: the blue doors ————— */}
       <DoorReveal />
 
-      {/* ————— the company they keep, on calm linen ————— */}
+      {/* ————— the company they keep: an asymmetric page on linen ————— */}
       <section className="bg-linen">
-        <div className="mx-auto max-w-[1520px] px-5 py-24 md:px-10 md:py-36">
-          <p className={`${MICRO} text-taupe`}>{site.copy.whyLabel}</p>
-          <Lines
-            as="h2"
-            className="display mt-6 max-w-4xl text-[1.9rem] text-umber sm:text-4xl md:text-5xl"
-            lines={["Uncompromising quality,", "unparalleled expertise."]}
-          />
-          <div className="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:gap-0">
-            <p className="text-[16px] font-light leading-relaxed text-umber/80 md:col-span-5">
+        <div className="mx-auto max-w-[1520px] px-5 py-24 md:px-10 md:py-40">
+          <div className="max-w-2xl">
+            <p className={`${MICRO} text-taupe`}>{site.copy.whyLabel}</p>
+            <Lines
+              as="h2"
+              className="display mt-6 text-[1.9rem] text-umber sm:text-4xl md:text-5xl"
+              lines={["Uncompromising quality,", "unparalleled expertise."]}
+            />
+          </div>
+          <div className="mt-10 flex md:mt-24 md:justify-end">
+            <p className="max-w-md text-[16px] font-light leading-relaxed text-umber/80">
               {site.copy.why}
             </p>
-            <p className="serif-body text-xl italic leading-relaxed text-umber/85 md:col-span-5 md:col-start-8">
+          </div>
+          <div className="mt-10 md:mt-6">
+            <p className="serif-body max-w-md text-xl italic leading-relaxed text-umber/85">
               {site.copy.collaborations}
             </p>
           </div>
 
-          <div className="rule mt-16 md:mt-20" />
-          <div className="mt-12 grid gap-12 sm:grid-cols-3 sm:gap-8">
-            {(
-              [
-                ["Architects", site.collaborators.architects],
-                ["Interior Designers", site.collaborators.interiors],
-                ["Landscape Architects", site.collaborators.landscape],
-              ] as const
-            ).map(([title, names]) => (
-              <div key={title}>
-                <p className={`${MICRO} mb-6 text-taupe`}>{title}</p>
-                <ul className="flex flex-col gap-3.5">
-                  {names.map((firm) => (
-                    <li key={firm.name}>
-                      <a
-                        href={firm.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="serif-body border-b border-transparent text-lg leading-snug text-umber/85 transition-colors duration-300 hover:border-navy/40 hover:text-umber"
-                      >
-                        {firm.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-12 md:gap-0">
+            <div className="md:col-span-3">
+              <p className={`${MICRO} text-taupe`}>Collaborations</p>
+            </div>
+            <div className="grid gap-12 sm:grid-cols-3 sm:gap-8 md:col-span-9">
+              {(
+                [
+                  ["Architects", site.collaborators.architects],
+                  ["Interior Designers", site.collaborators.interiors],
+                  ["Landscape Architects", site.collaborators.landscape],
+                ] as const
+              ).map(([title, names]) => (
+                <div key={title}>
+                  <p className={`${MICRO} mb-6 text-taupe/80`}>{title}</p>
+                  <ul className="flex flex-col gap-3.5">
+                    {names.map((firm) => (
+                      <li key={firm.name}>
+                        <a
+                          href={firm.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="serif-body border-b border-transparent text-lg leading-snug text-umber/85 transition-colors duration-300 hover:border-navy/40 hover:text-umber"
+                        >
+                          {firm.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

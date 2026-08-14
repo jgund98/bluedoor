@@ -79,6 +79,43 @@ function DoorPanel({ side }: { side: "left" | "right" }) {
 
 const easeOut3 = (x: number) => 1 - Math.pow(1 - x, 3);
 
+/** One painting on the studio wall — it hangs, then takes its leave. */
+function OverturePainting({
+  piece,
+  index,
+  progress,
+  flyT,
+}: {
+  piece: { src: string; cls: string; rot: number; fx: number; fy: number; fr: number };
+  index: number;
+  progress: import("framer-motion").MotionValue<number>;
+  flyT: (v: number) => number;
+}) {
+  const stagger = index * 0.035;
+  const x = useTransform(progress, (v) => {
+    const t = easeOut3(Math.min(1, Math.max(0, flyT(v) - stagger) / (1 - stagger)));
+    return `${piece.fx * t}vw`;
+  });
+  const y = useTransform(progress, (v) => {
+    const t = easeOut3(Math.min(1, Math.max(0, flyT(v) - stagger) / (1 - stagger)));
+    return `${piece.fy * t}vh`;
+  });
+  const rotate = useTransform(progress, (v) => {
+    const t = easeOut3(Math.min(1, Math.max(0, flyT(v) - stagger) / (1 - stagger)));
+    return piece.rot + piece.fr * t;
+  });
+  return (
+    <motion.div
+      className={`absolute ${piece.cls}`}
+      style={{ x, y, rotate }}
+    >
+      <div className="border border-umber/10 bg-white p-2 shadow-[0_24px_55px_-28px_rgba(53,48,42,0.45)]">
+        <img src={piece.src} alt="" loading="lazy" className="h-auto w-full" />
+      </div>
+    </motion.div>
+  );
+}
+
 export default function HeroArch() {
   preload("/images/hero-stairhall.jpg", { as: "image", fetchPriority: "high" });
   const ref = useRef<HTMLElement>(null);
@@ -108,63 +145,43 @@ export default function HeroArch() {
   const archW = isMobile ? vp.w * 0.86 : Math.min(vp.w * 0.56, 860);
   const topRest = isMobile ? vp.h * 0.34 : vp.h * 0.365;
 
-  /* beat 1→2: the doors part (0.05 → 0.3), slow first inches */
+  /* act one: the doors part, unhurried (0.04 → 0.26) */
   const doorEase = (v: number) => {
-    const t = Math.min(1, Math.max(0, (v - 0.05) / 0.25));
-    const cracked = Math.min(t, 0.18) * 0.06;
-    const swept = t <= 0.18 ? 0 : (t - 0.18) / 0.82;
-    return cracked + easeOut3(swept) * 0.99;
+    const t = Math.min(1, Math.max(0, (v - 0.04) / 0.22));
+    // easeInOut — a door opened by hand, not thrown
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
+  /* act two: the studio wall — paintings hang, then take their leave */
+  const flyT = (v: number) => Math.min(1, Math.max(0, (v - 0.4) / 0.24));
+  const overtureBackdrop = useTransform(scrollYProgress, (v) =>
+    v <= 0.46 ? 1 : v >= 0.62 ? 0 : 1 - (v - 0.46) / 0.16
+  );
+  const overtureVisibility = useTransform(scrollYProgress, (v) =>
+    v > 0.66 ? "hidden" : "visible"
+  );
+  const overtureLogoOpacity = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.4) return 1;
+    if (v >= 0.56) return 0;
+    return 1 - (v - 0.4) / 0.16;
+  });
   const leftX = useTransform(scrollYProgress, (v) => `${-102 * doorEase(v)}%`);
   const rightX = useTransform(scrollYProgress, (v) => `${102 * doorEase(v)}%`);
   const doorsVisibility = useTransform(scrollYProgress, (v) =>
-    v > 0.34 ? "hidden" : "visible"
+    v > 0.3 ? "hidden" : "visible"
   );
   const medallionOpacity = useTransform(scrollYProgress, (v) =>
-    v <= 0.04 ? 1 : v >= 0.14 ? 0 : 1 - (v - 0.04) / 0.1
-  );
-  const medallionScale = useTransform(scrollYProgress, (v) =>
-    v <= 0.04 ? 1 : 1 + Math.min((v - 0.04) / 0.1, 1) * 0.22
+    v <= 0.03 ? 1 : v >= 0.12 ? 0 : 1 - (v - 0.03) / 0.09
   );
   const whisperOpacity = useTransform(scrollYProgress, (v) =>
-    v <= 0.015 ? 1 : v >= 0.06 ? 0 : 1 - (v - 0.015) / 0.045
+    v <= 0.02 ? 1 : v >= 0.08 ? 0 : 1 - (v - 0.02) / 0.06
   );
-  // light through the crack — bone, since it opens onto ivory
-  const crackOpacity = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.045 || v >= 0.2) return 0;
-    if (v < 0.09) return (v - 0.045) / 0.045;
-    return 1 - (v - 0.09) / 0.11;
-  });
-
-  /* beat 3: the arch blooms (0.46 → 0.86) */
-  const bloomT = (v: number) =>
-    reduce ? 0 : Math.min(1, Math.max(0, (v - 0.46) / 0.4));
-  const clipPath = useTransform(scrollYProgress, (v) => {
-    const e = easeOut3(bloomT(v));
-    const side = ((vp.w - archW) / 2) * (1 - e);
-    const top = topRest * (1 - e);
-    const straighten = bloomT(v) >= 0.86 ? (bloomT(v) - 0.86) / 0.14 : 0;
-    const radius = ((vp.w - side * 2) / 2) * (1 - straighten);
-    return `inset(${top}px ${side}px 0px ${side}px round ${radius}px ${radius}px 0 0)`;
-  });
+  // the page behind the doors: a still monograph plate. The photograph
+  // settles by a breath as the doors open — one motion, one act.
+  const clipPath = `inset(${topRest}px ${(vp.w - archW) / 2}px 0px ${(vp.w - archW) / 2}px round ${archW / 2}px ${archW / 2}px 0 0)`;
   const imageScale = useTransform(scrollYProgress, (v) => {
-    const settle = 1 - Math.pow(1 - bloomT(v), 2);
-    return 1.16 - 0.16 * settle;
+    const t = Math.min(1, Math.max(0, (v - 0.45) / 0.3));
+    return 1.2 - 0.04 * (1 - Math.pow(1 - t, 2));
   });
-  // the lockup reads during the hold, then gives way to the photograph
-  const plateOpacity = useTransform(scrollYProgress, (v) =>
-    reduce || v <= 0.48 ? 1 : v >= 0.68 ? 0 : 1 - (v - 0.48) / 0.2
-  );
-  const plateY = useTransform(scrollYProgress, (v) =>
-    reduce || v <= 0.48 ? 0 : v >= 0.68 ? -44 : (-44 * (v - 0.48)) / 0.2
-  );
-  const plateVisibility = useTransform(scrollYProgress, (v) =>
-    !reduce && v > 0.7 ? "hidden" : "visible"
-  );
-  // at full bloom, the company they keep drifts in along the bottom edge
-  const marqueeOpacity = useTransform(scrollYProgress, (v) =>
-    reduce ? 1 : v <= 0.86 ? 0 : v >= 0.96 ? 1 : (v - 0.86) / 0.1
-  );
 
   /* ————— reduced motion: the monograph page, no theatre ————— */
   if (reduce) {
@@ -198,7 +215,7 @@ export default function HeroArch() {
   }
 
   return (
-    <section ref={ref} className="relative h-[300vh] bg-bone md:h-[340vh]">
+    <section ref={ref} className="relative h-[260vh] bg-bone md:h-[280vh]">
       <div
         className="sticky top-0 h-[100dvh] overflow-hidden md:h-screen"
         onMouseMove={(e) => {
@@ -211,7 +228,7 @@ export default function HeroArch() {
         }}
       >
         {/* the monograph page: the photograph held by the arch */}
-        <motion.div className="absolute inset-0" style={{ clipPath }}>
+        <div className="absolute inset-0" style={{ clipPath }}>
           <motion.img
             src="/images/hero-stairhall.jpg"
             alt="A coquina stone stair hall in a Bluedoor oceanfront estate"
@@ -219,13 +236,10 @@ export default function HeroArch() {
             style={{ scale: imageScale, x: parX, y: parY }}
             fetchPriority="high"
           />
-        </motion.div>
+        </div>
 
         {/* the lockup — composed tight against the crown of the arch */}
-        <motion.div
-          className="absolute inset-x-0 top-0 z-10 flex flex-col items-center px-5 pt-[100px] text-center md:pt-[124px]"
-          style={{ opacity: plateOpacity, y: plateY, visibility: plateVisibility }}
-        >
+        <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-center px-5 pt-[100px] text-center md:pt-[124px]">
           <p className="text-[10px] font-medium uppercase tracking-[0.5em] text-taupe">
             Palm Beach, Florida
           </p>
@@ -235,14 +249,43 @@ export default function HeroArch() {
             lines={["Homes of lasting", "beauty and distinction."]}
             delay={0.2}
           />
-        </motion.div>
+        </div>
 
-        {/* light through the crack — the page glowing through */}
+        {/* act two: the studio wall — her paintings, hung around the mark */}
         <motion.div
-          className="absolute left-1/2 top-0 z-30 h-full w-24 -translate-x-1/2"
-          style={{ opacity: crackOpacity }}
+          className="absolute inset-0 z-30"
+          style={{ visibility: overtureVisibility }}
         >
-          <div className="h-full w-full bg-[radial-gradient(ellipse_40%_60%_at_center,rgba(251,249,244,0.95),rgba(251,249,244,0.25)_55%,transparent_75%)] blur-[6px]" />
+          {/* its own ivory wall, dissolving as the paintings leave */}
+          <motion.div
+            className="absolute inset-0 bg-bone"
+            style={{ opacity: overtureBackdrop }}
+          />
+          {(
+            [
+              { src: "/images/watercolor-1.jpg", cls: "left-[8%] top-[16%] w-[190px] md:left-[13%] md:w-[240px]", rot: -4, fx: -60, fy: -12, fr: -14 },
+              { src: "/images/watercolor-3.jpg", cls: "right-[8%] top-[13%] w-[170px] md:right-[14%] md:w-[215px]", rot: 3, fx: 62, fy: -16, fr: 12, hideMobile: false },
+              { src: "/images/watercolor-4.jpg", cls: "hidden md:block md:left-[21%] md:bottom-[10%] md:w-[200px]", rot: 2.2, fx: -55, fy: 20, fr: -10, hideMobile: true },
+              { src: "/images/watercolor-5.jpg", cls: "bottom-[12%] right-[10%] w-[200px] md:bottom-[14%] md:right-[19%] md:w-[250px]", rot: -2.6, fx: 58, fy: 18, fr: 12 },
+              { src: "/images/watercolor-2.jpg", cls: "bottom-[14%] left-[10%] w-[160px] md:left-auto md:bottom-auto md:left-1/2 md:top-[7%] md:w-[185px] md:-translate-x-1/2", rot: 1.6, fx: 0, fy: -70, fr: 6 },
+            ] as const
+          ).map((p, i) => (
+            <OverturePainting key={p.src} piece={p} index={i} progress={scrollYProgress} flyT={flyT} />
+          ))}
+          {/* the mark at the centre of the wall */}
+          <motion.div
+            className="absolute left-1/2 top-[43%] -translate-x-1/2 -translate-y-1/2 text-center"
+            style={{ opacity: overtureLogoOpacity }}
+          >
+            <img
+              src="/images/logo.png"
+              alt=""
+              className="mx-auto w-[110px] rounded-full shadow-[0_0_0_1px_rgba(53,48,42,0.12),0_24px_60px_-24px_rgba(53,48,42,0.4)] md:w-[130px]"
+            />
+            <p className="serif-body mt-5 text-[15px] italic text-taupe">
+              Every home, painted before it is&nbsp;poured.
+            </p>
+          </motion.div>
         </motion.div>
 
         {/* beat 1: the doors */}
@@ -262,7 +305,7 @@ export default function HeroArch() {
         {/* the medallion on the seam */}
         <motion.div
           className="pointer-events-none absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
-          style={{ opacity: medallionOpacity, scale: medallionScale, visibility: doorsVisibility }}
+          style={{ opacity: medallionOpacity, visibility: doorsVisibility }}
         >
           <motion.img
             src="/images/logo.png"
@@ -303,13 +346,10 @@ export default function HeroArch() {
           />
         </motion.div>
 
-        {/* the company they keep, arriving with the full frame */}
-        <motion.div
-          className="absolute inset-x-0 bottom-0 z-20 overflow-hidden border-t border-bone/10 bg-espresso/25 py-3.5 backdrop-blur-sm md:py-4"
-          style={{ opacity: marqueeOpacity }}
-        >
+        {/* the company they keep — waiting quietly beneath the doors */}
+        <div className="absolute inset-x-0 bottom-0 z-20 overflow-hidden border-t border-bone/10 bg-espresso/25 py-3.5 backdrop-blur-sm md:py-4">
           {MARQUEE}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

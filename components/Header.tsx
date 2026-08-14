@@ -12,6 +12,7 @@ const NAV = [
   { href: "/process", label: "Process" },
   { href: "/culture", label: "Culture" },
   { href: "/media", label: "Publications" },
+  { href: "/portal", label: "Client Login" },
 ] as const;
 
 /**
@@ -189,19 +190,14 @@ export default function Header() {
                 <br />
                 {site.address.city}, {site.address.state}
               </p>
-              <div className="flex flex-col items-end gap-3">
-                <a
-                  href={site.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="label text-bone/80"
-                >
-                  Instagram
-                </a>
-                <Link href="/portal" className="label text-bone/60">
-                  Client Login
-                </Link>
-              </div>
+              <a
+                href={site.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="label text-bone/80"
+              >
+                Instagram
+              </a>
             </motion.div>
           </motion.div>
         )}

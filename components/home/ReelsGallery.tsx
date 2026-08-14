@@ -185,7 +185,7 @@ export default function ReelsGallery() {
   });
   // continuous projection position: 0 … N-1, with a quiet hold on the last
   const pos = useTransform(scrollYProgress, (v) => {
-    const t = Math.min(1, Math.max(0, (v - 0.08) / 0.82));
+    const t = Math.min(1, Math.max(0, (v - 0.04) / 0.92));
     return t * (N - 1);
   });
 
@@ -251,7 +251,7 @@ export default function ReelsGallery() {
   }
 
   return (
-    <section ref={sectionRef} className="relative bg-linen" style={{ height: "300vh" }}>
+    <section ref={sectionRef} className="relative bg-linen" style={{ height: "240vh" }}>
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden pb-6 pt-24">
         <div className="mx-auto w-full max-w-[1520px] px-10">
           <div className="flex items-end justify-between gap-6">
