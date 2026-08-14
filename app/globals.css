@@ -21,7 +21,7 @@
 
   --font-display: var(--font-marcellus), "Times New Roman", serif;
   --font-serif: var(--font-cormorant), "Times New Roman", serif;
-  --font-script: var(--font-pinyon), cursive;
+  --font-script: var(--font-script-face), cursive;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 

@@ -72,7 +72,7 @@ export default function Threshold() {
   const insetTop = useTransform(bloom, (b) => lerp(100 - doorHPct - sillPct, 0, b));
   const insetBottom = useTransform(bloom, (b) => lerp(sillPct, 0, b));
   const rx = useTransform(bloom, (b) => lerp(doorW / 2, 0, b));
-  const ry = useTransform(bloom, (b) => lerp(doorHPct * 0.3, 0, b));
+  const ry = useTransform(bloom, (b) => lerp(doorHPct * 0.34, 0, b));
   const clip = useMotionTemplate`inset(${insetTop}% ${insetX}px ${insetBottom}% ${insetX}px round ${rx}px ${rx}px 2px 2px / ${ry}% ${ry}% 0px 0px)`;
 
   /* The doorway should look level into the room, not down at the floor —
@@ -129,17 +129,17 @@ export default function Threshold() {
               opacity: frameFade,
             }}
           >
-            <div className="absolute -bottom-5 left-1/2 h-8 w-[118%] -translate-x-1/2 rounded-[50%] bg-umber/25 blur-xl" />
-
-            <DoorCase medallion={box.mobile ? 40 : 48} />
-
-            <motion.div
-              className="absolute inset-0"
-              style={{ perspective: 1900, opacity: leafFade }}
-            >
-              <DoorLeaf side="left" turn={leftTurn} />
-              <DoorLeaf side="right" turn={rightTurn} />
-            </motion.div>
+            <DoorCase medallion={box.mobile ? 42 : 52}>
+              {/* the leaves hang inside the arch and are cut by it, so the
+                  curve runs unbroken across the pair */}
+              <motion.div
+                className="absolute inset-0"
+                style={{ perspective: 1900, opacity: leafFade }}
+              >
+                <DoorLeaf side="left" turn={leftTurn} />
+                <DoorLeaf side="right" turn={rightTurn} />
+              </motion.div>
+            </DoorCase>
           </motion.div>
         )}
 

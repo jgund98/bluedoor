@@ -220,9 +220,11 @@ export const nav = {
 
 /** The procession behind the hero arch — tall, bright, blue-and-white. */
 export const heroRail = [
+  // The door and the bougainvillea lead: on a phone one plate fills the
+  // frame, and the first one should have some colour in it.
+  { src: "/images/rail/door-arched.jpg", pos: "52% 50%" },
   { src: "/images/rail/estate-palms.jpg", pos: "50% 58%" },
   { src: "/images/rail/greatroom.jpg", pos: "50% 50%" },
-  { src: "/images/rail/door-arched.jpg", pos: "52% 50%" },
   { src: "/images/rail/aerial-oceanfront.jpg", pos: "50% 52%" },
   { src: "/images/rail/estate-colonial.jpg", pos: "50% 56%" },
   { src: "/images/rail/kitchen-brass.jpg", pos: "50% 50%" },

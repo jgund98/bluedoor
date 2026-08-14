@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Marcellus, Cormorant_Garamond, Pinyon_Script, Figtree } from "next/font/google";
+import { Marcellus, Cormorant_Garamond, Mrs_Saint_Delafield, Figtree } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import Header from "@/components/chrome/Header";
@@ -20,10 +20,10 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const pinyon = Pinyon_Script({
+const script = Mrs_Saint_Delafield({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-pinyon",
+  variable: "--font-script-face",
   display: "swap",
 });
 
@@ -93,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${cormorant.variable} ${pinyon.variable} ${figtree.variable}`}
+      className={`${marcellus.variable} ${cormorant.variable} ${script.variable} ${figtree.variable}`}
     >
       <body className="antialiased">
         <script

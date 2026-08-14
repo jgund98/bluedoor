@@ -15,21 +15,26 @@ export function Signature({
   children,
   className,
   delay = 0,
+  write = false,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  /** Only the home page watches it being written. Elsewhere it is simply signed. */
+  write?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const seen = useInView(ref, { once: true, margin: "-12% 0px -12% 0px" });
-  const pen = useMotionValue(-12);
+  const pen = useMotionValue(write ? -12 : 112);
   const ink = useMotionTemplate`linear-gradient(90deg, #000 ${pen}%, rgba(0,0,0,0) calc(${pen}% + 9%))`;
 
   useEffect(() => {
-    if (!seen) return;
+    if (!write || !seen) return;
     const run = animate(pen, 112, { duration: 2.1, ease: [0.32, 0.72, 0.36, 1], delay });
     return () => run.stop();
-  }, [seen, pen, delay]);
+  }, [write, seen, pen, delay]);
+
+  if (!write) return <span className={className}>{children}</span>;
 
   return (
     <motion.span

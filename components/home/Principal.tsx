@@ -11,7 +11,7 @@ export default function Principal() {
         {/* her name, written across the full measure */}
         <Reveal>
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-            <Signature className="script block whitespace-nowrap text-[clamp(58px,12vw,88px)] text-navy lg:text-[clamp(88px,7.8vw,126px)]">
+            <Signature write className="script block whitespace-nowrap text-[clamp(58px,12vw,88px)] text-navy lg:text-[clamp(88px,7.8vw,126px)]">
               Siobhan Zerilla
             </Signature>
             <span className="label mt-3 shrink-0 text-ink/50 lg:mb-6 lg:mt-0">

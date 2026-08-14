@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { portals, written } from "@/lib/site";
@@ -13,10 +13,28 @@ const GROUND: Record<string, string> = {
 };
 
 export default function StackedPortals() {
+  // The panels stack on a desk, where a pinned page reads as a page turning.
+  // Under a thumb it reads as the site refusing to scroll, so a phone simply
+  // scrolls through them.
+  const [stack, setStack] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setStack(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   return (
     <div className="relative">
       {portals.map((p, i) => (
-        <Panel key={p.label} portal={p} i={i} last={i === portals.length - 1} />
+        <Panel
+          key={p.label}
+          portal={p}
+          i={i}
+          last={i === portals.length - 1}
+          stack={stack}
+        />
       ))}
     </div>
   );
@@ -42,7 +60,17 @@ function Keystone({ ground, small }: { ground: string; small?: boolean }) {
   );
 }
 
-function Panel({ portal, i, last }: { portal: Portal; i: number; last: boolean }) {
+function Panel({
+  portal,
+  i,
+  last,
+  stack,
+}: {
+  portal: Portal;
+  i: number;
+  last: boolean;
+  stack: boolean;
+}) {
   const ref = useRef<HTMLElement>(null);
 
   // Rising: the panel lifts over the one before it with an arched leading edge.
@@ -56,16 +84,18 @@ function Panel({ portal, i, last }: { portal: Portal; i: number; last: boolean }
     offset: ["start start", "end start"],
   });
 
-  const radiusTop = useTransform(rise, (v) => (i === 0 ? 0 : (1 - v) * 16));
-  const radiusV = useTransform(rise, (v) => (i === 0 ? 0 : (1 - v) * 7));
+  const radiusTop = useTransform(rise, (v) => (i === 0 || !stack ? 0 : (1 - v) * 16));
+  const radiusV = useTransform(rise, (v) => (i === 0 || !stack ? 0 : (1 - v) * 7));
   const radius = useMotionTemplate`${radiusTop}% ${radiusV}%`;
-  const contentScale = useTransform(rest, (v) => (last ? 1 : 1 - v * 0.05));
-  const contentFade = useTransform(rest, (v) => (last ? 1 : 1 - v * 0.85));
+  const contentScale = useTransform(rest, (v) => (last || !stack ? 1 : 1 - v * 0.05));
+  const contentFade = useTransform(rest, (v) => (last || !stack ? 1 : 1 - v * 0.85));
 
   return (
     <motion.section
       ref={ref}
-      className={`sticky top-0 h-[100dvh] overflow-hidden grain ${GROUND[portal.ground] ?? "bg-porcelain"}`}
+      className={`h-[100dvh] overflow-hidden grain ${
+        stack ? "sticky top-0" : "relative"
+      } ${GROUND[portal.ground] ?? "bg-porcelain"}`}
       style={{ borderTopLeftRadius: radius, borderTopRightRadius: radius }}
     >
       <motion.div
