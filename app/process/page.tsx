@@ -83,22 +83,25 @@ export default function ProcessPage() {
             </p>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden lg:mt-16 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:mt-16 lg:grid-cols-3 lg:gap-14">
             {PILLARS.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.08}>
-                <div className="h-full border-t border-navy/20 pt-7 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 lg:first:border-l-0 lg:first:pl-0">
+                <div className="h-full border-t border-navy/20 pt-7">
                   <div className="flex items-baseline gap-4">
                     <span className="display text-[22px] text-navy/40">{p.n}</span>
                     <span className="display text-[24px] text-ink lg:text-[28px]">{p.name}</span>
                   </div>
-                  <p className="prose-lux mt-4 text-[16px] lg:text-[17px]">{p.copy}</p>
+                  <p className="prose-lux mt-4 max-w-[380px] text-[16px] lg:text-[17px]">{p.copy}</p>
                 </div>
               </Reveal>
             ))}
           </div>
 
           <Reveal delay={0.1}>
-            <p className="prose-lux mt-12 max-w-[720px] lg:mt-16">{site.copy.bigThreeDetail}</p>
+            <div className="mt-14 grid grid-cols-1 gap-5 border-t border-navy/20 pt-8 lg:mt-20 lg:grid-cols-12 lg:gap-14 lg:pt-10">
+              <span className="label text-navy/70 lg:col-span-3">In practice</span>
+              <p className="prose-lux lg:col-span-8 lg:col-start-5">{site.copy.bigThreeDetail}</p>
+            </div>
           </Reveal>
         </div>
       </section>
