@@ -8,12 +8,21 @@ import { nav, site } from "@/lib/site";
 
 const EASE = [0.76, 0, 0.24, 1] as const;
 
+/** A bone plate with a circle cut out of it, for the medallion to sit in. */
+const PLATE_NOTCH =
+  "radial-gradient(circle 54px at 50% 50%, transparent 0 54px, #000 55px)";
+
+/** Routes whose masthead is a full-bleed photograph. */
+const PHOTO_MASTHEADS = ["/portfolio", "/portfolio/"];
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   // the portal is a navy room — the chrome inverts to bone there
-  const onDark = usePathname()?.startsWith("/portal") ?? false;
+  const path = usePathname() ?? "/";
+  const onDark = path.startsWith("/portal");
+  const onPhoto = PHOTO_MASTHEADS.includes(path);
 
   // Two hairline segments that grow outward from the medallion as you read.
   const fill = useTransform(scrollYProgress, (v) => v);
@@ -36,6 +45,9 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // The portal is a room of its own — no chrome on the way in.
+  if (onDark) return null;
+
   return (
     <>
       <header
@@ -43,6 +55,21 @@ export default function Header() {
           scrolled ? (onDark ? "bg-ink/85 backdrop-blur-[10px]" : "bg-porcelain/88 backdrop-blur-[10px]") : "bg-transparent"
         }`}
       >
+        {/* Over a full-bleed photograph the chrome would vanish into the
+            picture. Instead of a scrim, the nav gets its own doorplate: a
+            bone bar with a circle cut out of it, so the medallion sits in
+            the plate the way an escutcheon sits in a door. */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-x-0 top-0 h-full bg-porcelain transition-opacity duration-700 ${
+            onPhoto && !scrolled ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            maskImage: PLATE_NOTCH,
+            WebkitMaskImage: PLATE_NOTCH,
+            boxShadow: "0 1px 0 rgba(34,75,130,0.14)",
+          }}
+        />
         <div
           className={`relative mx-auto flex max-w-[1560px] items-center px-5 transition-all duration-700 lg:px-12 ${
             scrolled ? "h-[64px]" : "h-[116px] lg:h-[138px]"

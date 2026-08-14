@@ -33,7 +33,7 @@ export default function ProcessPage() {
       {/* masthead */}
       <section className="bg-porcelain pb-16 pt-[136px] grain lg:pb-24 lg:pt-[196px]">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
-          <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-6">
               <Reveal>
                 <div className="flex items-center gap-4">
@@ -50,16 +50,23 @@ export default function ProcessPage() {
                 </h1>
                 <p className="prose-lux mt-8 max-w-[520px]">{site.copy.processIntro}</p>
                 <p className="prose-lux mt-5 max-w-[520px]">{site.copy.processBuilders}</p>
+
+                <div className="mt-9 flex items-center gap-6">
+                  <Link href="/build-with-bluedoor/" className="quiet-link shrink-0 text-navy">
+                    Begin a conversation
+                  </Link>
+                  <span className="hair hidden h-px flex-1 lg:block" />
+                </div>
               </Reveal>
             </div>
 
             <div className="lg:col-span-5 lg:col-start-8">
-              <RevealPlate className="portal aspect-[3/3.8] overflow-hidden plate ring-1 ring-navy/12">
+              <RevealPlate className="portal aspect-[4/4.2] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/blueprint.jpg"
                   alt="Working drawings for a Bluedoor home"
-                  style={{ objectPosition: "50% 40%" }}
+                  style={{ objectPosition: "50% 42%" }}
                 />
               </RevealPlate>
             </div>

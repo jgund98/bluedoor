@@ -159,14 +159,23 @@ export default function Threshold() {
                 </Link>
               </div>
 
-              <div className="shrink-0">
-                <span className="hair-light block h-px w-full" />
-                <span className="script on-photo mt-2 block whitespace-nowrap text-[clamp(52px,12vw,68px)] text-ceramic lg:text-[84px]">
-                  Siobhan Zerilla
-                </span>
-                <span className="label on-photo mt-1 block text-porcelain/60">
-                  {site.principal.title}, {site.name}
-                </span>
+              {/* the seal, not the signature again — the door closes the site
+                  with its own mark */}
+              <div className="flex shrink-0 items-center gap-5 lg:flex-col lg:items-end lg:gap-4 lg:text-right">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/logo.png"
+                  alt=""
+                  className="w-[54px] shrink-0 rounded-full ring-1 ring-porcelain/35 lg:w-[68px]"
+                />
+                <div>
+                  <span className="display on-photo block text-[19px] leading-none text-porcelain lg:text-[22px]">
+                    {site.name}
+                  </span>
+                  <span className="label on-photo mt-3 block text-porcelain/60">
+                    {site.address.city}, {site.address.state}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

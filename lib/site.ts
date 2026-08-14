@@ -27,12 +27,16 @@ export const site = {
       name: "Lisa Palmisciano",
       title: "Chief Financial Officer",
       photo: "/images/team-lisa.jpg",
+      short:
+        "Lisa brings precision to financial management, client contracts and budgets, and plays a pivotal role in administrative project management. She collaborated with Siobhan long before Bluedoor’s creation.",
       bio: "Lisa brings precision and expertise to all aspects of financial management, human resources, client contracts, budgets, and plays a pivotal role in providing administrative project management for Bluedoor Building. With 15 years of experience in IT within the banking and healthcare sectors, her background includes systems analysis, project planning, team management, and financial reporting. Lisa's passion for home renovations led her to collaborate with Siobhan long before Bluedoor's creation, and she has been a part of the team from its inception. Her meticulous attention to detail ensures accuracy and transparency in tracking and reporting project costs, upholding Bluedoor's commitment to its highest standards of quality and integrity.",
     },
     {
       name: "Majic Noone",
       title: "Director of Operations",
       photo: "/images/team-majic.jpg",
+      short:
+        "After two decades in healthcare administration, Majic brought her expertise to high end construction. She keeps procurement, permits and vendor agreements running smoothly.",
       bio: "With over two decades of experience in healthcare, including 10 years in administrative roles, Majic Noone seamlessly transitioned her expertise to high end construction. Leveraging her LEAN Six Sigma and SWOT analysis training, she excels at optimizing operations for Bluedoor Building. Majic's strong background in managing people, processes, and data brings unmatched efficiency to the team. From streamlining procurement and client bid comparisons to managing permits and vendor agreements, Majic ensures Bluedoor's operations run smoothly, allowing the company to focus on delivering exceptional results for clients.",
     },
   ],
@@ -314,8 +318,8 @@ export const written = {
     "Each project begins as a watercolor — a study of proportion, light, and setting, drawn before a single line is staked on the lot.",
 
   pressLabel: "Recognition",
-  pressLine: "Written up,",
-  pressAnswer: "rarely announced.",
+  pressLine: "Featured in",
+  pressAnswer: "the most respected pages.",
 
   collabLabel: "In collaboration with",
   collabCopy: site.copy.collaborations,

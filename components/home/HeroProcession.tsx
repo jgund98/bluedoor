@@ -50,10 +50,10 @@ export default function HeroProcession() {
   }, []);
 
   const rail = box.mobile ? heroRailMobile : heroRail;
-  const plateW = box.mobile ? Math.round(box.w * 0.8) : Math.round(box.w * 0.4);
+  const plateW = box.mobile ? Math.round(box.w * 0.6) : Math.round(box.w * 0.4);
   const railW = rail.length * plateW;
 
-  const apW0 = box.mobile ? Math.round(box.w * 0.74) : Math.min(Math.round(box.w * 0.3), 440);
+  const apW0 = box.mobile ? Math.round(box.w * 0.7) : Math.min(Math.round(box.w * 0.3), 440);
   const apH0 = Math.round(box.h * (box.mobile ? 0.62 : 0.6));
 
   /* ---- the procession: moves on its own, and comes to rest as you scroll ---- */
@@ -117,14 +117,10 @@ export default function HeroProcession() {
         ref={stage}
         className="sticky top-0 h-[100svh] w-full overflow-hidden bg-porcelain grain"
       >
-        {/* the world outside the doorway */}
+        {/* the world outside the doorway — the same procession, carrying on
+            past the jambs, veiled back to near-paper. Phones get it too. */}
         <motion.div className="absolute inset-0" style={{ opacity: washFade }}>
-          {/* on a desk the procession carries on past the jambs; a phone gets
-              the quiet field instead — two moving rails is more than it can
-              composite at sixty frames a second */}
-          {!box.mobile && box.ready && (
-            <Rail rail={rail} x={x} plateW={plateW} railW={railW} />
-          )}
+          {box.ready && <Rail rail={rail} x={x} plateW={plateW} railW={railW} />}
           <div className="absolute inset-0 bg-porcelain/74" />
           <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-porcelain via-porcelain/72 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-porcelain/92 to-transparent" />

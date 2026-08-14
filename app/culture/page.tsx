@@ -122,11 +122,13 @@ export default function CulturePage() {
                     <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: "50% 34%" }} />
                   </div>
                   <div>
-                    <h3 className="display text-[21px] text-ink lg:text-[24px]">{m.name}</h3>
+                    <h3 className="display text-[19px] text-ink lg:text-[21px]">{m.name}</h3>
                     <span className="label mt-2 block text-navy/70">{m.title}</span>
                   </div>
                 </div>
-                <p className="prose-lux mt-6 text-[16px] leading-[1.68]">{m.bio}</p>
+                <p className="prose-lux mt-5 max-w-[420px] text-[15px] leading-[1.66] lg:text-[15px]">
+                  {m.short}
+                </p>
               </Reveal>
             ))}
           </div>

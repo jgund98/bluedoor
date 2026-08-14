@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/lib/site";
 import { Reveal } from "@/components/motion";
 
 const DROP = [0, 46, 14, 28, 0, 40];
 
 export default function Reels() {
+  // one clip has the sound at a time, the way it works on a phone
+  const [audible, setAudible] = useState<string | null>(null);
+
   return (
     <section className="bg-porcelain py-16 grain lg:py-24">
       <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
@@ -41,7 +44,11 @@ export default function Reels() {
         <div className="mt-14 hidden grid-cols-3 gap-8 lg:grid xl:gap-10">
           {site.reels.map((r, i) => (
             <div key={r.src} style={{ paddingTop: DROP[i % DROP.length] }}>
-              <Clip src={r.src} poster={r.poster} label={r.label} />
+              <Clip
+                {...r}
+                audible={audible === r.src}
+                onToggle={() => setAudible(audible === r.src ? null : r.src)}
+              />
             </div>
           ))}
         </div>
@@ -50,7 +57,11 @@ export default function Reels() {
         <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 lg:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {site.reels.map((r) => (
             <div key={r.src} className="w-[72vw] shrink-0 snap-center">
-              <Clip src={r.src} poster={r.poster} label={r.label} />
+              <Clip
+                {...r}
+                audible={audible === r.src}
+                onToggle={() => setAudible(audible === r.src ? null : r.src)}
+              />
             </div>
           ))}
         </div>
@@ -59,7 +70,19 @@ export default function Reels() {
   );
 }
 
-function Clip({ src, poster, label }: { src: string; poster: string; label: string }) {
+function Clip({
+  src,
+  poster,
+  label,
+  audible,
+  onToggle,
+}: {
+  src: string;
+  poster: string;
+  label: string;
+  audible: boolean;
+  onToggle: () => void;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -76,11 +99,27 @@ function Clip({ src, poster, label }: { src: string; poster: string; label: stri
     return () => io.disconnect();
   }, []);
 
+  // Muted must stay a real DOM property — autoplay policies read the
+  // property, not the attribute.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.muted = !audible;
+    if (audible) el.play().catch(() => {});
+  }, [audible]);
+
   return (
     <figure>
-      <div
-        className="portal relative aspect-[3/4.1] overflow-hidden ring-1 ring-navy/12"
-        style={{ backgroundImage: `url(${poster})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-label={audible ? `Mute ${label}` : `Play sound for ${label}`}
+        className="portal group relative block aspect-[3/4.1] w-full overflow-hidden ring-1 ring-navy/12"
+        style={{
+          backgroundImage: `url(${poster})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
         <video
           ref={ref}
@@ -92,8 +131,37 @@ function Clip({ src, poster, label }: { src: string; poster: string; label: stri
           preload="none"
           className="h-full w-full object-cover"
         />
-      </div>
+
+        {/* the affordance, always legible, never in the way */}
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/55 to-transparent" />
+        <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-ink/55 px-4 py-2 backdrop-blur-[6px] transition-colors duration-500 group-hover:bg-ink/75">
+          <Speaker on={audible} />
+          <span className="label whitespace-nowrap text-porcelain">
+            {audible ? "Sound on" : "Tap for sound"}
+          </span>
+        </span>
+      </button>
       <figcaption className="answer mt-4 text-[15px] leading-[1.4] text-ink/55">{label}</figcaption>
     </figure>
+  );
+}
+
+function Speaker({ on }: { on: boolean }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M3 6h2.5L9 3v10L5.5 10H3V6z"
+        fill="currentColor"
+        className="text-porcelain"
+      />
+      {on ? (
+        <>
+          <path d="M11 5.5a3.4 3.4 0 0 1 0 5" stroke="currentColor" strokeWidth="1.2" className="text-porcelain" strokeLinecap="round" />
+          <path d="M12.8 3.6a6 6 0 0 1 0 8.8" stroke="currentColor" strokeWidth="1.2" className="text-porcelain" strokeLinecap="round" />
+        </>
+      ) : (
+        <path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" strokeWidth="1.2" className="text-porcelain" strokeLinecap="round" />
+      )}
+    </svg>
   );
 }

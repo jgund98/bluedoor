@@ -86,7 +86,7 @@ function Sheet({
       <a href={pub.url} target="_blank" rel="noreferrer" className="block">
         <div style={{ paddingBottom: set.lift }}>
           <div
-            className="bg-porcelain p-[7px] shadow-[0_22px_48px_-34px_rgba(20,41,74,0.6)] ring-1 ring-navy/12 transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:rotate-0 group-hover:shadow-[0_40px_66px_-34px_rgba(20,41,74,0.62)] group-hover:ring-navy/25"
+            className="w-fit bg-porcelain p-[7px] shadow-[0_22px_48px_-34px_rgba(20,41,74,0.6)] ring-1 ring-navy/12 transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:rotate-0 group-hover:shadow-[0_40px_66px_-34px_rgba(20,41,74,0.62)] group-hover:ring-navy/25"
             style={{ rotate: `${set.tilt}deg` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,7 +98,7 @@ function Sheet({
             />
           </div>
 
-          <div className="mt-5 max-w-[260px]">
+          <div className="mt-5 max-w-[230px]">
             <span className="label text-navy/70">{pub.name}</span>
             <p className="answer mt-2 text-[15px] leading-[1.4] text-ink/70 transition-colors duration-500 group-hover:text-ink">
               {pub.title}

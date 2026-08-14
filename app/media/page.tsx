@@ -56,7 +56,7 @@ export default function MediaPage() {
                       }`}
                     >
                       <a href={pub.url} target="_blank" rel="noreferrer" className="group block">
-                        <div className="bg-porcelain p-[8px] shadow-[0_26px_54px_-34px_rgba(20,41,74,0.6)] ring-1 ring-navy/12 transition-all duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_44px_70px_-36px_rgba(20,41,74,0.6)]">
+                        <div className="w-fit bg-porcelain p-[8px] shadow-[0_26px_54px_-34px_rgba(20,41,74,0.6)] ring-1 ring-navy/12 transition-all duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_44px_70px_-36px_rgba(20,41,74,0.6)]">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={pub.image}

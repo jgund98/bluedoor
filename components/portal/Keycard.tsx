@@ -15,14 +15,18 @@ export default function Keycard({ studio }: { studio: string }) {
       className="relative w-full max-w-[440px]"
     >
       {/* the medallion, set into the card edge like an escutcheon */}
-      <div className="absolute -top-[27px] left-1/2 z-10 -translate-x-1/2">
+      <Link
+        href="/"
+        aria-label="Bluedoor Building — home"
+        className="absolute -top-[27px] left-1/2 z-10 -translate-x-1/2"
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/logo.png"
           alt=""
-          className="w-[54px] rounded-full ring-[6px] ring-porcelain"
+          className="w-[54px] rounded-full ring-[6px] ring-porcelain transition-opacity duration-500 hover:opacity-80"
         />
-      </div>
+      </Link>
 
       <div className="bg-porcelain px-7 pb-9 pt-14 shadow-[0_50px_100px_-40px_rgba(0,0,0,0.7)] lg:px-10 lg:pb-11 lg:pt-16">
         <div className="text-center">
@@ -80,8 +84,11 @@ export default function Keycard({ studio }: { studio: string }) {
           </motion.p>
         )}
 
-        <div className="mt-8 border-t border-navy/12 pt-6 text-center">
-          <Link href="/build-with-bluedoor/" className="quiet-link inline-block text-ink/55">
+        <div className="mt-8 flex items-center justify-center gap-7 border-t border-navy/12 pt-6">
+          <Link href="/" className="quiet-link inline-block whitespace-nowrap text-ink/55">
+            Return home
+          </Link>
+          <Link href="/build-with-bluedoor/" className="quiet-link inline-block whitespace-nowrap text-ink/55">
             Not a client yet
           </Link>
         </div>

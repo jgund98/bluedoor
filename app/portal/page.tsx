@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PortalPage() {
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy px-5 py-[132px]">
+    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy px-5 py-24">
       {/* a wall of door panelling, barely lit */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(68%_54%_at_50%_44%,rgba(255,255,255,0.10)_0%,rgba(0,0,0,0)_70%)]" />
