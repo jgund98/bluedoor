@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { site, written } from "@/lib/site";
 import { DoorCase, DoorLeaf } from "@/components/Door";
 
 const BEYOND = "/images/loggia-stone.jpg";
+
+// Measure before the browser paints, so a stage never shows one frame at
+// the wrong size. Falls back to useEffect where there is no DOM.
+const useMeasure = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const seg = (v: number, a: number, b: number) => clamp01((v - a) / (b - a));
@@ -25,7 +29,7 @@ export default function Threshold() {
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const [box, setBox] = useState({ w: 1440, h: 900, mobile: false, ready: false });
-  useEffect(() => {
+  useMeasure(() => {
     const el = stage.current;
     if (!el) return;
     const measure = () => {
@@ -81,9 +85,12 @@ export default function Threshold() {
           <div className="absolute inset-0 bg-[radial-gradient(72%_58%_at_50%_62%,#ffffff_0%,#f3f1ec_46%,#e6e2da_100%)]" />
         </motion.div>
 
-        {/* what lies beyond */}
+        {/* Sized from the measured stage — hidden until that exists, so it
+            never paints once at the server's guess. */}
         <motion.div
-          className="absolute inset-0 bg-linen"
+          className={`absolute inset-0 bg-linen transition-opacity duration-500 ${
+            box.ready ? "opacity-100" : "opacity-0"
+          }`}
           style={{ clipPath: clip, WebkitClipPath: clip }}
         >
           <motion.div className="absolute inset-0" style={{ y: lookY }}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import {
   motion,
@@ -14,6 +14,10 @@ import { heroRail, heroRailMobile, site, written } from "@/lib/site";
 import { DoorLeaf } from "@/components/Door";
 
 const ARRIVAL = "/images/hero-stairhall.jpg";
+
+// Measure before the browser paints, so a stage never shows one frame at
+// the wrong size. Falls back to useEffect where there is no DOM.
+const useMeasure = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const seg = (v: number, a: number, b: number) => clamp01((v - a) / (b - a));
@@ -34,7 +38,7 @@ export default function HeroProcession() {
   // phone the moment the URL bar moves, and that mismatch is what made the
   // reveal land wrong.
   const [box, setBox] = useState({ w: 1440, h: 900, mobile: false, ready: false });
-  useEffect(() => {
+  useMeasure(() => {
     const el = stage.current;
     if (!el) return;
     const measure = () => {
@@ -126,16 +130,25 @@ export default function HeroProcession() {
           <div className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-porcelain/92 to-transparent" />
         </motion.div>
 
-        {/* the casing, clipped to the same arch grown by its own width */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 bg-porcelain"
-          style={{
-            clipPath: clipCase,
-            WebkitClipPath: clipCase,
-            opacity: frameOpacity,
-            filter: box.mobile ? undefined : "drop-shadow(0 34px 54px rgba(20,41,74,0.34))",
-          }}
-        />
+        {/* Everything below is sized from the measured stage, so it stays
+            hidden until that measurement exists. Otherwise the markup paints
+            once at the server's guess before the browser has run a line of
+            our code — which is the flicker. */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-500 ${
+            box.ready ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {/* the casing, clipped to the same arch grown by its own width */}
+          <motion.div
+            className="pointer-events-none absolute inset-0 bg-porcelain"
+            style={{
+              clipPath: clipCase,
+              WebkitClipPath: clipCase,
+              opacity: frameOpacity,
+              filter: box.mobile ? undefined : "drop-shadow(0 34px 54px rgba(20,41,74,0.34))",
+            }}
+          />
 
         {/* what you can see through it */}
         <motion.div
@@ -171,10 +184,11 @@ export default function HeroProcession() {
           }}
         />
 
-        {/* the leaves, standing just open against the jambs */}
-        {box.ready && (
-          <Leaves bloom={bloom} box={box} apW0={apW0} apH0={apH0} opacity={frameOpacity} />
-        )}
+          {/* the leaves, standing just open against the jambs */}
+          {box.ready && (
+            <Leaves bloom={bloom} box={box} apW0={apW0} apH0={apH0} opacity={frameOpacity} />
+          )}
+        </div>
 
         {/* the opening lockup */}
         <motion.div

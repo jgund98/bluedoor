@@ -6,6 +6,8 @@ export const site = {
   legalName: "Bluedoor Building, Inc.",
   tagline: "Luxury Custom Home Builder — Palm Beach, Florida",
   url: "https://www.bluedoorbuilding.com",
+  /** Where this build is actually served. Link previews resolve against it. */
+  deployUrl: "https://bluedoor-beta.vercel.app",
   address: {
     street: "501 Palm Street, C-2",
     city: "West Palm Beach",
