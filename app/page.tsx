@@ -1,7 +1,6 @@
 import HeroProcession from "@/components/home/HeroProcession";
 import StackedPortals from "@/components/home/StackedPortals";
 import Principal from "@/components/home/Principal";
-import Drawing from "@/components/home/Drawing";
 import Atelier from "@/components/home/Atelier";
 import Press from "@/components/home/Press";
 import Collaborators from "@/components/home/Collaborators";
@@ -13,7 +12,6 @@ export default function Home() {
       <HeroProcession />
       <StackedPortals />
       <Principal />
-      <Drawing />
       <Atelier />
       <Press />
       <Collaborators />

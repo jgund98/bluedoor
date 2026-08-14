@@ -2,41 +2,23 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
-import {
-  motion,
-  useAnimationFrame,
-  useMotionTemplate,
-  useMotionValue,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { heroRail, heroRailMobile, site, written } from "@/lib/site";
+import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
+import { heroRail, heroRailMobile, written } from "@/lib/site";
 import { DoorLeaf } from "@/components/Door";
 
-const ARRIVAL = "/images/hero-stairhall.jpg";
-
-// Measure before the browser paints, so a stage never shows one frame at
+// Measure before the browser paints, so the stage never shows one frame at
 // the wrong size. Falls back to useEffect where there is no DOM.
 const useMeasure = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
-const seg = (v: number, a: number, b: number) => clamp01((v - a) / (b - a));
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
 /**
- * The arch never changes size — a full-screen layer is clipped to it, so
- * opening the doorway costs a repaint instead of a re-layout of sixteen
- * photographs. That is what keeps it smooth on a phone.
+ * One screen. Her houses glide past behind an arched opening, the door
+ * standing open at the jambs, and nothing moves but the procession. The
+ * blue door has its moment at the foot of the page; up here the site
+ * simply holds still and lets the work go by.
  */
 export default function HeroProcession() {
-  const ref = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
-  // Measure the sticky stage itself. innerHeight and 100svh disagree on a
-  // phone the moment the URL bar moves, and that mismatch is what made the
-  // reveal land wrong.
   const [box, setBox] = useState({ w: 1440, h: 900, mobile: false, ready: false });
   useMeasure(() => {
     const el = stage.current;
@@ -54,17 +36,29 @@ export default function HeroProcession() {
   }, []);
 
   const rail = box.mobile ? heroRailMobile : heroRail;
-  const plateW = box.mobile ? Math.round(box.w * 0.6) : Math.round(box.w * 0.4);
+  // Each plate has to be wider than the opening, or a seam parks in the
+  // middle of the arch and reads as a mistake.
+  const plateW = box.mobile ? Math.round(box.w * 0.84) : Math.round(box.w * 0.46);
   const railW = rail.length * plateW;
 
-  const apW0 = box.mobile ? Math.round(box.w * 0.7) : Math.min(Math.round(box.w * 0.3), 440);
-  const apH0 = Math.round(box.h * (box.mobile ? 0.62 : 0.6));
+  const apW = box.mobile ? Math.round(box.w * 0.7) : Math.min(Math.round(box.w * 0.3), 440);
+  const apH = Math.round(box.h * (box.mobile ? 0.62 : 0.6));
+  const insetX = (box.w - apW) / 2;
+  const insetTop = box.h - apH;
 
-  /* ---- the procession: moves on its own, and comes to rest as you scroll ---- */
+  const arch = `inset(${insetTop}px ${insetX}px 0px ${insetX}px round ${apW / 2}px ${apW / 2}px 3px 3px / ${apH * 0.3}px ${apH * 0.3}px 0px 0px)`;
+  const archCase = `inset(${insetTop - 10}px ${insetX - 10}px -10px ${insetX - 10}px round ${
+    apW / 2 + 10
+  }px ${apW / 2 + 10}px 3px 3px / ${apH * 0.3 + 10}px ${apH * 0.3 + 10}px 0px 0px)`;
+
+  // the picture sits in the opening at its middle, not at its floor
+  const lookY = (box.h - apH) / 2;
+
+  /* ---- the only thing that moves ---- */
   const x = useMotionValue(0);
   const onStage = useRef(true);
   useEffect(() => {
-    const el = ref.current;
+    const el = stage.current;
     if (!el) return;
     const io = new IntersectionObserver(([e]) => (onStage.current = e.isIntersecting), {
       rootMargin: "10% 0px",
@@ -73,219 +67,144 @@ export default function HeroProcession() {
     return () => io.disconnect();
   }, []);
 
-  useAnimationFrame((_, delta) => {
+  // A house rests centred in the opening, then the procession glides on to
+  // the next one. Not a conveyor — a considered turn of the page.
+  const HOLD = 4200;
+  const GLIDE = 1600;
+  const at = (i: number) => box.w / 2 - plateW / 2 - (i + 1) * plateW;
+  const index = useRef(0);
+  const moving = useRef(false);
+  const mark = useRef(0);
+
+  useAnimationFrame((t) => {
     if (!onStage.current || !railW) return;
-    const d = delta > 64 ? 64 : delta; // a dropped frame must not jump the rail
-    const rest = 1 - easeInOut(seg(p.get(), 0, 0.4));
-    const speed = (box.mobile ? 20 : 34) * rest;
-    if (speed <= 0.01) return;
-    let next = x.get() - (speed * d) / 1000;
-    if (next <= -railW) next += railW;
-    x.set(next);
+    if (!mark.current) {
+      mark.current = t;
+      x.set(at(0));
+      return;
+    }
+    const elapsed = t - mark.current;
+
+    if (!moving.current) {
+      if (elapsed >= HOLD) {
+        moving.current = true;
+        mark.current = t;
+      }
+      return;
+    }
+
+    const k = elapsed / GLIDE;
+    if (k >= 1) {
+      index.current = (index.current + 1) % rail.length;
+      x.set(at(index.current));
+      moving.current = false;
+      mark.current = t;
+      return;
+    }
+    const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    const from = at(index.current);
+    x.set(from + (at(index.current + 1) - from) * eased);
   });
 
-  /* ---- the doorway opens: only the clip changes ---- */
-  const bloom = useTransform(p, (v) => easeInOut(seg(v, 0.04, 0.56)));
-  const insetX = useTransform(bloom, (b) => (box.w - lerp(apW0, box.w, b)) / 2);
-  const insetTop = useTransform(bloom, (b) => box.h - lerp(apH0, box.h, b));
-  const rx = useTransform(bloom, (b) => lerp(apW0 / 2, 0, b));
-  const ry = useTransform(bloom, (b) => lerp(apH0 * 0.3, 0, b));
-  const clip = useMotionTemplate`inset(${insetTop}px ${insetX}px 0px ${insetX}px round ${rx}px ${rx}px 3px 3px / ${ry}px ${ry}px 0px 0px)`;
-
-  // the same shape, grown by the width of the casing
-  const caseTop = useTransform(insetTop, (v) => v - 10);
-  const caseX = useTransform(insetX, (v) => v - 10);
-  const caseRx = useTransform(rx, (v) => v + 10);
-  const caseRy = useTransform(ry, (v) => v + 10);
-  const clipCase = useMotionTemplate`inset(${caseTop}px ${caseX}px -10px ${caseX}px round ${caseRx}px ${caseRx}px 3px 3px / ${caseRy}px ${caseRy}px 0px 0px)`;
-
-  // You are looking through a doorway, not down at the floor: the picture
-  // rides down so the opening frames its middle, and settles as it grows.
-  const lookY = useTransform(bloom, (b) => (box.h - lerp(apH0, box.h, b)) / 2);
-
-  const frameOpacity = useTransform(bloom, (b) => 1 - clamp01(b * 1.7));
-  const washFade = useTransform(bloom, (b) => 1 - clamp01(b * 1.3));
-
-  /* ---- the procession settles, then hands over to the arrival ---- */
-  const railFade = useTransform(p, (v) => 1 - seg(v, 0.28, 0.44));
-  const arrivalScale = useTransform(p, (v) => lerp(1.12, 1, seg(v, 0.34, 1)));
-
-  /* ---- type ---- */
-  const openingOpacity = useTransform(p, (v) => 1 - seg(v, 0.02, 0.2));
-  const openingLift = useTransform(p, (v) => -seg(v, 0.02, 0.34) * 40);
-  const statementOpacity = useTransform(p, (v) => seg(v, 0.66, 0.86));
-
   return (
-    <section ref={ref} className="relative h-[240svh] lg:h-[300vh]">
-      <div
-        ref={stage}
-        className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-porcelain grain"
-      >
-        {/* the world outside the doorway — the same procession, carrying on
-            past the jambs, veiled back to near-paper. Phones get it too. */}
-        <motion.div className="absolute inset-0" style={{ opacity: washFade }}>
-          {box.ready && <Rail rail={rail} x={x} plateW={plateW} railW={railW} />}
-          <div className="absolute inset-0 bg-porcelain/74" />
-          <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-porcelain via-porcelain/72 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-porcelain/92 to-transparent" />
-        </motion.div>
+    <section
+      ref={stage}
+      className="relative h-[100dvh] w-full overflow-hidden bg-porcelain grain"
+    >
+      {/* the world outside the doorway — the same procession, veiled back
+          to near-paper */}
+      <div className="absolute inset-0">
+        {box.ready && <Rail rail={rail} x={x} plateW={plateW} railW={railW} />}
+        <div className="absolute inset-0 bg-porcelain/74" />
+        <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-porcelain via-porcelain/72 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-porcelain/92 to-transparent" />
+      </div>
 
-        {/* Everything below is sized from the measured stage, so it stays
-            hidden until that measurement exists. Otherwise the markup paints
-            once at the server's guess before the browser has run a line of
-            our code — which is the flicker. */}
+      {/* Everything below is sized from the measured stage, so it stays
+          hidden until that measurement exists. */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-700 ${
+          box.ready ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {/* the casing */}
         <div
-          className={`absolute inset-0 transition-opacity duration-500 ${
-            box.ready ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {/* the casing, clipped to the same arch grown by its own width */}
-          <motion.div
-            className="pointer-events-none absolute inset-0 bg-porcelain"
-            style={{
-              clipPath: clipCase,
-              WebkitClipPath: clipCase,
-              opacity: frameOpacity,
-              filter: box.mobile ? undefined : "drop-shadow(0 34px 54px rgba(20,41,74,0.34))",
-            }}
-          />
+          className="pointer-events-none absolute inset-0 bg-porcelain"
+          style={{
+            clipPath: archCase,
+            WebkitClipPath: archCase,
+            filter: box.mobile ? undefined : "drop-shadow(0 34px 54px rgba(20,41,74,0.34))",
+          }}
+        />
 
         {/* what you can see through it */}
-        <motion.div
+        <div
           className="absolute inset-0 bg-linen"
-          style={{ clipPath: clip, WebkitClipPath: clip }}
+          style={{ clipPath: arch, WebkitClipPath: arch }}
         >
-          <motion.div className="absolute inset-0" style={{ y: lookY }}>
-            {/* the arrival waits underneath at full strength — the procession
-                dissolves off it, so nothing ever crossfades through a gap */}
-            <div className="plate absolute inset-0">
-              <motion.img
-                src={ARRIVAL}
-                alt="A double stair hall in cut travertine"
-                className="h-full w-full object-cover"
-                style={{ scale: arrivalScale, objectPosition: "50% 46%" }}
-              />
-            </div>
-
-            <motion.div className="absolute inset-0" style={{ opacity: railFade }}>
-              {box.ready && <Rail rail={rail} x={x} plateW={plateW} railW={railW} />}
-            </motion.div>
-          </motion.div>
-        </motion.div>
+          <div className="absolute inset-0" style={{ transform: `translateY(${lookY}px)` }}>
+            {box.ready && <Rail rail={rail} x={x} plateW={plateW} railW={railW} />}
+          </div>
+        </div>
 
         {/* the hairline that reads the arch */}
-        <motion.div
+        <div
           className="pointer-events-none absolute inset-0"
           style={{
-            clipPath: clip,
-            WebkitClipPath: clip,
-            opacity: frameOpacity,
+            clipPath: arch,
+            WebkitClipPath: arch,
             boxShadow: "inset 0 0 0 1px rgba(34,75,130,0.45)",
           }}
         />
 
-          {/* the leaves, standing just open against the jambs */}
-          {box.ready && (
-            <Leaves bloom={bloom} box={box} apW0={apW0} apH0={apH0} opacity={frameOpacity} />
-          )}
+        {/* the leaves, standing just open against the jambs */}
+        {box.ready && (
+          <div className="pointer-events-none absolute inset-0" style={{ perspective: 2600 }}>
+            <div
+              className="absolute bottom-0"
+              style={{ left: insetX - apW * 0.44 - 10, width: apW * 0.44, height: apH }}
+            >
+              <DoorLeaf side="left" hinge="right" turn={74} width="100%" />
+            </div>
+            <div
+              className="absolute bottom-0"
+              style={{ right: insetX - apW * 0.44 - 10, width: apW * 0.44, height: apH }}
+            >
+              <DoorLeaf side="right" hinge="left" turn={-74} width="100%" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* the lockup */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center px-6 pt-[112px] text-center lg:pt-[142px]">
+        <span className="label text-navy/75">{written.heroEyebrow}</span>
+        <h1 className="mt-6 text-ink lg:mt-8">
+          <span className="display block text-[clamp(30px,7.4vw,40px)] lg:text-[clamp(44px,3.9vw,62px)]">
+            {written.heroLine}
+          </span>
+          <span className="answer mt-1 block text-[clamp(31px,7.7vw,42px)] text-navy lg:mt-2 lg:text-[clamp(46px,4.1vw,66px)]">
+            {written.heroAnswer}
+          </span>
+        </h1>
+      </div>
+
+      {/* the margins, used */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden items-end justify-between px-12 pb-11 lg:flex">
+        <div className="flex items-center gap-4">
+          <span className="h-14 w-px bg-navy/30" />
+          <span className="label text-ink/55">{written.scrollCue}</span>
         </div>
+        <div className="flex items-center gap-4">
+          <span className="label text-ink/55">{written.heroFoot}</span>
+          <span className="h-14 w-px bg-navy/30" />
+        </div>
+      </div>
 
-        {/* the opening lockup */}
-        <motion.div
-          className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center px-6 pt-[112px] text-center lg:pt-[142px]"
-          style={{ opacity: openingOpacity, y: openingLift }}
-        >
-          <span className="label text-navy/75">{written.heroEyebrow}</span>
-          <h1 className="mt-6 text-ink lg:mt-8">
-            <span className="display block text-[clamp(30px,7.4vw,40px)] lg:text-[clamp(44px,3.9vw,62px)]">
-              {written.heroLine}
-            </span>
-            <span className="answer mt-1 block text-[clamp(31px,7.7vw,42px)] text-navy lg:mt-2 lg:text-[clamp(46px,4.1vw,66px)]">
-              {written.heroAnswer}
-            </span>
-          </h1>
-        </motion.div>
-
-        {/* on a phone the cue belongs on the threshold of the door itself */}
-        <motion.div
-          className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center lg:hidden"
-          style={{ opacity: openingOpacity }}
-        >
-          <span className="label on-photo text-porcelain/85">{written.scrollCue}</span>
-        </motion.div>
-
-        {/* the flanking margins — used, not empty */}
-        <motion.div
-          className="pointer-events-none absolute inset-x-0 bottom-0 hidden items-end justify-between px-12 pb-11 lg:flex"
-          style={{ opacity: openingOpacity }}
-        >
-          <div className="flex items-center gap-4">
-            <span className="h-14 w-px bg-navy/30" />
-            <span className="label text-ink/55">{written.scrollCue}</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="label text-ink/55">{written.heroFoot}</span>
-            <span className="h-14 w-px bg-navy/30" />
-          </div>
-        </motion.div>
-
-
-        {/* what she calls herself, once you are through */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 flex items-end"
-          style={{ opacity: statementOpacity }}
-        >
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-ink/72 via-ink/34 to-transparent" />
-          <p className="on-photo relative max-w-[540px] px-6 pb-12 text-porcelain lg:max-w-[640px] lg:px-12 lg:pb-14">
-            <span className="label block text-ceramic">{site.name}</span>
-            <span className="answer mt-4 block text-[19px] leading-[1.5] lg:text-[26px] lg:leading-[1.44]">
-              {site.bio}
-            </span>
-          </p>
-        </motion.div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center lg:hidden">
+        <span className="label on-photo text-porcelain/85">{written.scrollCue}</span>
       </div>
     </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
-function Leaves({
-  bloom,
-  box,
-  apW0,
-  apH0,
-  opacity,
-}: {
-  bloom: MotionValue<number>;
-  box: { w: number; h: number; mobile: boolean };
-  apW0: number;
-  apH0: number;
-  opacity: MotionValue<number>;
-}) {
-  const width = useTransform(bloom, (b) => lerp(apW0, box.w, b) * 0.44);
-  const height = useTransform(bloom, (b) => lerp(apH0, box.h, b));
-  const leftPos = useTransform(bloom, (b) => {
-    const w = lerp(apW0, box.w, b);
-    return (box.w - w) / 2 - w * 0.44 - 10;
-  });
-  const rightPos = leftPos;
-
-  return (
-    <motion.div className="pointer-events-none absolute inset-0" style={{ opacity }}>
-      <motion.div
-        className="absolute bottom-0"
-        style={{ left: leftPos, width, height, perspective: 2600 }}
-      >
-        <DoorLeaf side="left" hinge="right" turn={74} width="100%" />
-      </motion.div>
-      <motion.div
-        className="absolute bottom-0"
-        style={{ right: rightPos, width, height, perspective: 2600 }}
-      >
-        <DoorLeaf side="right" hinge="left" turn={-74} width="100%" />
-      </motion.div>
-    </motion.div>
   );
 }
 
