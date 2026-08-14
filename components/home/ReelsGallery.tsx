@@ -35,20 +35,24 @@ function ReelVideo({
   const ref = useRef<HTMLVideoElement>(null);
   const [sound, setSound] = useState(false);
 
-  // play while visible; drop sound the moment the arch leaves center stage
+  // the projector runs one film at a time — and only while on screen
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+    let inView = false;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
+        inView = entry.isIntersecting;
+        if (inView && active) video.play().catch(() => {});
         else video.pause();
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     io.observe(video);
+    if (active) video.play().catch(() => {});
+    else video.pause();
     return () => io.disconnect();
-  }, []);
+  }, [active]);
 
   useEffect(() => {
     const video = ref.current;
@@ -96,50 +100,67 @@ function ReelVideo({
   );
 }
 
-/** One arch riding the colonnade, all styling derived from distance to center. */
-function ColonnadeArch({
+/** One film in the projection room — it fades through the shared arch. */
+function StackedFilm({
   index,
   pos,
   children,
-  caption,
 }: {
   index: number;
   pos: MotionValue<number>;
   children: React.ReactNode;
-  caption: string;
 }) {
-  const x = useTransform(pos, (p) => (index - p) * SPACING);
-  const scale = useTransform(pos, (p) => {
-    const d = Math.min(Math.abs(index - p), 2.5);
-    return 1 - d * 0.13;
+  const opacity = useTransform(pos, (p) => {
+    const d = Math.abs(index - p);
+    return d >= 0.5 ? 0 : 1 - d * 2;
   });
-  const y = useTransform(pos, (p) => Math.min(Math.abs(index - p), 2.5) * 26);
-  const veil = useTransform(pos, (p) =>
-    Math.min(Math.abs(index - p) * 0.42, 0.62)
+  const scale = useTransform(pos, (p) => {
+    const d = Math.min(Math.abs(index - p), 0.5);
+    return 1 + d * 0.06;
+  });
+  const visibility = useTransform(pos, (p) =>
+    Math.abs(index - p) >= 0.5 ? "hidden" : "visible"
   );
-  const captionOpacity = useTransform(pos, (p) =>
-    Math.max(0, 1 - Math.abs(index - p) * 1.6)
-  );
-
   return (
     <motion.div
-      className="absolute left-1/2 top-0 will-change-transform"
-      style={{ x, scale, y, translateX: "-50%", zIndex: 50 - index }}
+      className="absolute inset-0"
+      style={{ opacity, scale, visibility }}
     >
-      <div className="relative h-[52vh] min-h-[380px] w-[30vh] min-w-[244px] max-w-[318px] md:w-[33vh]">
-        {children}
-        {/* the recession veil — arches out of focus fall into shadow */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 rounded-t-full bg-espresso"
-          style={{ opacity: veil }}
-        />
-      </div>
-      <motion.p
-        className="serif-body mt-5 text-center text-[16px] italic text-umber/75"
-        style={{ opacity: captionOpacity }}
-      >
-        {caption}
-      </motion.p>
+      {children}
+    </motion.div>
+  );
+}
+
+/** The running order beside the arch, engraved like a programme. */
+function Programme({ pos }: { pos: MotionValue<number> }) {
+  return (
+    <div className="hidden flex-col gap-5 lg:flex">
+      {site.reels.map((reel, i) => (
+        <ProgrammeRow key={reel.src} index={i} pos={pos} label={reel.label} />
+      ))}
+    </div>
+  );
+}
+
+function ProgrammeRow({
+  index,
+  pos,
+  label,
+}: {
+  index: number;
+  pos: MotionValue<number>;
+  label: string;
+}) {
+  const opacity = useTransform(pos, (p) =>
+    Math.abs(index - p) < 0.5 ? 1 : 0.35
+  );
+  const x = useTransform(pos, (p) => (Math.abs(index - p) < 0.5 ? 10 : 0));
+  return (
+    <motion.div className="flex items-baseline gap-4" style={{ opacity, x }}>
+      <span className="display text-lg text-taupe">{String(index + 1).padStart(2, "0")}</span>
+      <span className="serif-body max-w-[180px] text-[15px] italic leading-snug text-umber/80">
+        {label}
+      </span>
     </motion.div>
   );
 }
@@ -162,10 +183,10 @@ export default function ReelsGallery() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  // continuous colonnade position: 0 … N (last stop is the mark)
+  // continuous projection position: 0 … N-1, with a quiet hold on the last
   const pos = useTransform(scrollYProgress, (v) => {
-    const t = Math.min(1, Math.max(0, (v - 0.06) / 0.86));
-    return t * N;
+    const t = Math.min(1, Math.max(0, (v - 0.08) / 0.82));
+    return t * (N - 1);
   });
 
   // which arch holds center stage (for sound handoff + the counter)
@@ -230,7 +251,7 @@ export default function ReelsGallery() {
   }
 
   return (
-    <section ref={sectionRef} className="relative bg-linen" style={{ height: "420vh" }}>
+    <section ref={sectionRef} className="relative bg-linen" style={{ height: "300vh" }}>
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden pb-6 pt-24">
         <div className="mx-auto w-full max-w-[1520px] px-10">
           <div className="flex items-end justify-between gap-6">
@@ -262,38 +283,38 @@ export default function ReelsGallery() {
           </div>
         </div>
 
-        {/* the colonnade */}
-        <div className="relative mt-10 flex-1">
-          {site.reels.map((reel, i) => (
-            <ColonnadeArch key={reel.src} index={i} pos={pos} caption={reel.label}>
-              <ReelVideo {...reel} active={stage === i} />
-            </ColonnadeArch>
-          ))}
-          {/* the walk ends at the door */}
-          <ColonnadeArch index={N} pos={pos} caption="Follow the work, daily.">
+        {/* the projection room: one arch, the films change inside it */}
+        <div className="relative mt-8 flex flex-1 items-center justify-center gap-14 xl:gap-20">
+          <Programme pos={pos} />
+          <div className="relative h-[54vh] min-h-[380px] w-[min(34vh,80vw)] min-w-[250px]">
+            <div
+              className="absolute -inset-3 rounded-t-full border border-umber/15"
+              aria-hidden
+            />
+            <div className="relative h-full w-full overflow-hidden rounded-t-full">
+              {site.reels.map((reel, i) => (
+                <StackedFilm key={reel.src} index={i} pos={pos}>
+                  <ReelVideo {...reel} active={stage === i} />
+                </StackedFilm>
+              ))}
+            </div>
+          </div>
+          <div className="hidden w-[220px] flex-col gap-6 lg:flex">
+            <p className="serif-body text-[16px] italic leading-relaxed text-umber/75">
+              {site.bio}
+            </p>
             <a
               href={site.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-full w-full flex-col items-center justify-center gap-6 rounded-t-full border border-navy/25 bg-bone"
+              className="inline-block text-[10.5px] font-medium uppercase tracking-[0.34em] text-navy underline decoration-navy/35 underline-offset-8 transition-colors hover:decoration-navy"
             >
-              <img
-                src="/images/logo.png"
-                alt=""
-                className="h-24 w-24 transition-transform duration-700 group-hover:scale-110"
-              />
-              <span className="label text-center leading-relaxed text-navy">
-                Follow
-                <br />
-                {site.instagramHandle}
-              </span>
+              Follow {site.instagramHandle}
             </a>
-          </ColonnadeArch>
+          </div>
         </div>
 
-        <p className="serif-body mx-auto max-w-xl px-5 text-center text-[16px] italic leading-relaxed text-umber/70">
-          {site.bio}
-        </p>
+
       </div>
     </section>
   );

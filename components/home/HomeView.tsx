@@ -20,7 +20,7 @@ import ReelsGallery from "./ReelsGallery";
 const WARM = [
   "/images/aerial-oceanfront.jpg",
   "/images/estate-bougainvillea.jpg",
-  "/images/gate-pineapple.jpg",
+  "/images/watercolor-2.jpg",
   "/images/kitchen-marble.jpg",
   "/images/loggia-ocean.jpg",
   "/images/siobhan-arch.jpg",
@@ -111,8 +111,8 @@ export default function HomeView() {
               {/* a smaller study resting on the mat's corner */}
               <div className="absolute -bottom-10 right-0 hidden w-44 border border-umber/10 bg-white p-2 md:block lg:w-56">
                 <ImageReveal
-                  src="/images/gate-pineapple.jpg"
-                  alt="A restored garden gate with pineapple finials"
+                  src="/images/watercolor-2.jpg"
+                  alt="Watercolor study of a historic residence"
                   className="aspect-[3/4] w-full"
                 />
               </div>

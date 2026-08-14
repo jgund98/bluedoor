@@ -42,10 +42,12 @@ export default function Header() {
     };
   }, [open]);
 
-  // only the portal opens on navy — its header floats transparent in bone
-  // until scroll; home and every other page open on the ivory bar
-  const onDark = pathname.startsWith("/portal") && !scrolled && !open;
-  const hideMark = false;
+  // home opens on the navy doors and the portal lives on navy — the header
+  // floats transparent in bone there until scroll inverts it to ivory
+  const onDark =
+    (pathname === "/" || pathname.startsWith("/portal")) && !scrolled && !open;
+  // over the closed doors the centered medallion IS the identity
+  const hideMark = pathname === "/" && !scrolled && !open;
 
   return (
     <>
@@ -104,18 +106,6 @@ export default function Header() {
                 )}
               </Link>
             ))}
-            <span
-              aria-hidden
-              className={`hidden h-3 w-px xl:block ${onDark ? "bg-bone/25" : "bg-umber/15"}`}
-            />
-            <Link
-              href="/portal"
-              className={`hidden text-[10px] font-medium uppercase tracking-[0.32em] transition-colors duration-500 xl:block ${
-                onDark ? "text-bone/55 hover:text-bone" : "text-umber/40 hover:text-umber/80"
-              }`}
-            >
-              Client Login
-            </Link>
             <Link
               href="/build-with-bluedoor"
               className={`label border px-5 py-2 transition-all duration-500 ${
