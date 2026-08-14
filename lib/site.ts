@@ -311,6 +311,12 @@ export const written = {
   principalLine: "She began as a laborer.",
   principalAnswer: "She still walks every site.",
 
+  drawingLabel: "The Drawing",
+  drawingLine: "Every house is drawn",
+  drawingAnswer: "before it is built.",
+  drawingCopy:
+    "Plans, sections and details are resolved on paper first, so that decisions are made at the drafting table rather than in the field.",
+
   atelierLabel: "The Studio",
   atelierLine: "Every home is painted",
   atelierAnswer: "before it is poured.",
