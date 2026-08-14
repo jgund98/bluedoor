@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const PROJECTS = ["New construction", "Renovation", "Historic restoration", "Not yet decided"];
 
-export default function Enquiry() {
+export default function Inquiry() {
   const [sent, setSent] = useState(false);
 
   return (
@@ -25,7 +25,7 @@ export default function Enquiry() {
               Thank you — your note has been received.
             </p>
             <p className="prose-lux mx-auto mt-4 max-w-[380px] text-[16px]">
-              Siobhan reads every enquiry herself. You will hear back from the studio shortly.
+              Siobhan reads every inquiry herself. You will hear back from the studio shortly.
             </p>
             <button onClick={() => setSent(false)} className="quiet-link mt-9 inline-block text-navy">
               Write another
@@ -85,7 +85,7 @@ export default function Enquiry() {
                 Send
               </button>
               <span className="answer hidden text-[14px] leading-[1.4] text-ink/45 sm:block">
-                We reply to every enquiry.
+                We reply to every inquiry.
               </span>
             </div>
           </motion.form>

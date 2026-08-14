@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
 import { Reveal, RevealPlate, Signature } from "@/components/motion";
-import Enquiry from "@/components/build/Enquiry";
+import Inquiry from "@/components/build/Inquiry";
 
 export const metadata: Metadata = {
   title: "Build with Bluedoor",
@@ -44,7 +44,7 @@ export default function BuildPage() {
             </Reveal>
 
             <Reveal delay={0.1} className="mt-11 lg:mt-14">
-              <Enquiry />
+              <Inquiry />
             </Reveal>
 
             {/* where we are */}

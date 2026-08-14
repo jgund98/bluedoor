@@ -140,7 +140,7 @@ body {
   border-radius: 50% 50% 2px 2px / 18% 18% 0 0;
 }
 
-/* Hairline rules, warm not grey. */
+/* Hairline rules, warm not gray. */
 .hair {
   background: color-mix(in srgb, var(--color-navy) 16%, transparent);
 }

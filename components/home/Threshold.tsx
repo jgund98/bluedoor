@@ -62,8 +62,10 @@ export default function Threshold() {
 
   /* the leaves swing */
   const swing = useTransform(p, (v) => easeInOut(seg(v, 0.06, 0.44)));
-  const leftTurn = useTransform(swing, (s) => -86 * s);
-  const rightTurn = useTransform(swing, (s) => 86 * s);
+  const leftTurn = useTransform(swing, (s) => 84 * s);
+  const rightTurn = useTransform(swing, (s) => -84 * s);
+  // the face turns away from the light as it goes
+  const shade = useTransform(swing, (s) => s * 0.5);
   const leafFade = useTransform(p, (v) => 1 - seg(v, 0.4, 0.54));
 
   /* the doorway opens onto the whole screen */
@@ -134,10 +136,15 @@ export default function Threshold() {
                   curve runs unbroken across the pair */}
               <motion.div
                 className="absolute inset-0"
-                style={{ perspective: 1900, opacity: leafFade }}
+                style={{
+                  perspective: 820,
+                  perspectiveOrigin: "50% 46%",
+                  transformStyle: "preserve-3d",
+                  opacity: leafFade,
+                }}
               >
-                <DoorLeaf side="left" turn={leftTurn} />
-                <DoorLeaf side="right" turn={rightTurn} />
+                <DoorLeaf side="left" turn={leftTurn} shade={shade} />
+                <DoorLeaf side="right" turn={rightTurn} shade={shade} />
               </motion.div>
             </DoorCase>
           </motion.div>

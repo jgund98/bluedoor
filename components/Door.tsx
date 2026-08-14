@@ -39,6 +39,7 @@ export function DoorLeaf({
   turn,
   width = "50%",
   hinge,
+  shade,
 }: {
   side: "left" | "right";
   turn: Turn;
@@ -46,6 +47,8 @@ export function DoorLeaf({
   width?: string;
   /** Which edge the leaf pivots on. Defaults to its own outer edge. */
   hinge?: "left" | "right";
+  /** How far the face has turned out of the light, 0–1. */
+  shade?: MotionValue<number>;
 }) {
   const isLeft = side === "left";
   const pivot = hinge ?? (isLeft ? "left" : "right");
@@ -116,6 +119,14 @@ export function DoorLeaf({
           boxShadow: "0 2px 5px rgba(0,0,0,0.45)",
         }}
       />
+
+      {/* as the leaf swings into the room its face turns out of the light */}
+      {shade && (
+        <motion.div
+          className="pointer-events-none absolute inset-0 bg-abyss"
+          style={{ opacity: shade }}
+        />
+      )}
     </motion.div>
   );
 }

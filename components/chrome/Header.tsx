@@ -76,7 +76,7 @@ export default function Header() {
             Client Login
           </Link>
 
-          {/* centre — the doorplate, with the nav split symmetrically around it */}
+          {/* center — the doorplate, with the nav split symmetrically around it */}
           <div className="pointer-events-none absolute inset-x-0 flex items-center justify-center">
             <nav className="pointer-events-auto hidden w-[320px] items-center justify-end gap-10 lg:flex">
               {nav.left.map((n) => (
@@ -109,7 +109,7 @@ export default function Header() {
             href="/build-with-bluedoor/"
             className="label z-10 ml-auto hidden text-navy transition-opacity duration-500 hover:opacity-60 lg:block"
           >
-            Enquire
+            Inquire
           </Link>
 
           <button

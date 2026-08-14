@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { written } from "@/lib/site";
 import { Reveal } from "@/components/motion";
 
-/** Her own watercolours, hung from a picture rail. */
+/** Her own watercolors, hung from a picture rail. */
 const HANGS = [
   { src: "/images/watercolor-3.jpg", w: "18.5%", drop: 26, float: 22 },
   { src: "/images/watercolor-1.jpg", w: "23%", drop: 62, float: -16 },
@@ -63,7 +63,7 @@ export default function Atelier() {
             <div key={h.src} className="w-[74vw] shrink-0 snap-center">
               <div className="bg-porcelain p-2 shadow-[0_18px_40px_-30px_rgba(20,41,74,0.55)] ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={h.src} alt="Watercolour study of a Bluedoor home" loading="lazy" />
+                <img src={h.src} alt="Watercolor study of a Bluedoor home" loading="lazy" />
               </div>
             </div>
           ))}
@@ -103,7 +103,7 @@ function Hang({
       <div style={{ paddingTop: hang.drop }}>
         <div className="bg-porcelain p-[10px] shadow-[0_18px_40px_-30px_rgba(20,41,74,0.55)] ring-1 ring-navy/12 transition-all duration-700 ease-out group-hover:-translate-y-[6px] group-hover:shadow-[0_34px_60px_-32px_rgba(20,41,74,0.62)] group-hover:ring-navy/25">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={hang.src} alt="Watercolour study of a Bluedoor home" loading="lazy" />
+          <img src={hang.src} alt="Watercolor study of a Bluedoor home" loading="lazy" />
         </div>
       </div>
     </motion.div>
