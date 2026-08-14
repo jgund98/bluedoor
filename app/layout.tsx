@@ -1,55 +1,65 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Figtree, Marcellus } from "next/font/google";
+import { Marcellus, Cormorant_Garamond, Italianno, Figtree } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { site } from "@/lib/site";
+import Header from "@/components/chrome/Header";
+import Footer from "@/components/chrome/Footer";
 
 const marcellus = Marcellus({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-marcellus",
+  display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-cormorant",
+  display: "swap",
+});
+
+const italianno = Italianno({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-italianno",
+  display: "swap",
 });
 
 const figtree = Figtree({
-  weight: ["300", "400", "500"],
   subsets: ["latin"],
   variable: "--font-figtree",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Bluedoor Building | Luxury Custom Home Builder | Palm Beach, FL",
+    default: "Bluedoor Building | Luxury Custom Home Builder — Palm Beach, Florida",
     template: "%s | Bluedoor Building",
   },
-  description:
-    "Bluedoor Building is a luxury custom home builder in Palm Beach, Florida — new construction, historic renovation, and finely detailed interiors, led by Siobhan Zerilla.",
+  description: site.bio,
   openGraph: {
+    title: "Bluedoor Building | Luxury Custom Home Builder — Palm Beach",
+    description: site.bio,
+    url: site.url,
     siteName: site.name,
     type: "website",
-    locale: "en_US",
-    images: [{ url: "/images/aerial-oceanfront.jpg" }],
+    images: ["/images/hero-stairhall.jpg"],
   },
   icons: { icon: "/images/logo.png" },
 };
 
-const jsonLd = {
+const schema = {
   "@context": "https://schema.org",
-  "@type": "HomeAndConstructionBusiness",
-  name: site.legalName,
+  "@type": "GeneralContractor",
+  name: site.name,
+  legalName: site.legalName,
+  description: site.bio,
   url: site.url,
+  image: `${site.url}/images/hero-stairhall.jpg`,
   logo: `${site.url}/images/logo.png`,
-  image: `${site.url}/images/aerial-oceanfront.jpg`,
-  slogan: "Homes of lasting beauty and distinction",
-  founder: { "@type": "Person", name: site.principal.name },
   address: {
     "@type": "PostalAddress",
     streetAddress: site.address.street,
@@ -57,32 +67,22 @@ const jsonLd = {
     addressRegion: site.address.state,
     addressCountry: "US",
   },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: site.geo.lat,
-    longitude: site.geo.lng,
-  },
+  geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
   areaServed: site.areas.map((a) => ({ "@type": "Place", name: a })),
+  founder: { "@type": "Person", name: site.principal.name, jobTitle: "Principal" },
   sameAs: [site.instagram],
-  knowsAbout: [
-    "Luxury custom home construction",
-    "Historic and landmark restoration",
-    "High-end residential interiors",
-  ],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${cormorant.variable} ${figtree.variable}`}
+      className={`${marcellus.variable} ${cormorant.variable} ${italianno.variable} ${figtree.variable}`}
     >
-      <body>
+      <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
         <Header />
         <main>{children}</main>

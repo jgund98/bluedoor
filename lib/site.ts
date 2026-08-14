@@ -187,3 +187,145 @@ export const site = {
 } as const;
 
 export type Publication = (typeof site.publications)[number];
+
+/* ------------------------------------------------------------------ *
+ * Site composition. Facts live above; how the site is arranged lives
+ * here. New copy follows her register: plain, exact, unembellished.
+ * ------------------------------------------------------------------ */
+
+export const nav = {
+  left: [
+    { label: "Portfolio", href: "/portfolio/" },
+    { label: "Process", href: "/process/" },
+  ],
+  right: [
+    { label: "Culture", href: "/culture/" },
+    { label: "Press", href: "/media/" },
+  ],
+  full: [
+    { label: "Portfolio", href: "/portfolio/", line: "Selected work" },
+    { label: "Process", href: "/process/", line: "How a house is made" },
+    { label: "Culture", href: "/culture/", line: "Siobhan, and the studio" },
+    { label: "Press", href: "/media/", line: "Features and recognition" },
+    { label: "Build with Bluedoor", href: "/build-with-bluedoor/", line: "Begin a conversation" },
+    { label: "Client Login", href: "/portal/", line: "For clients under construction" },
+  ],
+} as const;
+
+/** The procession behind the hero arch — tall, bright, blue-and-white. */
+export const heroRail = [
+  { src: "/images/rail/estate-palms.jpg", pos: "50% 58%" },
+  { src: "/images/rail/greatroom.jpg", pos: "50% 50%" },
+  { src: "/images/rail/door-arched.jpg", pos: "52% 50%" },
+  { src: "/images/rail/aerial-oceanfront.jpg", pos: "50% 52%" },
+  { src: "/images/rail/estate-colonial.jpg", pos: "50% 56%" },
+  { src: "/images/rail/kitchen-brass.jpg", pos: "50% 50%" },
+  { src: "/images/rail/gate-pineapple.jpg", pos: "50% 50%" },
+  { src: "/images/rail/loggia-pool.jpg", pos: "50% 50%" },
+] as const;
+
+/** Three portals — her three disciplines, in her words. */
+export const portals = [
+  {
+    index: "I",
+    label: "Luxury Residential",
+    line: "From concept",
+    answer: "to completion.",
+    copy: site.services[0].copy,
+    image: "/images/estate-bougainvillea.jpg",
+    pos: "50% 58%",
+    href: "/portfolio/",
+    ground: "porcelain",
+  },
+  {
+    index: "II",
+    label: "Historic Renovation",
+    line: "The delicate art",
+    answer: "of restoration.",
+    copy: site.services[1].copy,
+    image: "/images/hall-door.jpg",
+    pos: "50% 46%",
+    href: "/process/",
+    ground: "mist",
+  },
+  {
+    index: "III",
+    label: "Quality Interiors",
+    line: "Exquisite exteriors,",
+    answer: "detailed interiors.",
+    copy: site.services[2].copy,
+    image: "/images/pantry-blue.jpg",
+    pos: "50% 50%",
+    href: "/portfolio/",
+    ground: "porcelain",
+  },
+] as const;
+
+/** Portfolio plates. Captions stay descriptive — no names, no addresses. */
+export const gallery = [
+  { src: "/images/hero-stairhall.jpg", caption: "A double stair hall in cut travertine", tall: true },
+  { src: "/images/greatroom.jpg", caption: "Great room, framed to the Atlantic" },
+  { src: "/images/estate-palms.jpg", caption: "Mediterranean elevation, oceanfront" },
+  { src: "/images/kitchen-brass.jpg", caption: "Kitchen in blue and unlacquered brass", tall: true },
+  { src: "/images/loggia-ocean.jpg", caption: "Loggia under a cypress ceiling" },
+  { src: "/images/door-arched.jpg", caption: "Arched entry, bougainvillea in season" },
+  { src: "/images/stairhall-2.jpg", caption: "The same hall, finished", tall: true },
+  { src: "/images/living-coastal.jpg", caption: "Living room, natural light held all day" },
+  { src: "/images/loggia-pool.jpg", caption: "Pool terrace and cabana" },
+  { src: "/images/pantry-blue.jpg", caption: "Scullery in painted cabinetry" },
+  { src: "/images/estate-colonial.jpg", caption: "Colonial elevation with louvered shutters" },
+  { src: "/images/hallway-gallery.jpg", caption: "Gallery corridor, oceanside", tall: true },
+  { src: "/images/oceanfront-entry.jpg", caption: "Motor court and entry" },
+  { src: "/images/loggia-stone.jpg", caption: "Stone colonnade under construction" },
+  { src: "/images/courtyard-modern.jpg", caption: "Courtyard, planted for shade" },
+  { src: "/images/bunkroom-green.jpg", caption: "Bunk room, painted millwork" },
+  { src: "/images/gate-pineapple.jpg", caption: "Lattice gate and pineapple finials" },
+  { src: "/images/living-ocean.jpg", caption: "Seating room open to the terrace" },
+  { src: "/images/house-shingle.jpg", caption: "Shingled elevation, in town" },
+  { src: "/images/detail-stone-column.jpg", caption: "Cast column, hand-finished" },
+] as const;
+
+/** Copy written for this site. Her register: plain, exact, no flourish. */
+export const written = {
+  heroEyebrow: "A boutique custom home builder",
+  heroLine: "Uncompromising quality.",
+  heroAnswer: "Unparalleled expertise.",
+  heroFoot: "Palm Beach, Florida",
+  scrollCue: "Scroll to enter",
+
+  portalsLabel: "What we build",
+  portalsLine: "Three disciplines,",
+  portalsAnswer: "one standard.",
+
+  principalLabel: "The Principal",
+  principalLine: "She began as a laborer.",
+  principalAnswer: "She still walks every site.",
+
+  atelierLabel: "The Studio",
+  atelierLine: "Every home is painted",
+  atelierAnswer: "before it is poured.",
+  atelierCopy:
+    "Each project begins as a watercolor — a study of proportion, light, and setting, drawn before a single line is staked on the lot.",
+
+  pressLabel: "Recognition",
+  pressLine: "Written up,",
+  pressAnswer: "rarely announced.",
+
+  collabLabel: "In collaboration with",
+  collabCopy: site.copy.collaborations,
+
+  inviteLabel: "Build with Bluedoor",
+  inviteLine: "A small studio,",
+  inviteAnswer: "by design.",
+  inviteCopy:
+    "We take on a limited number of homes at a time so that each one has the attention it was promised. If you are considering a build or a renovation in the Palm Beaches, write to us.",
+  inviteCta: "Begin a conversation",
+
+  /* The closer — the last thing said, after the door opens. Her language. */
+  closerLine: "Elevating your vision",
+  closerAnswer: "with our expertise.",
+  closerCopy:
+    "We take on a limited number of homes at a time, and we do not leave projects unsupervised. If you are considering a build or a renovation in the Palm Beaches, the door is open.",
+  closerCta: "Begin a conversation",
+} as const;
+

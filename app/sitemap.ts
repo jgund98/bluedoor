@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/lib/site";
 
 export const dynamic = "force-static";
+import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/portfolio", "/process", "/culture", "/media", "/build-with-bluedoor"];
-  return routes.map((route) => ({
-    url: `${site.url}${route}`,
+  const routes = ["/", "/portfolio/", "/process/", "/culture/", "/media/", "/build-with-bluedoor/"];
+  return routes.map((r) => ({
+    url: `${site.url}${r}`,
     lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: route === "" ? 1 : 0.8,
+    changeFrequency: r === "/" ? "monthly" : "yearly",
+    priority: r === "/" ? 1 : 0.7,
   }));
 }
