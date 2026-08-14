@@ -16,28 +16,33 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 /**
  * The finale: the blue door itself. It stands closed on a quiet field,
- * swings open onto the stair hall, and walks you in.
+ * swings open onto the colonnade, and walks you in. Like the hero, the
+ * opening is a clip on a fixed layer — nothing is ever resized.
  */
 export default function Threshold() {
   const ref = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
-  const [vp, setVp] = useState({ w: 1440, h: 900, mobile: false });
+  const [box, setBox] = useState({ w: 1440, h: 900, mobile: false, ready: false });
   useEffect(() => {
-    const measure = () =>
-      setVp({
-        w: window.innerWidth,
-        h: window.visualViewport?.height ?? window.innerHeight,
-        mobile: window.innerWidth < 1024,
-      });
+    const el = stage.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.height) {
+        setBox({ w: r.width, h: r.height, mobile: r.width < 1024, ready: true });
+      }
+    };
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
-  const doorW = vp.mobile ? Math.min(vp.w * 0.62, 330) : Math.min(vp.w * 0.27, 386);
-  const doorH = Math.round(vp.h * (vp.mobile ? 0.48 : 0.56));
-  const sill = Math.round(vp.h * (vp.mobile ? 0.1 : 0.09));
+  const doorW = box.mobile ? Math.min(box.w * 0.66, 340) : Math.min(box.w * 0.27, 386);
+  const doorH = Math.round(box.h * (box.mobile ? 0.5 : 0.56));
+  const sill = Math.round(box.h * (box.mobile ? 0.1 : 0.09));
 
   /* the leaves swing */
   const swing = useTransform(p, (v) => easeInOut(seg(v, 0.06, 0.44)));
@@ -45,27 +50,32 @@ export default function Threshold() {
   const rightTurn = useTransform(swing, (s) => 86 * s);
   const leafFade = useTransform(p, (v) => 1 - seg(v, 0.4, 0.54));
 
-  /* the doorway opens to the whole screen */
+  /* the doorway opens onto the whole screen */
   const bloom = useTransform(p, (v) => easeOut(seg(v, 0.34, 0.72)));
-  const openW = useTransform(bloom, (b) => lerp(doorW, vp.w, b));
-  const openH = useTransform(bloom, (b) => lerp(doorH, vp.h, b));
-  const openBottom = useTransform(bloom, (b) => lerp(sill, 0, b));
-  const rTop = useTransform(bloom, (b) => lerp(50, 0, b));
-  const rV = useTransform(bloom, (b) => lerp(30, 0, b));
-  const radius = useMotionTemplate`${rTop}% ${rTop}% 2px 2px / ${rV}% ${rV}% 0 0`;
+  const insetX = useTransform(bloom, (b) => (box.w - lerp(doorW, box.w, b)) / 2);
+  const insetTop = useTransform(bloom, (b) => box.h - lerp(doorH, box.h, b) - lerp(sill, 0, b));
+  const insetBottom = useTransform(bloom, (b) => lerp(sill, 0, b));
+  const rx = useTransform(bloom, (b) => lerp(doorW / 2, 0, b));
+  const ry = useTransform(bloom, (b) => lerp(doorH * 0.3, 0, b));
+  const clip = useMotionTemplate`inset(${insetTop}px ${insetX}px ${insetBottom}px ${insetX}px round ${rx}px ${rx}px 2px 2px / ${ry}px ${ry}px 0px 0px)`;
+
+  /* The doorway should look level into the room, not down at the floor —
+     the picture rides down so the opening frames its middle, and settles
+     as the opening grows to fill the screen. */
+  const lookY = useTransform(bloom, (b) => (box.h - lerp(doorH, box.h, b)) / 2 - lerp(sill, 0, b) / 2);
+
   const frameFade = useTransform(p, (v) => 1 - seg(v, 0.36, 0.52));
   const groundFade = useTransform(p, (v) => 1 - seg(v, 0.4, 0.66));
 
   /* and then you walk in */
-  const walkIn = useTransform(p, (v) => lerp(1.02, 1.34, easeOut(seg(v, 0.4, 1))));
-  const walkUp = useTransform(p, (v) => lerp(0, -5, easeOut(seg(v, 0.5, 1))));
+  const walkIn = useTransform(p, (v) => lerp(1.04, 1.3, easeOut(seg(v, 0.4, 1))));
 
   const openingFade = useTransform(p, (v) => 1 - seg(v, 0.04, 0.2));
   const inviteFade = useTransform(p, (v) => seg(v, 0.72, 0.9));
 
   return (
     <section ref={ref} className="relative h-[250svh] lg:h-[300vh]">
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-chalk">
+      <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-chalk">
         {/* the quiet field the door stands on */}
         <motion.div className="absolute inset-0 grain" style={{ opacity: groundFade }}>
           <div className="absolute inset-0 bg-[radial-gradient(72%_58%_at_50%_62%,#ffffff_0%,#f3f1ec_46%,#e6e2da_100%)]" />
@@ -73,37 +83,40 @@ export default function Threshold() {
 
         {/* what lies beyond */}
         <motion.div
-          className="absolute left-1/2 overflow-hidden plate"
-          style={{ width: openW, height: openH, bottom: openBottom, borderRadius: radius, x: "-50%" }}
+          className="absolute inset-0 bg-linen"
+          style={{ clipPath: clip, WebkitClipPath: clip }}
         >
-          <motion.div
-            className="absolute bottom-0 left-1/2 -translate-x-1/2"
-            style={{ width: vp.w, height: vp.h }}
-          >
+          <motion.div className="absolute inset-0" style={{ y: lookY }}>
             <motion.img
               src={BEYOND}
               alt="A stone colonnade, under construction"
               className="h-full w-full object-cover"
               loading="lazy"
-              style={{ scale: walkIn, y: walkUp, objectPosition: "50% 52%" }}
+              decoding="async"
+              style={{ scale: walkIn, objectPosition: "50% 46%" }}
             />
           </motion.div>
         </motion.div>
 
         {/* the door */}
-        <motion.div
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{ width: doorW, height: doorH, bottom: sill, opacity: frameFade }}
-        >
-          <div className="absolute -bottom-5 left-1/2 h-8 w-[118%] -translate-x-1/2 rounded-[50%] bg-umber/25 blur-xl" />
+        {box.ready && (
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2"
+            style={{ width: doorW, height: doorH, bottom: sill, opacity: frameFade }}
+          >
+            <div className="absolute -bottom-5 left-1/2 h-8 w-[118%] -translate-x-1/2 rounded-[50%] bg-umber/25 blur-xl" />
 
-          <DoorCase medallion={vp.mobile ? 40 : 48} />
+            <DoorCase medallion={box.mobile ? 40 : 48} />
 
-          <motion.div className="absolute inset-0" style={{ perspective: 1900, opacity: leafFade }}>
-            <DoorLeaf side="left" turn={leftTurn} />
-            <DoorLeaf side="right" turn={rightTurn} />
+            <motion.div
+              className="absolute inset-0"
+              style={{ perspective: 1900, opacity: leafFade }}
+            >
+              <DoorLeaf side="left" turn={leftTurn} />
+              <DoorLeaf side="right" turn={rightTurn} />
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
 
         {/* before */}
         <motion.div
@@ -122,10 +135,7 @@ export default function Threshold() {
         </motion.div>
 
         {/* after */}
-        <motion.div
-          className="absolute inset-0 flex items-end"
-          style={{ opacity: inviteFade }}
-        >
+        <motion.div className="absolute inset-0 flex items-end" style={{ opacity: inviteFade }}>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[82%] bg-gradient-to-t from-ink/80 via-ink/42 to-transparent" />
           <div className="relative w-full px-5 pb-11 lg:px-12 lg:pb-14">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">

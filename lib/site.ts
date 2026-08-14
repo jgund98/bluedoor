@@ -224,6 +224,12 @@ export const heroRail = [
   { src: "/images/rail/loggia-pool.jpg", pos: "50% 50%" },
 ] as const;
 
+/** Smaller plates for phones — half the decode cost, same procession. */
+export const heroRailMobile = heroRail.map((r) => ({
+  ...r,
+  src: r.src.replace("/images/rail/", "/images/rail/m/"),
+}));
+
 /** Three portals — her three disciplines, in her words. */
 export const portals = [
   {
