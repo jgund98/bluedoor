@@ -75,7 +75,7 @@ export default function Threshold() {
 
   return (
     <section ref={ref} className="relative h-[250svh] lg:h-[300vh]">
-      <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-chalk">
+      <div ref={stage} className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-chalk">
         {/* the quiet field the door stands on */}
         <motion.div className="absolute inset-0 grain" style={{ opacity: groundFade }}>
           <div className="absolute inset-0 bg-[radial-gradient(72%_58%_at_50%_62%,#ffffff_0%,#f3f1ec_46%,#e6e2da_100%)]" />
@@ -166,10 +166,10 @@ export default function Threshold() {
                 <img
                   src="/images/logo.png"
                   alt=""
-                  className="w-[54px] shrink-0 rounded-full ring-1 ring-porcelain/35 lg:w-[68px]"
+                  className="w-[76px] shrink-0 rounded-full ring-1 ring-porcelain/35 lg:w-[124px]"
                 />
                 <div>
-                  <span className="display on-photo block text-[19px] leading-none text-porcelain lg:text-[22px]">
+                  <span className="display on-photo block text-[21px] leading-none text-porcelain lg:text-[26px]">
                     {site.name}
                   </span>
                   <span className="label on-photo mt-3 block text-porcelain/60">

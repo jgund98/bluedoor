@@ -115,7 +115,7 @@ export default function HeroProcession() {
     <section ref={ref} className="relative h-[240svh] lg:h-[300vh]">
       <div
         ref={stage}
-        className="sticky top-0 h-[100svh] w-full overflow-hidden bg-porcelain grain"
+        className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-porcelain grain"
       >
         {/* the world outside the doorway — the same procession, carrying on
             past the jambs, veiled back to near-paper. Phones get it too. */}
@@ -190,7 +190,14 @@ export default function HeroProcession() {
               {written.heroAnswer}
             </span>
           </h1>
-          <span className="label mt-9 text-ink/45 lg:hidden">{written.scrollCue}</span>
+        </motion.div>
+
+        {/* on a phone the cue belongs on the threshold of the door itself */}
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center lg:hidden"
+          style={{ opacity: openingOpacity }}
+        >
+          <span className="label on-photo text-porcelain/85">{written.scrollCue}</span>
         </motion.div>
 
         {/* the flanking margins — used, not empty */}

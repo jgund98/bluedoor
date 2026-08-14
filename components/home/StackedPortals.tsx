@@ -27,14 +27,14 @@ function Keystone({ ground, small }: { ground: string; small?: boolean }) {
   return (
     <div
       className={`pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 ${
-        small ? "-top-[17px]" : "-top-[21px]"
+        small ? "-top-[26px]" : "-top-[34px]"
       }`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/logo.png"
         alt=""
-        className={`rounded-full ${small ? "w-[34px] ring-[5px]" : "w-[42px] ring-[7px]"} ${
+        className={`rounded-full ${small ? "w-[52px] ring-[7px]" : "w-[68px] ring-[9px]"} ${
           ground === "mist" ? "ring-mist" : "ring-porcelain"
         }`}
       />
@@ -65,7 +65,7 @@ function Panel({ portal, i, last }: { portal: Portal; i: number; last: boolean }
   return (
     <motion.section
       ref={ref}
-      className={`sticky top-0 h-[100svh] overflow-hidden grain ${GROUND[portal.ground] ?? "bg-porcelain"}`}
+      className={`sticky top-0 h-[100dvh] overflow-hidden grain ${GROUND[portal.ground] ?? "bg-porcelain"}`}
       style={{ borderTopLeftRadius: radius, borderTopRightRadius: radius }}
     >
       <motion.div

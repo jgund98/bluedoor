@@ -8,10 +8,6 @@ import { nav, site } from "@/lib/site";
 
 const EASE = [0.76, 0, 0.24, 1] as const;
 
-/** A bone plate with a circle cut out of it, for the medallion to sit in. */
-const PLATE_NOTCH =
-  "radial-gradient(circle 54px at 50% 50%, transparent 0 54px, #000 55px)";
-
 /** Routes whose masthead is a full-bleed photograph. */
 const PHOTO_MASTHEADS = ["/portfolio", "/portfolio/"];
 
@@ -56,37 +52,26 @@ export default function Header() {
         }`}
       >
         {/* Over a full-bleed photograph the chrome would vanish into the
-            picture. Instead of a scrim, the nav gets its own doorplate: a
-            bone bar with a circle cut out of it, so the medallion sits in
-            the plate the way an escutcheon sits in a door. */}
+            picture. Rather than a scrim, the nav gets its own bone lintel —
+            the photograph begins beneath it, the way a view begins beneath
+            a door head. */}
         <div
           aria-hidden
           className={`pointer-events-none absolute inset-x-0 top-0 h-full bg-porcelain transition-opacity duration-700 ${
             onPhoto && !scrolled ? "opacity-100" : "opacity-0"
           }`}
-          style={{
-            maskImage: PLATE_NOTCH,
-            WebkitMaskImage: PLATE_NOTCH,
-            boxShadow: "0 1px 0 rgba(34,75,130,0.14)",
-          }}
+          style={{ boxShadow: "0 1px 0 rgba(34,75,130,0.16)" }}
         />
         <div
           className={`relative mx-auto flex max-w-[1560px] items-center px-5 transition-all duration-700 lg:px-12 ${
             scrolled ? "h-[64px]" : "h-[116px] lg:h-[138px]"
           }`}
         >
-          {/* far left — the way in. On a phone it opens the door; on a desk it
-              is where clients already under construction let themselves in. */}
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Open the index"
-            className={`label z-10 transition-colors duration-500 lg:hidden ${onDark ? "text-porcelain/65 hover:text-porcelain" : "text-ink/55 hover:text-navy"}`}
-          >
-            Index
-          </button>
+          {/* far left — where clients already under construction let
+              themselves in */}
           <Link
             href="/portal/"
-            className={`label z-10 hidden transition-colors duration-500 lg:block ${onDark ? "text-porcelain/65 hover:text-porcelain" : "text-ink/55 hover:text-navy"}`}
+            className="label z-10 whitespace-nowrap text-ink/55 transition-colors duration-500 hover:text-navy"
           >
             Client Login
           </Link>
@@ -119,13 +104,23 @@ export default function Header() {
             </nav>
           </div>
 
-          {/* far right — the ask */}
+          {/* far right — the ask on a desk, the way in on a phone */}
           <Link
             href="/build-with-bluedoor/"
-            className={`label z-10 ml-auto transition-opacity duration-500 hover:opacity-60 ${onDark ? "text-ceramic" : "text-navy"}`}
+            className="label z-10 ml-auto hidden text-navy transition-opacity duration-500 hover:opacity-60 lg:block"
           >
             Enquire
           </Link>
+
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open the index"
+            className="z-10 ml-auto flex h-6 w-[26px] flex-col justify-center gap-[6px] lg:hidden"
+          >
+            <span className="block h-px w-full bg-navy/70" />
+            <span className="block h-px w-full bg-navy/70" />
+            <span className="ml-auto block h-px w-2/3 bg-navy/70" />
+          </button>
         </div>
 
         {/* the rule that breaks around the plate, and reads back your progress */}
