@@ -214,8 +214,9 @@ export const nav = {
     { label: "Culture", href: "/culture/", line: "Siobhan, and the studio" },
     { label: "Press", href: "/media/", line: "Features and recognition" },
     { label: "Build with Bluedoor", href: "/build-with-bluedoor/", line: "Begin a conversation" },
-    { label: "Client Login", href: "/portal/", line: "For clients under construction" },
   ],
+  /** Utility, not navigation. It lives in the footer and nowhere else. */
+  clientLogin: { label: "Client Login", href: "/portal/" },
 } as const;
 
 /** The procession behind the hero arch — tall, bright, blue-and-white. */

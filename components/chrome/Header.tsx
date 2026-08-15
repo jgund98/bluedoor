@@ -67,15 +67,6 @@ export default function Header() {
             scrolled ? "h-[64px]" : "h-[116px] lg:h-[138px]"
           }`}
         >
-          {/* far left — where clients already under construction let
-              themselves in */}
-          <Link
-            href="/portal/"
-            className="label z-10 whitespace-nowrap text-ink/55 transition-colors duration-500 hover:text-navy"
-          >
-            Client Login
-          </Link>
-
           {/* center — the doorplate, with the nav split symmetrically around it */}
           <div className="pointer-events-none absolute inset-x-0 flex items-center justify-center">
             <nav className="pointer-events-auto hidden w-[320px] items-center justify-end gap-10 lg:flex">

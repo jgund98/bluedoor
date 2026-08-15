@@ -41,6 +41,14 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
+
+              {/* utility, kept apart from the navigation */}
+              <Link
+                href={nav.clientLogin.href}
+                className="label mt-8 inline-block text-porcelain/45 transition-colors duration-500 hover:text-porcelain"
+              >
+                {nav.clientLogin.label}
+              </Link>
             </div>
 
             <div className="max-w-[240px]">
