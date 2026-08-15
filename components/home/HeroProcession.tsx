@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   AnimatePresence,
@@ -34,38 +34,63 @@ type Plate = {
   art?: string;
 };
 
+/**
+ * A phone is a portrait window onto a landscape photograph — every plate is
+ * cropped to a slice about a third of its own width, so posM is not a nudge
+ * of the desktop framing but a second composition. Each is centred on the
+ * thing the picture is actually about: the stair, the pendants, the ocean
+ * window, the arched entry. Full height is always shown, so posM's vertical
+ * figure does no work and is left at centre.
+ */
 const PLATES: readonly Plate[] = [
   {
     src: "/images/estate-palms-hero.jpg",
     pos: "50% 50%",
-    posM: "42% 62%",
+    posM: "50% 50%",
     caption: "Mediterranean elevation, oceanfront",
   },
   {
     src: "/images/hero-stairhall.jpg",
     pos: "50% 52%",
-    posM: "50% 52%",
+    // the stair is dead centre and the hall is symmetric about it
+    posM: "50% 50%",
     caption: "A double stair hall in cut travertine",
   },
   {
     src: "/images/kitchen-brass.jpg",
     pos: "50% 52%",
-    posM: "46% 52%",
+    // the two blue-dipped pendants sit either side of the middle; centred
+    // here they hang level, evenly inset from both edges
+    posM: "50% 50%",
     caption: "Kitchen in blue and unlacquered brass",
   },
   {
     src: "/images/estate-colonial.jpg",
     pos: "50% 55%",
-    posM: "46% 55%",
+    // on the arched entry and the curved stair sweeping up to it
+    posM: "49% 50%",
     caption: "Colonial elevation with louvered shutters",
   },
   {
     src: "/images/greatroom.jpg",
     pos: "50% 45%",
-    posM: "50% 45%",
+    // on the window and the water beyond it
+    posM: "49% 50%",
     caption: "Great room, framed to the Atlantic",
   },
 ];
+
+const ALL = [0, 1, 2, 3, 4] as const;
+
+/**
+ * The phone runs its own edit. It opens on the stair hall — symmetric, and
+ * the only plate whose composition is already vertical — and the wide
+ * oceanfront elevation is held back for the desk, where it can be seen.
+ * Cropped to a phone it would show a quarter of its width, and at 1600px
+ * wide that slice is 386 native pixels doing the work of 780: the one plate
+ * in the set that cannot be sharp on a phone.
+ */
+const MOBILE = [1, 2, 4, 3] as const;
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
 
@@ -109,6 +134,15 @@ export default function HeroProcession() {
   const [incoming, setIncoming] = useState<number | null>(null);
   const busy = useRef(false);
 
+  // which plates this screen shows, and in what order
+  const seq = useMemo<readonly number[]>(() => (box.mobile ? MOBILE : ALL), [box.mobile]);
+
+  // a rotated phone inherits an index the desk's longer edit had reached
+  useEffect(() => {
+    setCurrent((c) => (c < seq.length ? c : 0));
+    setIncoming((n) => (n === null || n < seq.length ? n : null));
+  }, [seq]);
+
   // the paint spreading: 0 = a drop, 1 = the whole sheet
   const prog = useMotionValue(0);
   const size = useTransform(prog, [0, 1], [7, 360]);
@@ -146,7 +180,7 @@ export default function HeroProcession() {
     [current, prog],
   );
 
-  const turn = useCallback(() => turnTo((current + 1) % PLATES.length), [current, turnTo]);
+  const turn = useCallback(() => turnTo((current + 1) % seq.length), [current, seq, turnTo]);
 
   // the page turns itself, when nobody is turning it
   useEffect(() => {
@@ -160,8 +194,8 @@ export default function HeroProcession() {
   // the next plate is developed before it is needed
   useEffect(() => {
     const img = new Image();
-    img.src = PLATES[(current + 1) % PLATES.length].src;
-  }, [current]);
+    img.src = PLATES[seq[(current + 1) % seq.length]].src;
+  }, [current, seq]);
 
   // As the page begins to scroll, the photograph moves at half speed — the
   // page below is drawn up over the plate, the way a flyleaf is pulled
@@ -171,8 +205,8 @@ export default function HeroProcession() {
     clamp: true,
   });
 
-  const plate = PLATES[current];
-  const next = incoming !== null ? PLATES[incoming] : null;
+  const plate = PLATES[seq[current]];
+  const next = incoming !== null ? PLATES[seq[incoming]] : null;
   const shown = incoming ?? current;
 
   /* ---- the light meter ---- */
@@ -181,7 +215,7 @@ export default function HeroProcession() {
     const el = stage.current;
     if (!box.ready || !el) return;
     const h = el.getBoundingClientRect().height;
-    const p = PLATES[shown];
+    const p = PLATES[seq[shown]];
     const img = new window.Image();
 
     const meter = () => {
@@ -209,7 +243,7 @@ export default function HeroProcession() {
     if (img.complete) meter();
     else img.addEventListener("load", meter, { once: true });
     return () => img.removeEventListener("load", meter);
-  }, [shown, box.ready, box.w, box.mobile, grade]);
+  }, [shown, seq, box.ready, box.w, box.mobile, grade]);
   // a phone gets a clean dissolve — a masked full-screen repaint per frame
   // is exactly the kind of work that made the old hero stutter
   const bloom = !box.mobile && !box.reduced;
@@ -390,13 +424,13 @@ export default function HeroProcession() {
                 className="label label-sheet block whitespace-nowrap text-ink/50"
               >
                 Plate {NUMERALS[shown]}
-                <span className="hidden md:inline"> — {PLATES[shown].caption}</span>
+                <span className="hidden md:inline"> — {PLATES[seq[shown]].caption}</span>
               </motion.span>
             </AnimatePresence>
           </span>
 
           <span className="flex items-center gap-[9px]">
-            {PLATES.map((_, i) => (
+            {seq.map((_, i) => (
               <button
                 key={i}
                 type="button"
