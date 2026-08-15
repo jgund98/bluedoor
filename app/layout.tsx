@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Marcellus, Cormorant_Garamond, Mrs_Saint_Delafield, Figtree } from "next/font/google";
+import { Marcellus, Cormorant_Garamond, Herr_Von_Muellerhoff, Figtree } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import Header from "@/components/chrome/Header";
@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const script = Mrs_Saint_Delafield({
+const script = Herr_Von_Muellerhoff({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-script-face",

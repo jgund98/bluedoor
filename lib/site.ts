@@ -86,7 +86,7 @@ export const site = {
       title: "An Extraordinary Oceanfront Estate, Manalapan",
       blurb:
         "A newly completed waterfront estate spanning the Atlantic and the Intracoastal — “so rare, it is a retreat, a work of art, a once-in-a-lifetime opportunity.”",
-      url: "https://mlpalmbeach.com/discover-1160-south-ocean-boulevard-manalapan",
+      url: "https://www.modernluxury.com/discover-1160-south-ocean-boulevard-manalapan/",
       image: "/images/press-modernluxury.jpg",
     },
     {

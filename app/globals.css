@@ -82,7 +82,9 @@ body {
 .script {
   font-family: var(--font-script);
   font-weight: 400;
-  line-height: 1.02;
+  /* this hand throws long swashes above and below the line — a tight
+     leading clips them, and so does any mask drawn to the line box */
+  line-height: 1.34;
   letter-spacing: 0.005em;
 }
 

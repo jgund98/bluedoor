@@ -45,6 +45,11 @@ export function Signature({
         WebkitMaskImage: ink,
         maskRepeat: "no-repeat",
         WebkitMaskRepeat: "no-repeat",
+        // A mask hides everything outside the element's own box, and this
+        // hand throws swashes well past it. Pad the box out so the mask
+        // covers them, then pull the padding back out of the layout.
+        padding: "0.22em 0.14em",
+        margin: "-0.22em -0.14em",
       }}
     >
       {children}
