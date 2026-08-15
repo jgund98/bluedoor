@@ -8,8 +8,13 @@ import { nav, site } from "@/lib/site";
 
 const EASE = [0.76, 0, 0.24, 1] as const;
 
-/** Routes whose masthead is a full-bleed photograph. */
+/** Routes whose masthead is a full-bleed photograph under a bone lintel. */
 const PHOTO_MASTHEADS = ["/portfolio", "/portfolio/"];
+
+/** Routes where the chrome sits directly on the photograph before scroll —
+ *  the type goes porcelain with a soft settle, and returns to ink once the
+ *  sheet arrives. */
+const PHOTO_CHROME = ["/"];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -19,6 +24,7 @@ export default function Header() {
   const path = usePathname() ?? "/";
   const onDark = path.startsWith("/portal");
   const onPhoto = PHOTO_MASTHEADS.includes(path);
+  const light = PHOTO_CHROME.includes(path) && !scrolled;
 
   // Two hairline segments that grow outward from the medallion as you read.
   const fill = useTransform(scrollYProgress, (v) => v);
@@ -46,11 +52,14 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,height] duration-700 ${
-          scrolled ? (onDark ? "bg-ink/85 backdrop-blur-[10px]" : "bg-porcelain/88 backdrop-blur-[10px]") : "bg-transparent"
-        }`}
-      >
+      <header className="fixed inset-x-0 top-0 z-50 bg-transparent transition-[height] duration-700">
+        {/* the sheet the chrome rides on */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${
+            onDark ? "vellum-chrome-dark" : "vellum-chrome"
+          } ${scrolled ? "opacity-100" : "opacity-0"}`}
+        />
         {/* Over a full-bleed photograph the chrome would vanish into the
             picture. Rather than a scrim, the nav gets its own bone lintel —
             the photograph begins beneath it, the way a view begins beneath
@@ -71,7 +80,7 @@ export default function Header() {
           <div className="pointer-events-none absolute inset-x-0 flex items-center justify-center">
             <nav className="pointer-events-auto hidden w-[320px] items-center justify-end gap-10 lg:flex">
               {nav.left.map((n) => (
-                <NavLink key={n.href} {...n} onDark={onDark} />
+                <NavLink key={n.href} {...n} onDark={onDark} light={light} />
               ))}
             </nav>
 
@@ -90,7 +99,7 @@ export default function Header() {
 
             <nav className="pointer-events-auto hidden w-[320px] items-center justify-start gap-10 lg:flex">
               {nav.right.map((n) => (
-                <NavLink key={n.href} {...n} onDark={onDark} />
+                <NavLink key={n.href} {...n} onDark={onDark} light={light} />
               ))}
             </nav>
           </div>
@@ -98,7 +107,11 @@ export default function Header() {
           {/* far right — the ask on a desk, the way in on a phone */}
           <Link
             href="/build-with-bluedoor/"
-            className="label z-10 ml-auto hidden text-navy transition-opacity duration-500 hover:opacity-60 lg:block"
+            className={`label z-10 ml-auto hidden transition-all duration-500 lg:block ${
+              light
+                ? "hero-ink font-semibold text-porcelain hover:opacity-75"
+                : "text-navy hover:opacity-60"
+            }`}
           >
             Inquire
           </Link>
@@ -107,10 +120,11 @@ export default function Header() {
             onClick={() => setOpen(true)}
             aria-label="Open the index"
             className="z-10 ml-auto flex h-6 w-[26px] flex-col justify-center gap-[6px] lg:hidden"
+            style={light ? { filter: "drop-shadow(0 1px 3px rgba(14,29,52,0.55))" } : undefined}
           >
-            <span className="block h-px w-full bg-navy/70" />
-            <span className="block h-px w-full bg-navy/70" />
-            <span className="ml-auto block h-px w-2/3 bg-navy/70" />
+            <span className={`block h-px w-full ${light ? "bg-porcelain" : "bg-navy/70"}`} />
+            <span className={`block h-px w-full ${light ? "bg-porcelain" : "bg-navy/70"}`} />
+            <span className={`ml-auto block h-px w-2/3 ${light ? "bg-porcelain" : "bg-navy/70"}`} />
           </button>
         </div>
 
@@ -143,11 +157,27 @@ export default function Header() {
   );
 }
 
-function NavLink({ label, href, onDark }: { label: string; href: string; onDark?: boolean }) {
+function NavLink({
+  label,
+  href,
+  onDark,
+  light,
+}: {
+  label: string;
+  href: string;
+  onDark?: boolean;
+  light?: boolean;
+}) {
   return (
     <Link
       href={href}
-      className={`label transition-colors duration-500 ${onDark ? "text-porcelain/65 hover:text-porcelain" : "text-ink/62 hover:text-navy"}`}
+      className={`label transition-all duration-500 ${
+        light
+          ? "hero-ink font-semibold text-porcelain hover:text-porcelain/75"
+          : onDark
+            ? "text-porcelain/65 hover:text-porcelain"
+            : "text-ink/62 hover:text-navy"
+      }`}
     >
       {label}
     </Link>

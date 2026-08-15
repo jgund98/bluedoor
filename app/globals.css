@@ -199,8 +199,130 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
 }
 
+/* Small caps inside the vellum sheet. The sheet's own margins take about
+   sixty pixels out of the measure, and at 360 the full label tracking
+   pushes "A BOUTIQUE CUSTOM HOME BUILDER" onto a second line with one
+   word stranded on it. Tighten the tracking rather than break the line. */
+.label-sheet {
+  font-size: 9px;
+  letter-spacing: 0.26em;
+}
+
+@media (min-width: 400px) {
+  .label-sheet {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .label-sheet {
+    font-size: 11px;
+    letter-spacing: 0.36em;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Vellum — a sheet of architect's tracing paper laid over the work.
+ * The photograph underneath stays at full strength and simply goes out
+ * of focus, the way it would under a real overlay. Type sits on paper
+ * rather than on a picture, so nothing needs to be washed out.
+ * ------------------------------------------------------------------ */
+
+.vellum {
+  background: rgba(253, 252, 250, 0.9);
+  border: 1px solid rgba(34, 75, 130, 0.12);
+  box-shadow:
+    0 34px 70px -44px rgba(20, 41, 74, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .vellum {
+    background: rgba(253, 252, 250, 0.58);
+    -webkit-backdrop-filter: blur(22px) saturate(0.84) brightness(1.06);
+    backdrop-filter: blur(22px) saturate(0.84) brightness(1.06);
+  }
+}
+
+/* The chrome rides on the same sheet. A painted bar reads as a white gap
+   the moment a dark photograph runs under it — this stays a sheet, and
+   dissolves along its lower edge instead of ending in a hard line. */
+.vellum-chrome {
+  background: rgba(253, 252, 250, 0.86);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 42%, rgba(0,0,0,0.88) 56%, rgba(0,0,0,0.66) 68%, rgba(0,0,0,0.42) 78%, rgba(0,0,0,0.2) 87%, rgba(0,0,0,0.06) 94%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 42%, rgba(0,0,0,0.88) 56%, rgba(0,0,0,0.66) 68%, rgba(0,0,0,0.42) 78%, rgba(0,0,0,0.2) 87%, rgba(0,0,0,0.06) 94%, transparent 100%);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .vellum-chrome {
+    background: rgba(253, 252, 250, 0.44);
+    -webkit-backdrop-filter: blur(20px) saturate(0.88) brightness(1.07);
+    backdrop-filter: blur(20px) saturate(0.88) brightness(1.07);
+  }
+}
+
+.vellum-chrome-dark {
+  background: rgba(14, 29, 52, 0.86);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 42%, rgba(0,0,0,0.88) 56%, rgba(0,0,0,0.66) 68%, rgba(0,0,0,0.42) 78%, rgba(0,0,0,0.2) 87%, rgba(0,0,0,0.06) 94%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 42%, rgba(0,0,0,0.88) 56%, rgba(0,0,0,0.66) 68%, rgba(0,0,0,0.42) 78%, rgba(0,0,0,0.2) 87%, rgba(0,0,0,0.06) 94%, transparent 100%);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .vellum-chrome-dark {
+    background: rgba(14, 29, 52, 0.55);
+    -webkit-backdrop-filter: blur(20px) saturate(0.9);
+    backdrop-filter: blur(20px) saturate(0.9);
+  }
+}
+
+/* the same sheet, drawn thin across the top so the chrome can be read */
+.vellum-strip {
+  background: rgba(253, 252, 250, 0.3);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,0.9) 44%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.52) 65%, rgba(0,0,0,0.33) 74%, rgba(0,0,0,0.18) 83%, rgba(0,0,0,0.07) 91%, rgba(0,0,0,0.02) 96%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,0.9) 44%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.52) 65%, rgba(0,0,0,0.33) 74%, rgba(0,0,0,0.18) 83%, rgba(0,0,0,0.07) 91%, rgba(0,0,0,0.02) 96%, transparent 100%);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .vellum-strip {
+    background: rgba(253, 252, 250, 0.34);
+    -webkit-backdrop-filter: blur(22px) saturate(0.86) brightness(1.08);
+    backdrop-filter: blur(22px) saturate(0.86) brightness(1.08);
+  }
+}
+
+/* Hero words over very bright plates: a firmer settle than .on-photo,
+   still diffuse — never a hard drop shadow. */
+.hero-ink {
+  /* the settle hugs the glyphs — no wide glow that darkens the field
+     behind the words */
+  text-shadow:
+    0 1px 2px rgba(14, 29, 52, 0.55),
+    0 2px 10px rgba(14, 29, 52, 0.4),
+    0 0 1px rgba(14, 29, 52, 0.55);
+}
+
 .no-scroll {
   overflow: hidden;
+}
+
+/* Each plate breathes on its own clock, so the wall is never quite still.
+   Slow enough that you feel it rather than see it. */
+@keyframes breathe {
+  from {
+    transform: scale(1.03);
+  }
+  to {
+    transform: scale(1.09);
+  }
+}
+
+.breathe {
+  animation-name: breathe;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
 }
 
 @keyframes drift {
@@ -221,7 +343,8 @@ body {
   html {
     scroll-behavior: auto;
   }
-  .drift {
+  .drift,
+  .breathe {
     animation: none;
   }
 }
