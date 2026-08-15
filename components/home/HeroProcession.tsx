@@ -174,6 +174,42 @@ export default function HeroProcession() {
   const plate = PLATES[current];
   const next = incoming !== null ? PLATES[incoming] : null;
   const shown = incoming ?? current;
+
+  /* ---- the light meter ---- */
+  const grade = useMotionValue(box.mobile ? 0.42 : 0.3);
+  useEffect(() => {
+    const el = stage.current;
+    if (!box.ready || !el) return;
+    const h = el.getBoundingClientRect().height;
+    const p = PLATES[shown];
+    const img = new window.Image();
+
+    const meter = () => {
+      // the patch the words actually sit on, in stage pixels
+      const luma = readLuma(
+        img,
+        box.w,
+        h,
+        box.mobile ? p.posM : p.pos,
+        box.mobile
+          ? { x: 0, y: h - 290, w: box.w, h: 200 }
+          : { x: 0, y: h - 340, w: box.w * 0.52, h: 250 },
+        box.mobile ? 0.9 : 0.82,
+      );
+      if (luma === null) return;
+      // hold back only what has to come down: a sunlit stucco wall reads
+      // near 0.9, a shaded interior near 0.35
+      const lo = box.mobile ? 0.3 : 0.16;
+      const hi = box.mobile ? 0.82 : 0.56;
+      const target = Math.min(hi, Math.max(lo, (luma - 0.3) * (box.mobile ? 1.15 : 0.8)));
+      animate(grade, target, { duration: 0.9, ease: [0.4, 0, 0.2, 1] });
+    };
+
+    img.src = p.src;
+    if (img.complete) meter();
+    else img.addEventListener("load", meter, { once: true });
+    return () => img.removeEventListener("load", meter);
+  }, [shown, box.ready, box.w, box.mobile, grade]);
   // a phone gets a clean dissolve — a masked full-screen repaint per frame
   // is exactly the kind of work that made the old hero stutter
   const bloom = !box.mobile && !box.reduced;
@@ -258,7 +294,30 @@ export default function HeroProcession() {
             punch restored by the contrast lift on the photograph */}
         <div className="pointer-events-none absolute inset-0 bg-black/[0.14]" />
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44%] bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
+        {/* The grade exposes for the picture. Every plate is measured where
+            the words actually fall, and only the amount of light that has to
+            come down comes down — a sunlit white wall gets held back hard, a
+            dark interior is barely touched. A fixed scrim can only be wrong
+            in one direction or the other. */}
+        {/* A phone gets a band that hugs the words and feathers away above
+            them, rather than a wash down the whole frame — the same reading
+            for a third of the darkening, and the picture stays open. */}
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] lg:hidden"
+          style={{
+            opacity: grade,
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.94) 18%, rgba(0,0,0,0.96) 44%, rgba(0,0,0,0.7) 64%, rgba(0,0,0,0.3) 82%, rgba(0,0,0,0) 100%)",
+          }}
+        />
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[46%] lg:block"
+          style={{
+            opacity: grade,
+            background:
+              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.78) 26%, rgba(0,0,0,0.44) 52%, rgba(0,0,0,0.16) 76%, rgba(0,0,0,0) 100%)",
+          }}
+        />
       </button>
 
       {/* the chrome rides on a thin sheet of trace, so the nav can be read */}
@@ -363,6 +422,61 @@ export default function HeroProcession() {
       </div>
     </section>
   );
+}
+
+/**
+ * Average luminance of the patch of a photograph that lands under a given
+ * rect of the stage — the same cover maths the browser uses, run backwards
+ * so we sample exactly what the reader will see behind the words.
+ */
+function readLuma(
+  img: HTMLImageElement,
+  boxW: number,
+  boxH: number,
+  objectPosition: string,
+  rect: { x: number; y: number; w: number; h: number },
+  pct: number,
+): number | null {
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+  if (!iw || !ih || !boxW || !boxH) return null;
+
+  const scale = Math.max(boxW / iw, boxH / ih);
+  const drawW = iw * scale;
+  const drawH = ih * scale;
+  const [pxRaw, pyRaw] = objectPosition.split(/\s+/);
+  const px = (parseFloat(pxRaw) || 50) / 100;
+  const py = (parseFloat(pyRaw) || 50) / 100;
+  const offX = (boxW - drawW) * px;
+  const offY = (boxH - drawH) * py;
+
+  const sx = Math.max(0, Math.min(iw - 1, (rect.x - offX) / scale));
+  const sy = Math.max(0, Math.min(ih - 1, (rect.y - offY) / scale));
+  const sw = Math.max(1, Math.min(iw - sx, rect.w / scale));
+  const sh = Math.max(1, Math.min(ih - sy, rect.h / scale));
+
+  const N = 16;
+  const canvas = document.createElement("canvas");
+  canvas.width = N;
+  canvas.height = N;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return null;
+
+  try {
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, N, N);
+    const { data } = ctx.getImageData(0, 0, N, N);
+    const lumas: number[] = [];
+    for (let i = 0; i < data.length; i += 4) {
+      lumas.push((0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]) / 255);
+    }
+    // Not the average — white type fails against the brightest patch it
+    // crosses, and a facade full of dark windows averages out to nothing
+    // while the wall between them is still blinding. Meter for the highlights.
+    lumas.sort((a, b) => a - b);
+    return lumas[Math.min(lumas.length - 1, Math.floor(lumas.length * pct))];
+  } catch {
+    return null; // a tainted canvas is not worth a broken hero
+  }
 }
 
 /**
