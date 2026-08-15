@@ -102,7 +102,7 @@ const ORIGINS = ["62% 34%", "34% 46%", "68% 58%", "42% 28%", "56% 62%"] as const
 const BLOB_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><filter id='s' x='-40%' y='-40%' width='180%' height='180%'><feGaussianBlur stdDeviation='16'/></filter></defs><path filter='url(#s)' fill='black' d='M197 38 C 252 26 316 58 342 116 C 366 170 356 236 322 288 C 292 334 236 372 178 362 C 122 352 62 314 44 252 C 28 194 52 122 104 78 C 134 52 162 46 197 38 Z'/></svg>`;
 const BLOB = `url("data:image/svg+xml,${encodeURIComponent(BLOB_SVG)}")`;
 
-const HOLD_MS = 7000;
+const HOLD_MS = 5600;
 const BLOOM_S = 1.7;
 
 export default function HeroProcession() {
