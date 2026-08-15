@@ -24,7 +24,7 @@ export function Signature({
   write?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const seen = useInView(ref, { once: true, margin: "-12% 0px -12% 0px" });
+  const seen = useInView(ref, { once: true, amount: 0.5 });
   const pen = useMotionValue(write ? -12 : 112);
   const ink = useMotionTemplate`linear-gradient(90deg, #000 ${pen}%, rgba(0,0,0,0) calc(${pen}% + 9%))`;
 
@@ -73,7 +73,7 @@ export function Reveal({
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
+      viewport={{ once: true, amount: 0.22 }}
       transition={{ duration: 1.05, ease: EASE, delay }}
     >
       {children}
@@ -96,7 +96,7 @@ export function RevealPlate({
       className={className}
       initial={{ opacity: 0, scale: 1.04 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-8% 0px -8% 0px" }}
+      viewport={{ once: true, amount: 0.18 }}
       transition={{ duration: 1.4, ease: EASE, delay }}
     >
       {children}

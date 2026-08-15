@@ -67,7 +67,7 @@ export default function HeroProcession() {
   return (
     <section
       ref={stage}
-      className="relative h-[100dvh] w-full overflow-hidden bg-porcelain grain"
+      className="relative h-[100svh] w-full overflow-hidden bg-porcelain grain lg:h-screen"
     >
       {/* the work, going by */}
       <div

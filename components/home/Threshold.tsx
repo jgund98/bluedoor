@@ -94,7 +94,7 @@ export default function Threshold() {
 
   return (
     <section ref={ref} className="relative h-[250svh] lg:h-[300vh]">
-      <div ref={stage} className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-chalk">
+      <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-chalk lg:h-screen">
         {/* the quiet field the door stands on */}
         <motion.div className="absolute inset-0 grain" style={{ opacity: groundFade }}>
           <div className="absolute inset-0 bg-[radial-gradient(72%_58%_at_50%_62%,#ffffff_0%,#f3f1ec_46%,#e6e2da_100%)]" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { portals, written } from "@/lib/site";
@@ -13,17 +13,10 @@ const GROUND: Record<string, string> = {
 };
 
 export default function StackedPortals() {
-  // The panels stack on a desk, where a pinned page reads as a page turning.
-  // Under a thumb it reads as the site refusing to scroll, so a phone simply
-  // scrolls through them.
-  const [stack, setStack] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setStack(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
+  // The panels stack like pages settling on a desk — on every screen.
+  // (The stage is svh-sized on phones so the URL bar collapsing can never
+  // re-lay a pinned panel out mid-scroll.)
+  const stack = true;
 
   return (
     <div className="relative">
@@ -93,9 +86,9 @@ function Panel({
   return (
     <motion.section
       ref={ref}
-      className={`h-[100dvh] overflow-hidden grain ${
-        stack ? "sticky top-0" : "relative"
-      } ${GROUND[portal.ground] ?? "bg-porcelain"}`}
+      className={`sticky top-0 h-[100svh] overflow-hidden grain lg:h-[100dvh] ${
+        GROUND[portal.ground] ?? "bg-porcelain"
+      }`}
       style={{ borderTopLeftRadius: radius, borderTopRightRadius: radius }}
     >
       <motion.div
