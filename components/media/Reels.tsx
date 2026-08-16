@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
 import { Reveal } from "@/components/motion";
 
@@ -40,23 +41,18 @@ export default function Reels() {
           </Reveal>
         </div>
 
-        {/* desktop: a staggered hang of arches */}
-        <div className="mt-14 hidden grid-cols-3 gap-8 lg:grid xl:gap-10">
+        {/* One list, two layouts: a swipe on a phone, a staggered hang of
+            arches on a desk. It must stay ONE list — a second copy behind
+            `hidden` is still a <video> in the document, and a display:none
+            video goes on playing its audio. Two copies of a clip unmuting
+            together is two soundtracks a few hundred milliseconds apart. */}
+        <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0 xl:gap-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {site.reels.map((r, i) => (
-            <div key={r.src} style={{ paddingTop: DROP[i % DROP.length] }}>
-              <Clip
-                {...r}
-                audible={audible === r.src}
-                onToggle={() => setAudible(audible === r.src ? null : r.src)}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* mobile: swipe through them */}
-        <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 lg:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {site.reels.map((r) => (
-            <div key={r.src} className="w-[72vw] shrink-0 snap-center">
+            <div
+              key={r.src}
+              className="w-[72vw] shrink-0 snap-center lg:w-auto lg:shrink lg:pt-[var(--drop)]"
+              style={{ "--drop": `${DROP[i % DROP.length]}px` } as CSSProperties}
+            >
               <Clip
                 {...r}
                 audible={audible === r.src}
