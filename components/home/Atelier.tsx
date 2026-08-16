@@ -17,16 +17,25 @@ const HANGS = [
 const STUDY = ["I", "II", "III", "IV", "V"] as const;
 
 /**
- * The lift off the rail, and the settle back onto it. A tween on the same
- * decelerating curve the hero settles on, not a spring — a spring arrives
- * eagerly, and nothing here should look eager. Slow enough that the eye can
- * follow the painting across the room.
+ * The lift off the rail, and the settle back onto it. A tween that starts
+ * from rest — an expo-out leaves at maximum velocity, which is right for
+ * something released and wrong for something picked up.
  */
 const LIFT = { type: "tween" as const, duration: 0.86, ease: [0.45, 0, 0.15, 1] as const };
 
 export default function Atelier() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+
+  // the wires only drift on a desk, where the hang is a hang and not a rail
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const read = () => setWide(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
 
   /* Which painting has been taken down off the rail, by index. */
   const [held, setHeld] = useState<number | null>(null);
@@ -82,45 +91,86 @@ export default function Atelier() {
       <div className="relative mt-16 lg:mt-24">
         <div className="hair absolute inset-x-0 top-0 h-px" />
 
-        {/* desktop: a salon hang, each painting drifting on its own wire */}
-        <div className="mx-auto hidden max-w-[1560px] items-start justify-between gap-6 px-12 lg:flex">
+        {/* ONE hang, two layouts: a swipe on a phone, a salon hang on a desk.
+            It must stay one list. A second copy behind `hidden` still mounts,
+            and then ten elements claim five layoutIds — framer cannot tell
+            which is the lead, and hides the wrong ones on the way out. That
+            is what made the paintings vanish on close. */}
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 pt-8 lg:mx-auto lg:max-w-[1560px] lg:snap-none lg:items-start lg:justify-between lg:gap-6 lg:overflow-visible lg:px-12 lg:pb-0 lg:pt-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {HANGS.map((h, i) => (
             <Hang
               key={h.src}
               hang={h}
               i={i}
               progress={scrollYProgress}
+              wide={wide}
               held={held === i}
               onLift={() => setHeld(i)}
             />
-          ))}
-        </div>
-
-        {/* mobile: a swipeable hang */}
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 pt-8 lg:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {HANGS.map((h, i) => (
-            <div key={h.src} className="w-[62vw] shrink-0 snap-center">
-              <button
-                type="button"
-                onClick={() => setHeld(i)}
-                aria-label={`Look closer at study ${STUDY[i]}`}
-                className="block w-full"
-              >
-                <motion.div
-                  layoutId={`study-${i}`}
-                  className="bg-porcelain p-2 shadow-[0_18px_40px_-30px_rgba(20,41,74,0.55)] ring-1 ring-navy/12"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={h.src} alt="Watercolor study of a Bluedoor home" loading="lazy" />
-                </motion.div>
-              </button>
-            </div>
           ))}
         </div>
       </div>
 
       <Held index={held} onClose={() => setHeld(null)} onStep={step} />
     </section>
+  );
+}
+
+function Hang({
+  hang,
+  i,
+  progress,
+  wide,
+  held,
+  onLift,
+}: {
+  hang: (typeof HANGS)[number];
+  i: number;
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  wide: boolean;
+  held: boolean;
+  onLift: () => void;
+}) {
+  // read `wide` at render, not inside the transform — useTransform captures
+  // its function, and this flips from false to true after mount
+  const drift = useTransform(progress, (v) => (v - 0.5) * hang.float);
+
+  return (
+    <motion.div
+      className="group relative w-[62vw] shrink-0 snap-center lg:w-[var(--w)] lg:shrink"
+      style={{ y: wide ? drift : 0, ["--w" as string]: hang.w }}
+      initial={{ opacity: 0, y: -14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10% 0px" }}
+      transition={{ duration: 1.1, ease: [0.19, 1, 0.22, 1], delay: i * 0.09 }}
+    >
+      {/* The wire it hangs by — a desk thing. It lets go while the study is
+          off the wall, so nothing is left holding an empty hook. */}
+      <motion.div
+        className="absolute left-1/2 top-0 hidden w-px -translate-x-1/2 bg-navy/25 lg:block"
+        style={{ height: hang.drop }}
+        animate={{ opacity: held ? 0 : 1, scaleY: held ? 0.4 : 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      />
+      <div className="absolute left-1/2 top-0 hidden h-[5px] w-[5px] -translate-x-1/2 -translate-y-[2px] rounded-full bg-navy/45 lg:block" />
+
+      <div className="lg:pt-[var(--drop)]" style={{ ["--drop" as string]: `${hang.drop}px` }}>
+        <button type="button" onClick={onLift} aria-label={`Look closer at study ${STUDY[i]}`} className="block w-full cursor-pointer">
+          {/* the hover lift lives on a plain wrapper, never on the element
+              carrying the layoutId — a transform there fights the flight */}
+          <div className="transition-transform duration-700 ease-out lg:group-hover:-translate-y-[6px]">
+            <motion.div
+              layoutId={`study-${i}`}
+              className="bg-porcelain p-2 shadow-[0_18px_40px_-30px_rgba(20,41,74,0.55)] ring-1 ring-navy/12 transition-shadow duration-700 lg:p-[10px] lg:group-hover:shadow-[0_34px_60px_-32px_rgba(20,41,74,0.62)]"
+              transition={LIFT}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={hang.src} alt="Watercolor study of a Bluedoor home" loading="lazy" />
+            </motion.div>
+          </div>
+        </button>
+      </div>
+    </motion.div>
   );
 }
 
@@ -148,7 +198,7 @@ function Held({
             type="button"
             aria-label="Put the study back"
             onClick={onClose}
-            className="absolute inset-0 cursor-zoom-out bg-porcelain/95 grain"
+            className="absolute inset-0 cursor-pointer bg-porcelain/95 grain"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -159,11 +209,10 @@ function Held({
             layoutId={`study-${index}`}
             className="relative bg-porcelain p-3 shadow-[0_60px_120px_-60px_rgba(20,41,74,0.7)] ring-1 ring-navy/15 lg:p-4"
             /* One width, and the height follows the paper. No `layout` on the
-               image inside: that counter-scales the child to correct
+               image inside: that counter-scales a child to correct parent
                distortion, and since the study and its thumbnail are the same
-               picture at the same ratio there is no distortion to correct --
-               it only made the painting snap to full size and slide, instead
-               of growing. */
+               picture at the same ratio there is none to correct — it only
+               made the painting snap to full size and slide. */
             style={{ width: "min(92vw, min(820px, 96svh))" }}
             transition={LIFT}
           >
@@ -206,63 +255,5 @@ function Held({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-function Hang({
-  hang,
-  i,
-  progress,
-  held,
-  onLift,
-}: {
-  hang: (typeof HANGS)[number];
-  i: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-  held: boolean;
-  onLift: () => void;
-}) {
-  const y = useTransform(progress, (v) => (v - 0.5) * hang.float);
-
-  return (
-    <motion.div
-      className="group relative shrink-0"
-      style={{ width: hang.w, y }}
-      initial={{ opacity: 0, y: -14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 1.1, ease: [0.19, 1, 0.22, 1], delay: i * 0.09 }}
-    >
-      {/* The wire it hangs by — it lets go while the study is off the wall,
-          so nothing is left holding an empty hook. */}
-      <motion.div
-        className="absolute left-1/2 top-0 w-px -translate-x-1/2 bg-navy/25"
-        style={{ height: hang.drop }}
-        animate={{ opacity: held ? 0 : 1, scaleY: held ? 0.4 : 1 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-      />
-      <div className="absolute left-1/2 top-0 h-[5px] w-[5px] -translate-x-1/2 -translate-y-[2px] rounded-full bg-navy/45" />
-
-      <div style={{ paddingTop: hang.drop }}>
-        <button
-          type="button"
-          onClick={onLift}
-          aria-label={`Look closer at study ${STUDY[i]}`}
-          className="block w-full cursor-zoom-in"
-        >
-          <motion.div
-            /* the id is surrendered while this one is the study in hand, so
-               framer moves the single painting rather than crossfading two */
-            layoutId={`study-${i}`}
-            className="bg-porcelain p-[10px] shadow-[0_18px_40px_-30px_rgba(20,41,74,0.55)] ring-1 ring-navy/12"
-            whileHover={{ y: -6, boxShadow: "0 34px 60px -32px rgba(20,41,74,0.62)" }}
-            transition={LIFT}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={hang.src} alt="Watercolor study of a Bluedoor home" loading="lazy" />
-          </motion.div>
-        </button>
-      </div>
-    </motion.div>
   );
 }
