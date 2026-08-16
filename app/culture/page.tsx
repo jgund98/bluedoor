@@ -101,7 +101,7 @@ export default function CulturePage() {
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <Reveal>
             <div className="max-w-[980px]">
-              <span className="label text-ceramic/70">In her words</span>
+              <span className="label text-ceramic/70">In Siobhan’s words</span>
               <p className="answer mt-6 text-[23px] leading-[1.42] text-porcelain lg:text-[38px] lg:leading-[1.32]">
                 “{site.principal.quote}”
               </p>
@@ -114,7 +114,7 @@ export default function CulturePage() {
       <section className="bg-chalk py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <div className="flex items-center gap-5">
-            <span className="label shrink-0 text-navy/75">How she runs a project</span>
+            <span className="label shrink-0 text-navy/75">How Siobhan runs a project</span>
             <span className="hair h-px flex-1" />
           </div>
 
@@ -160,7 +160,7 @@ export default function CulturePage() {
               </RevealPlate>
               <Reveal delay={0.1}>
                 <p className="answer mt-4 text-[15px] leading-[1.45] text-ink/50">
-                  A site she is on most days, mid-construction.
+                  A site Siobhan is on most days, mid-construction.
                 </p>
               </Reveal>
             </div>

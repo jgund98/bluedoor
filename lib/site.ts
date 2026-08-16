@@ -313,7 +313,7 @@ export const written = {
   portalsAnswer: "one standard.",
 
   principalLabel: "The Principal",
-  principalLine: "She began as a laborer.",
+  principalLine: "Siobhan began as a laborer.",
   principalAnswer: "She still walks every site.",
 
   atelierLabel: "The Studio",

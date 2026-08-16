@@ -37,7 +37,7 @@ export default function Principal() {
 
             <Reveal delay={0.1}>
               <p className="answer mt-4 text-[15px] leading-[1.45] text-ink/50">
-                On site, mid-construction — where she has spent most of her career.
+                On site, mid-construction — where Siobhan has spent most of her career.
               </p>
             </Reveal>
           </div>
