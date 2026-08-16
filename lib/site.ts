@@ -210,7 +210,7 @@ export const nav = {
   ],
   full: [
     { label: "Portfolio", href: "/portfolio/", line: "Selected work" },
-    { label: "Process", href: "/process/", line: "How a house is made" },
+    { label: "Process", href: "/process/", line: "How a home is made" },
     { label: "Culture", href: "/culture/", line: "Siobhan, and the studio" },
     { label: "Press", href: "/media/", line: "Features and recognition" },
     { label: "Build with Bluedoor", href: "/build-with-bluedoor/", line: "Begin a conversation" },

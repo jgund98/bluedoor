@@ -105,6 +105,9 @@ const BLOB = `url("data:image/svg+xml,${encodeURIComponent(BLOB_SVG)}")`;
 const HOLD_MS = 5600;
 const BLOOM_S = 1.7;
 
+/** A long decelerating settle — everything arrives quickly and stops slowly. */
+const RISE = [0.16, 1, 0.3, 1] as const;
+
 export default function HeroProcession() {
   const stage = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 1440, mobile: false, reduced: false, ready: false });
@@ -248,6 +251,44 @@ export default function HeroProcession() {
   // is exactly the kind of work that made the old hero stutter
   const bloom = !box.mobile && !box.reduced;
 
+  /* ---- the curtain ---- *
+   * Nothing moves until the first photograph is actually here. A hero that
+   * choreographs itself over an empty frame and then drops the picture in
+   * is worse than no choreography at all. */
+  const [lit, setLit] = useState(false);
+  useEffect(() => {
+    if (lit || !box.ready) return;
+    const img = new window.Image();
+    const raise = () => setLit(true);
+    img.addEventListener("load", raise, { once: true });
+    // a picture that will not load must not hold the page shut
+    img.addEventListener("error", raise, { once: true });
+    img.src = PLATES[seq[0]].src;
+    if (img.complete) raise();
+    const bell = setTimeout(raise, 2600);
+    return () => {
+      clearTimeout(bell);
+      img.removeEventListener("load", raise);
+      img.removeEventListener("error", raise);
+    };
+  }, [lit, box.ready, seq]);
+
+  /** One line of the setting, rising into place. */
+  const setting = (i: number) => ({
+    initial: "held" as const,
+    animate: (lit ? "set" : "held") as "set" | "held",
+    variants: {
+      held: box.reduced ? { opacity: 0 } : { opacity: 0, y: 18 },
+      set: {
+        opacity: 1,
+        y: 0,
+        transition: box.reduced
+          ? { duration: 0.3 }
+          : { duration: 1.15, delay: 0.34 + i * 0.13, ease: RISE },
+      },
+    },
+  });
+
   return (
     <section
       ref={stage}
@@ -258,12 +299,22 @@ export default function HeroProcession() {
         type="button"
         onClick={turn}
         aria-label="Next photograph"
-        className={`absolute inset-0 cursor-pointer overflow-hidden transition-opacity duration-700 focus:outline-none ${
-          box.ready ? "opacity-100" : "opacity-0"
+        className={`absolute inset-0 cursor-pointer overflow-hidden transition-opacity duration-[1400ms] ease-out focus:outline-none ${
+          lit ? "opacity-100" : "opacity-0"
         }`}
       >
         {box.ready && (
           <motion.div className="absolute inset-0" style={{ y: plateY }}>
+            {/* The picture comes to rest rather than arriving at rest — it
+                settles out of a slight over-scale, the way a print eases into
+                focus. It lands at 1, and the breathe drift begins from 1.03,
+                so the two never fight over the same frame. */}
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: box.reduced ? 1 : 1.075 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: box.reduced ? 0 : 2.4, ease: RISE }}
+            >
             <div
               key={plate.src}
               className="absolute inset-0"
@@ -320,6 +371,7 @@ export default function HeroProcession() {
                 </div>
               </motion.div>
             )}
+            </motion.div>
           </motion.div>
         )}
 
@@ -355,25 +407,41 @@ export default function HeroProcession() {
       </button>
 
       {/* the chrome rides on a thin sheet of trace, so the nav can be read */}
-      <div className="vellum-strip pointer-events-none absolute inset-x-0 top-0 h-[148px] lg:h-[184px]" />
+      <motion.div
+        className="vellum-strip pointer-events-none absolute inset-x-0 top-0 h-[148px] lg:h-[184px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: lit ? 1 : 0 }}
+        transition={{ duration: box.reduced ? 0.3 : 1.2, delay: box.reduced ? 0 : 0.2 }}
+      />
 
-      {/* the words, on the photograph — the same setting as the portfolio
-          masthead, which these plates have already proven they can carry */}
+      {/* The words are set on the page one line at a time, the way a
+          compositor sets them — eyebrow, the roman line, its italic answer,
+          then the way in. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-[64px] px-5 pb-8 text-left lg:bottom-[76px] lg:px-12 lg:pb-12">
-        <span className="label label-sheet hero-ink block text-porcelain">
+        <motion.span
+          {...setting(0)}
+          className="label label-sheet hero-ink block text-porcelain"
+        >
           {written.heroEyebrow}
-        </span>
+        </motion.span>
 
         <h1 className="hero-ink mt-5 text-porcelain lg:mt-6">
-          <span className="display block text-[clamp(30px,7.4vw,40px)] lg:text-[clamp(44px,3.8vw,64px)]">
+          <motion.span
+            {...setting(1)}
+            className="display block text-[clamp(30px,7.4vw,40px)] lg:text-[clamp(44px,3.8vw,64px)]"
+          >
             {written.heroLine}
-          </span>
-          <span className="answer mt-1 block text-[clamp(31px,7.7vw,42px)] text-porcelain/95 lg:mt-1.5 lg:text-[clamp(46px,4vw,68px)]">
+          </motion.span>
+          <motion.span
+            {...setting(2)}
+            className="answer mt-1 block text-[clamp(31px,7.7vw,42px)] text-porcelain/95 lg:mt-1.5 lg:text-[clamp(46px,4vw,68px)]"
+          >
             {written.heroAnswer}
-          </span>
+          </motion.span>
         </h1>
 
         {/* the way opens: two hairlines draw out from the words on hover */}
+        <motion.div {...setting(3)}>
         <Link
           href="/build-with-bluedoor/"
           className="group pointer-events-auto mt-7 inline-flex items-center gap-4 lg:mt-8 lg:gap-5"
@@ -384,11 +452,19 @@ export default function HeroProcession() {
           </span>
           <span className="h-px w-9 bg-porcelain/50 transition-all duration-700 ease-out group-hover:w-16 group-hover:bg-porcelain/85 lg:w-12 lg:group-hover:w-20" />
         </Link>
+        </motion.div>
       </div>
 
       {/* All that survives of the paper: a torn strip at the foot of the
-          page, carrying the plate's caption the way a monograph does. */}
-      <div className="absolute inset-x-0 bottom-0 h-[64px] bg-porcelain lg:h-[76px]">
+          page, carrying the plate's caption the way a monograph does. It
+          slides up under the picture last, the way the mount is laid in
+          after the print. */}
+      <motion.div
+        className="absolute inset-x-0 bottom-0 h-[64px] bg-porcelain lg:h-[76px]"
+        initial={{ y: box.reduced ? 0 : "100%" }}
+        animate={{ y: lit ? 0 : box.reduced ? 0 : "100%" }}
+        transition={{ duration: box.reduced ? 0.3 : 1.1, delay: box.reduced ? 0 : 0.72, ease: RISE }}
+      >
         {box.ready && (
           <svg
             aria-hidden
@@ -453,7 +529,7 @@ export default function HeroProcession() {
             {written.heroFoot}
           </span>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

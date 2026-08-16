@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
 
 export const metadata: Metadata = {
-  title: "Process — How a house is made",
+  title: "Process — How a home is made",
   description:
     "Vision, priorities, and budget: how Bluedoor Building manages a luxury custom home from concept to completion, with daily site supervision and a full record of costs.",
 };
@@ -42,7 +42,7 @@ export default function ProcessPage() {
                 </div>
                 <h1 className="mt-7">
                   <span className="display block text-[clamp(32px,7.6vw,40px)] text-ink lg:text-[clamp(42px,3.4vw,60px)]">
-                    How a house
+                    How a home
                   </span>
                   <span className="answer mt-0.5 block text-[clamp(34px,8vw,42px)] text-navy lg:mt-1 lg:text-[clamp(44px,3.6vw,64px)]">
                     is actually made.
