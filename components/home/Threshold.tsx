@@ -92,9 +92,26 @@ export default function Threshold() {
   const openingFade = useTransform(p, (v) => 1 - seg(v, 0.04, 0.2));
   const inviteFade = useTransform(p, (v) => seg(v, 0.72, 0.9));
 
+  /*
+   * The stage is 100lvh on a phone — not svh, and not dvh. This is the one
+   * measurement where both of the usual answers are wrong:
+   *   dvh tracks the URL bar, so the stage resizes mid-scroll: the door
+   *     stretches and useScroll loses its footing.
+   *   svh is the viewport with the URL bar SHOWING, so the moment the bar
+   *     hides, the screen is taller than the stage and a band of the page
+   *     shows underneath it — the white strip that appeared before the blue.
+   * lvh is the viewport with the bar hidden: constant, like svh, so nothing
+   * re-lays out, but tall enough to cover the screen in either state. The
+   * cost is that the last few percent sit below the fold while the bar is
+   * up, and nothing is composed against that edge.
+   *
+   * The runway is also longer on a phone (290svh against 250svh). The bloom
+   * has the same distance to travel as it does on a desk and was being
+   * compressed into a shorter scroll, which is what read as hurried.
+   */
   return (
-    <section ref={ref} className="relative h-[250svh] lg:h-[300vh]">
-      <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-chalk lg:h-screen">
+    <section ref={ref} className="relative h-[290svh] lg:h-[300vh]">
+      <div ref={stage} className="sticky top-0 h-[100lvh] w-full overflow-hidden bg-chalk lg:h-screen">
         {/* the quiet field the door stands on */}
         <motion.div className="absolute inset-0 grain" style={{ opacity: groundFade }}>
           <div className="absolute inset-0 bg-[radial-gradient(72%_58%_at_50%_62%,#ffffff_0%,#f3f1ec_46%,#e6e2da_100%)]" />
