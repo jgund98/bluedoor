@@ -224,33 +224,40 @@ function Held({
             />
           </motion.div>
 
-          {/* the plate line, set after the painting has come to rest */}
+          {/* The plate line, set after the painting has come to rest. On a
+              phone the line is longer than the screen, so it wraps and the
+              two marks drop beneath it; on a desk it stays one row with a
+              mark either side. `lg:contents` dissolves the wrapper at the
+              breakpoint so the buttons rejoin the row as flex children. */}
           <motion.div
-            className="relative mt-7 flex items-center gap-6"
+            className="relative mt-6 flex w-full max-w-[420px] flex-col items-center gap-3 lg:mt-7 lg:w-auto lg:max-w-none lg:flex-row lg:gap-6"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6, transition: { duration: 0.2 } }}
             transition={{ duration: 0.7, delay: 0.58, ease: [0.19, 1, 0.22, 1] }}
           >
-            <button
-              type="button"
-              onClick={() => onStep(-1)}
-              aria-label="The study before"
-              className="label text-ink/40 transition-colors duration-500 hover:text-navy"
-            >
-              ‹
-            </button>
-            <span className="label label-sheet whitespace-nowrap text-ink/50">
+            <span className="label label-sheet order-1 text-balance text-center leading-[1.9] text-ink/50 lg:order-2 lg:whitespace-nowrap lg:leading-normal">
               Study {STUDY[index]} — watercolor, before the line was staked
             </span>
-            <button
-              type="button"
-              onClick={() => onStep(1)}
-              aria-label="The next study"
-              className="label text-ink/40 transition-colors duration-500 hover:text-navy"
-            >
-              ›
-            </button>
+
+            <div className="order-2 flex items-center gap-10 lg:contents">
+              <button
+                type="button"
+                onClick={() => onStep(-1)}
+                aria-label="The study before"
+                className="label -m-3 p-3 text-[18px] leading-none text-ink/40 transition-colors duration-500 hover:text-navy lg:order-1 lg:m-0 lg:p-0 lg:text-inherit"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={() => onStep(1)}
+                aria-label="The next study"
+                className="label -m-3 p-3 text-[18px] leading-none text-ink/40 transition-colors duration-500 hover:text-navy lg:order-3 lg:m-0 lg:p-0 lg:text-inherit"
+              >
+                ›
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       )}
