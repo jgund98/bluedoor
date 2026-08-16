@@ -321,14 +321,15 @@ body {
   overflow: hidden;
 }
 
-/* Each plate breathes on its own clock, so the wall is never quite still.
-   Slow enough that you feel it rather than see it. */
+/* The wall is never quite still. A 6% travel was a zoom you could watch;
+   this is 2%, over three quarters of a minute — the picture is only ever
+   very slightly not where it was. Felt, not seen. */
 @keyframes breathe {
   from {
-    transform: scale(1.03);
+    transform: scale(1.012);
   }
   to {
-    transform: scale(1.09);
+    transform: scale(1.032);
   }
 }
 

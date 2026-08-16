@@ -105,12 +105,20 @@ export default function Header() {
           </div>
 
           {/* far right — the ask on a desk, the way in on a phone */}
+          {/* Over the hero the mark stands between two nav groups and nothing
+              else, so it is balanced by what is around it rather than merely
+              centred in the window — an "Inquire" alone at the far right, with
+              four hundred empty pixels facing it, pulls the whole masthead
+              over. The hero makes that invitation itself, and better. Once the
+              hero is behind you the header takes the job back. */}
           <Link
             href="/build-with-bluedoor/"
-            className={`label z-10 ml-auto hidden transition-all duration-500 lg:block ${
+            aria-hidden={light}
+            tabIndex={light ? -1 : undefined}
+            className={`label z-10 ml-auto hidden transition-all duration-700 lg:block ${
               light
-                ? "hero-ink font-semibold text-porcelain hover:opacity-75"
-                : "text-navy hover:opacity-60"
+                ? "pointer-events-none translate-x-1 opacity-0"
+                : "text-navy opacity-100 hover:opacity-60"
             }`}
           >
             Inquire
@@ -171,15 +179,22 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`label transition-all duration-500 ${
+      className={`label group relative transition-colors duration-500 ${
         light
-          ? "hero-ink font-semibold text-porcelain hover:text-porcelain/75"
+          ? "hero-ink font-semibold text-porcelain"
           : onDark
             ? "text-porcelain/65 hover:text-porcelain"
             : "text-ink/62 hover:text-navy"
       }`}
     >
       {label}
+      {/* a rule drawn under the word, from the left, the width of the word —
+          the only thing that happens on hover, and it happens slowly */}
+      <span
+        className={`pointer-events-none absolute -bottom-[7px] left-0 h-px w-full origin-left scale-x-0 transition-transform duration-[650ms] ease-out group-hover:scale-x-100 ${
+          light ? "bg-porcelain/70" : onDark ? "bg-porcelain/50" : "bg-navy/45"
+        }`}
+      />
     </Link>
   );
 }

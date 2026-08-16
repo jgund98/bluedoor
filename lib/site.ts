@@ -303,6 +303,7 @@ export const gallery = [
 /** Copy written for this site. Her register: plain, exact, no flourish. */
 export const written = {
   heroEyebrow: "A boutique custom home builder",
+  heroPlace: "Palm Beach, Florida",
   heroLine: "Uncompromising quality.",
   heroAnswer: "Unparalleled expertise.",
   heroFoot: "Palm Beach, Florida",

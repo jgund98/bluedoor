@@ -6,12 +6,11 @@ import {
   AnimatePresence,
   animate,
   motion,
-  useMotionTemplate,
   useMotionValue,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { written } from "@/lib/site";
+import { site, written } from "@/lib/site";
 
 // Measure before the browser paints, so the stage never shows one frame at
 // the wrong size. Falls back to useEffect where there is no DOM.
@@ -19,10 +18,10 @@ const useMeasure = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /* ------------------------------------------------------------------ *
  * The plates of a monograph, full screen. One photograph at a time at
- * full strength; the page turns by a wash of paint — the next plate
- * develops inside a spreading bloom, because every home here is painted
- * before it is poured. A torn strip of the paper survives at the foot
- * of the page, carrying the plate's caption the way a monograph does.
+ * full strength; the page turns by one plate dissolving into the next,
+ * the way a careful person turns a page — not performed. A torn strip of
+ * the paper survives at the foot, carrying the plate's caption the way a
+ * monograph does, and the marks beside it keep the clock.
  * ------------------------------------------------------------------ */
 
 type Plate = {
@@ -94,16 +93,16 @@ const MOBILE = [1, 2, 4, 3] as const;
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
 
-/** Where each bloom starts on the sheet — varied, never random, so the
- *  server and the client always agree. */
-const ORIGINS = ["62% 34%", "34% 46%", "68% 58%", "42% 28%", "56% 62%"] as const;
-
-/** An irregular splat with a soft edge, for the paint to spread through. */
-const BLOB_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><filter id='s' x='-40%' y='-40%' width='180%' height='180%'><feGaussianBlur stdDeviation='16'/></filter></defs><path filter='url(#s)' fill='black' d='M197 38 C 252 26 316 58 342 116 C 366 170 356 236 322 288 C 292 334 236 372 178 362 C 122 352 62 314 44 252 C 28 194 52 122 104 78 C 134 52 162 46 197 38 Z'/></svg>`;
-const BLOB = `url("data:image/svg+xml,${encodeURIComponent(BLOB_SVG)}")`;
-
-const HOLD_MS = 5600;
-const BLOOM_S = 1.7;
+/**
+ * One plate dissolves into the next and nothing else happens. The paint
+ * bloom that used to spread across the sheet was a lovely thing to watch —
+ * which is the objection to it. A portfolio shown to someone commissioning
+ * a house should change the way a page is turned by a careful person, not
+ * perform. No wipe, no slide, no zoom on the turn.
+ */
+const FADE_S = 1.05;
+const HOLD_DESK = 6000;
+const HOLD_PHONE = 7200;
 
 /** A long decelerating settle — everything arrives quickly and stops slowly. */
 const RISE = [0.16, 1, 0.3, 1] as const;
@@ -146,12 +145,12 @@ export default function HeroProcession() {
     setIncoming((n) => (n === null || n < seq.length ? n : null));
   }, [seq]);
 
-  // the paint spreading: 0 = a drop, 1 = the whole sheet
+  // the dissolve: 0 = the plate on the page, 1 = the next one in its place
   const prog = useMotionValue(0);
-  const size = useTransform(prog, [0, 1], [7, 360]);
-  const maskSize = useMotionTemplate`${size}%`;
-  const settle = useTransform(prog, [0, 1], [1.075, 1.03]);
-  const fade = useTransform(prog, [0, 0.35, 1], [0, 1, 1]);
+
+  // how far through its hold the plate is, for the marks at the foot
+  const held = useMotionValue(0);
+  const hold = box.mobile ? HOLD_PHONE : HOLD_DESK;
 
   const onStage = useRef(true);
   useEffect(() => {
@@ -171,8 +170,10 @@ export default function HeroProcession() {
       setIncoming(idx);
       prog.set(0);
       animate(prog, 1, {
-        duration: BLOOM_S,
-        ease: [0.4, 0, 0.2, 1],
+        duration: FADE_S,
+        // symmetric and gentle at both ends: the plate underneath is never
+        // caught half-lit, which is what makes a crossfade look like one
+        ease: [0.37, 0, 0.63, 1],
         onComplete: () => {
           setCurrent(idx);
           setIncoming(null);
@@ -185,14 +186,20 @@ export default function HeroProcession() {
 
   const turn = useCallback(() => turnTo((current + 1) % seq.length), [current, seq, turnTo]);
 
-  // the page turns itself, when nobody is turning it
+  // the page turns itself, when nobody is turning it — and the marks at the
+  // foot run the same clock, so the one that is lit reads how long is left
   useEffect(() => {
     if (incoming !== null) return;
+    held.set(0);
+    const run = animate(held, 1, { duration: hold / 1000, ease: "linear" });
     const t = setTimeout(() => {
       if (onStage.current && !document.hidden) turn();
-    }, HOLD_MS);
-    return () => clearTimeout(t);
-  }, [current, incoming, turn]);
+    }, hold);
+    return () => {
+      run.stop();
+      clearTimeout(t);
+    };
+  }, [current, incoming, turn, hold, held]);
 
   // the next plate is developed before it is needed
   useEffect(() => {
@@ -236,8 +243,8 @@ export default function HeroProcession() {
       if (luma === null) return;
       // hold back only what has to come down: a sunlit stucco wall reads
       // near 0.9, a shaded interior near 0.35
-      const lo = box.mobile ? 0.3 : 0.16;
-      const hi = box.mobile ? 0.82 : 0.56;
+      const lo = box.mobile ? 0.28 : 0.17;
+      const hi = box.mobile ? 0.74 : 0.58;
       const target = Math.min(hi, Math.max(lo, (luma - 0.3) * (box.mobile ? 1.15 : 0.8)));
       animate(grade, target, { duration: 0.9, ease: [0.4, 0, 0.2, 1] });
     };
@@ -247,9 +254,6 @@ export default function HeroProcession() {
     else img.addEventListener("load", meter, { once: true });
     return () => img.removeEventListener("load", meter);
   }, [shown, seq, box.ready, box.w, box.mobile, grade]);
-  // a phone gets a clean dissolve — a masked full-screen repaint per frame
-  // is exactly the kind of work that made the old hero stutter
-  const bloom = !box.mobile && !box.reduced;
 
   /* ---- the curtain ---- *
    * Nothing moves until the first photograph is actually here. A hero that
@@ -311,66 +315,56 @@ export default function HeroProcession() {
                 so the two never fight over the same frame. */}
             <motion.div
               className="absolute inset-0"
-              initial={{ scale: box.reduced ? 1 : 1.075 }}
+              initial={{ scale: box.reduced ? 1 : 1.055 }}
               animate={{ scale: 1 }}
-              transition={{ duration: box.reduced ? 0 : 2.4, ease: RISE }}
+              transition={{ duration: box.reduced ? 0 : 2.6, ease: RISE }}
             >
-            <div
-              key={plate.src}
-              className="absolute inset-0"
-              style={{ transform: box.mobile ? undefined : plate.art }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={plate.src}
-                alt={plate.caption}
-                className="breathe absolute inset-0 h-full w-full object-cover"
-                fetchPriority="high"
-                style={{
-                  objectPosition: box.mobile ? plate.posM : plate.pos,
-                  animationDuration: "26s",
-                  filter: "contrast(1.04)",
-                }}
-              />
-            </div>
-
-            {next && (
-              <motion.div
-                className="absolute inset-0"
-                style={
-                  bloom
-                    ? {
-                        scale: settle,
-                        WebkitMaskImage: BLOB,
-                        maskImage: BLOB,
-                        WebkitMaskRepeat: "no-repeat",
-                        maskRepeat: "no-repeat",
-                        WebkitMaskPosition: ORIGINS[incoming! % ORIGINS.length],
-                        maskPosition: ORIGINS[incoming! % ORIGINS.length],
-                        WebkitMaskSize: maskSize,
-                        maskSize: maskSize,
-                      }
-                    : { opacity: fade, scale: settle }
-                }
+              {/* The drift lives here, on a wrapper that never unmounts, so
+                  both plates are always at the same scale. Put it on the
+                  images and each new one restarts its own clock — the
+                  dissolve then happens between two pictures at different
+                  magnifications, which is exactly the seam you can see. */}
+              <div
+                className="breathe absolute inset-0"
+                style={{ animationDuration: "58s" }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <div
                   className="absolute inset-0"
-                  style={{ transform: box.mobile ? undefined : next.art }}
+                  style={{ transform: box.mobile ? undefined : plate.art }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={next.src}
-                    alt=""
+                    src={plate.src}
+                    alt={plate.caption}
                     className="absolute inset-0 h-full w-full object-cover"
+                    fetchPriority="high"
                     style={{
-                      objectPosition: box.mobile ? next.posM : next.pos,
+                      objectPosition: box.mobile ? plate.posM : plate.pos,
                       filter: "contrast(1.04)",
                     }}
                   />
                 </div>
-              </motion.div>
-            )}
+
+                {next && (
+                  <motion.div className="absolute inset-0" style={{ opacity: prog }}>
+                    <div
+                      className="absolute inset-0"
+                      style={{ transform: box.mobile ? undefined : next.art }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={next.src}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover"
+                        style={{
+                          objectPosition: box.mobile ? next.posM : next.pos,
+                          filter: "contrast(1.04)",
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -389,19 +383,23 @@ export default function HeroProcession() {
             them, rather than a wash down the whole frame — the same reading
             for a third of the darkening, and the picture stays open. */}
         <motion.div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] lg:hidden"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] lg:hidden"
           style={{
             opacity: grade,
             background:
-              "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.94) 18%, rgba(0,0,0,0.96) 44%, rgba(0,0,0,0.7) 64%, rgba(0,0,0,0.3) 82%, rgba(0,0,0,0) 100%)",
+              "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.9) 42%, rgba(0,0,0,0.66) 60%, rgba(0,0,0,0.36) 76%, rgba(0,0,0,0.14) 88%, rgba(0,0,0,0) 100%)",
           }}
         />
+        {/* Taller than it was, and no denser: the credit line above the
+            headline sat above the old band's reach and had nothing under it.
+            Reach, not weight — the top three fifths are almost nothing, so
+            there is no edge anywhere to read as an overlay. */}
         <motion.div
-          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[46%] lg:block"
+          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[58%] lg:block"
           style={{
             opacity: grade,
             background:
-              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.78) 26%, rgba(0,0,0,0.44) 52%, rgba(0,0,0,0.16) 76%, rgba(0,0,0,0) 100%)",
+              "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.84) 16%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.4) 44%, rgba(0,0,0,0.25) 58%, rgba(0,0,0,0.14) 72%, rgba(0,0,0,0.06) 86%, rgba(0,0,0,0) 100%)",
           }}
         />
       </button>
@@ -418,40 +416,56 @@ export default function HeroProcession() {
           compositor sets them — eyebrow, the roman line, its italic answer,
           then the way in. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-[64px] px-5 pb-8 text-left lg:bottom-[76px] lg:px-12 lg:pb-12">
+        {/* The trade and the place, set as a masthead credit: what she does
+            and where she does it, before the claim she makes about it. On a
+            desk they sit on one line with a rule between them. A phone has
+            no room for that, so they become two credit lines and the rule
+            goes — left to wrap, it strands itself at the end of the first
+            line and reads as a stray dash. */}
         <motion.span
           {...setting(0)}
-          className="label label-sheet hero-ink block text-porcelain"
+          className="hero-ink flex flex-col items-start gap-y-[6px] text-porcelain lg:flex-row lg:items-center lg:gap-x-4 lg:gap-y-0"
         >
-          {written.heroEyebrow}
+          {/* Tracked caps at 10px over a sunlit facade are the weakest thing
+              on the screen. The answer is weight on the letter, not more
+              shadow under it and not a darker picture. */}
+          <span className="label label-sheet font-semibold">{written.heroEyebrow}</span>
+          <span className="hidden h-px w-8 shrink-0 bg-porcelain/55 lg:block" />
+          <span className="label label-sheet font-semibold">{written.heroPlace}</span>
         </motion.span>
 
-        <h1 className="hero-ink mt-5 text-porcelain lg:mt-6">
+        <h1 className="hero-ink mt-6 text-porcelain lg:mt-7">
           <motion.span
             {...setting(1)}
-            className="display block text-[clamp(30px,7.4vw,40px)] lg:text-[clamp(44px,3.8vw,64px)]"
+            className="display block text-[clamp(24px,7.8vw,44px)] tracking-[-0.018em] lg:text-[clamp(50px,4.3vw,74px)]"
           >
             {written.heroLine}
           </motion.span>
           <motion.span
             {...setting(2)}
-            className="answer mt-1 block text-[clamp(31px,7.7vw,42px)] text-porcelain/95 lg:mt-1.5 lg:text-[clamp(46px,4vw,68px)]"
+            className="answer mt-[3px] block text-[clamp(25px,8.1vw,46px)] text-porcelain/92 lg:mt-1 lg:text-[clamp(52px,4.5vw,78px)]"
           >
             {written.heroAnswer}
           </motion.span>
         </h1>
 
-        {/* the way opens: two hairlines draw out from the words on hover */}
+        {/* The way in. A rule either side read as ornament and pointed
+            nowhere; one rule, running out to the right from under the words,
+            reads as a direction. On hover the words step forward and the
+            rule runs on ahead of them. Never a pill, never a fill. */}
         <motion.div {...setting(3)}>
-        <Link
-          href="/build-with-bluedoor/"
-          className="group pointer-events-auto mt-7 inline-flex items-center gap-4 lg:mt-8 lg:gap-5"
-        >
-          <span className="h-px w-9 bg-porcelain/50 transition-all duration-700 ease-out group-hover:w-16 group-hover:bg-porcelain/85 lg:w-12 lg:group-hover:w-20" />
-          <span className="label label-sheet hero-ink whitespace-nowrap text-porcelain transition-opacity duration-700 group-hover:opacity-75">
-            {written.inviteCta}
-          </span>
-          <span className="h-px w-9 bg-porcelain/50 transition-all duration-700 ease-out group-hover:w-16 group-hover:bg-porcelain/85 lg:w-12 lg:group-hover:w-20" />
-        </Link>
+          <Link
+            href="/build-with-bluedoor/"
+            className="group pointer-events-auto mt-8 inline-flex items-center lg:mt-10"
+          >
+            <span className="label label-sheet hero-ink whitespace-nowrap font-semibold text-porcelain transition-transform duration-[900ms] ease-out group-hover:translate-x-[3px]">
+              {written.inviteCta}
+            </span>
+            <span className="relative ml-5 block h-px w-14 overflow-hidden lg:ml-7 lg:w-24">
+              <span className="absolute inset-0 bg-porcelain/40" />
+              <span className="absolute inset-y-0 left-0 w-full origin-left scale-x-[0.34] bg-porcelain transition-transform duration-[900ms] ease-out group-hover:scale-x-100" />
+            </span>
+          </Link>
         </motion.div>
       </div>
 
@@ -499,13 +513,20 @@ export default function HeroProcession() {
                 transition={{ duration: 0.45, ease: [0.19, 1, 0.22, 1] }}
                 className="label label-sheet block whitespace-nowrap text-ink/50"
               >
-                Plate {NUMERALS[shown]}
-                <span className="hidden md:inline"> — {PLATES[seq[shown]].caption}</span>
+                {/* A caption under a full-page photograph names the picture.
+                    On a phone the numeral is the part worth dropping — the
+                    marks already say which plate this is — so the caption
+                    itself survives instead. */}
+                <span className="hidden md:inline">Plate {NUMERALS[shown]} — </span>
+                {PLATES[seq[shown]].caption}
               </motion.span>
             </AnimatePresence>
           </span>
 
-          <span className="flex items-center gap-[9px]">
+          {/* The marks keep the clock. The lit one is a rule that fills as
+              its plate is held, so how long is left is available to anyone
+              who looks for it and invisible to everyone else. */}
+          <span className="flex shrink-0 items-center gap-[9px]">
             {seq.map((_, i) => (
               <button
                 key={i}
@@ -515,18 +536,28 @@ export default function HeroProcession() {
                 className="group flex h-6 w-2 items-center justify-center"
               >
                 <span
-                  className={`w-px transition-all duration-500 ${
-                    i === shown
-                      ? "h-[15px] bg-navy"
-                      : "h-[10px] bg-navy/25 group-hover:bg-navy/50"
+                  className={`relative w-px overflow-hidden transition-all duration-500 ${
+                    i === shown ? "h-[15px] bg-navy/22" : "h-[10px] bg-navy/25 group-hover:bg-navy/50"
                   }`}
-                />
+                >
+                  {i === shown && (
+                    <motion.span
+                      className="absolute inset-x-0 top-0 h-full origin-top bg-navy"
+                      style={{ scaleY: held }}
+                    />
+                  )}
+                </span>
               </button>
             ))}
           </span>
 
+          {/* The running foot of the book. It carried the place until the
+              credit line above the headline started saying it — the same
+              two words twice in one screen is the sort of thing that reads
+              as a template. The studio's name is what a monograph runs at
+              the foot of the page anyway. */}
           <span className="label label-sheet hidden whitespace-nowrap text-ink/40 lg:block">
-            {written.heroFoot}
+            {site.name}
           </span>
         </div>
       </motion.div>
