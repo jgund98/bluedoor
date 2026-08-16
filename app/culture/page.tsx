@@ -66,10 +66,20 @@ export default function CulturePage() {
                   />
                 </RevealPlate>
               </div>
+
+              {/* The closing line sits under the studies rather than at the
+                  foot of the portrait column. It is the shortest paragraph
+                  of the four, and it is the only one that can move without
+                  breaking the reading — which is what lets the two columns
+                  finish together instead of stranding 198px of empty page
+                  under the photographs. */}
+              <Reveal delay={0.16}>
+                <p className="prose-lux mt-8 text-[16px] leading-[1.7]">{site.copy.siobhanBio4}</p>
+              </Reveal>
             </div>
 
             <div className="lg:col-span-5 lg:col-start-8">
-              <RevealPlate className="portal aspect-[3/4.05] overflow-hidden plate ring-1 ring-navy/12">
+              <RevealPlate className="portal aspect-[3/4.42] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/siobhan-drafting.jpg"
@@ -80,9 +90,6 @@ export default function CulturePage() {
 
               <Reveal delay={0.1}>
                 <p className="prose-lux mt-7 text-[16px] leading-[1.7]">{site.copy.siobhanBio3}</p>
-              </Reveal>
-              <Reveal delay={0.14}>
-                <p className="prose-lux mt-5 text-[16px] leading-[1.7]">{site.copy.siobhanBio4}</p>
               </Reveal>
             </div>
           </div>
@@ -164,7 +171,11 @@ export default function CulturePage() {
       {/* who we build with */}
       <section className="bg-porcelain py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* The three discipline lists run longer than the heading beside
+              them, and their length is the client's, not ours. Centring the
+              heading against them splits the difference top and bottom
+              instead of stranding it all under the heading. */}
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
             <div className="lg:col-span-4">
               <Reveal>
                 <h2>
