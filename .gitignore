@@ -42,3 +42,8 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# stray scratch scripts from other projects keep landing here via `git add -A`
+_*.mjs
+shot97.mjs
+dev-server.log
