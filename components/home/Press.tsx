@@ -6,6 +6,22 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { site, written } from "@/lib/site";
 import { Reveal } from "@/components/motion";
 
+/**
+ * The tearsheets are scans, and some are very small — the Luxury Home cover
+ * is 327x360. The ceiling for each is half its own native height, which is
+ * as large as it can be drawn on a 2x phone without being enlarged past
+ * what was scanned. They therefore do not all come out the same size, which
+ * is right: these are printed pages on a table, not a row of cards.
+ */
+const NATIVE_CAP: Record<string, number> = {
+  "/images/press-housebeautiful.jpg": 422,
+  "/images/press-builders.jpg": 300,
+  "/images/press-lhm.jpg": 180,
+  "/images/press-lhm2.jpg": 300,
+  "/images/press-modernluxury.jpg": 540,
+  "/images/press-tailormade.jpg": 540,
+};
+
 /** Laid out on a table, slightly askew, the way magazines actually sit. */
 const SET = [
   { tilt: -1.4, lift: 0, float: 26 },
@@ -94,11 +110,16 @@ function Sheet({
               src={pub.image}
               alt={pub.title}
               loading="lazy"
-              className="h-[clamp(190px,15.5vw,290px)] w-auto"
+              /* On a phone 15.5vw resolves to 60px, so the clamp floor was
+                 doing all the work and every tearsheet came out the same
+                 190px — a row of thumbnails rather than magazines on a
+                 table. Give the phone its own measure. */
+              className="h-[clamp(238px,58vw,300px)] w-auto lg:h-[clamp(190px,15.5vw,290px)]"
+              style={{ maxHeight: NATIVE_CAP[pub.image] }}
             />
           </div>
 
-          <div className="mt-5 max-w-[230px]">
+          <div className="mt-5 max-w-[76vw] lg:max-w-[230px]">
             <span className="label text-navy/70">{pub.name}</span>
             <p className="answer mt-2 text-[15px] leading-[1.4] text-ink/70 transition-colors duration-500 group-hover:text-ink">
               {pub.title}
