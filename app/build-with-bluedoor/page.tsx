@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
 import { Reveal, RevealPlate, Signature } from "@/components/motion";
 import Inquiry from "@/components/build/Inquiry";
+import { Ribbon, Threshold } from "@/components/build/MobileColor";
 
 export const metadata: Metadata = {
   title: "Build with Bluedoor",
@@ -27,6 +28,9 @@ export default function BuildPage() {
           </div>
 
           <div className="lg:col-span-7 lg:col-start-6">
+            {/* a phone opens on a door, not on a paragraph */}
+            <Threshold />
+
             <Reveal>
               <div className="flex items-center gap-4">
                 <span className="h-px w-10 bg-navy/30" />
@@ -77,6 +81,9 @@ export default function BuildPage() {
                 </div>
               </div>
             </Reveal>
+
+            {/* her brightest work, swipeable — a phone shouldn't end on type */}
+            <Ribbon />
 
             {/* signed */}
             <Reveal delay={0.2}>
