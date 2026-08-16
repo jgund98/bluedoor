@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
 import { Reveal, RevealPlate, Signature } from "@/components/motion";
 import Inquiry from "@/components/build/Inquiry";
-import { Ribbon, Threshold } from "@/components/build/MobileColor";
 
 export const metadata: Metadata = {
   title: "Build with Bluedoor",
