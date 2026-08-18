@@ -31,10 +31,10 @@ const FILMS = [
     drop: 44,
   },
   {
-    src: "/reels/home/island.mp4",
-    poster: "/reels/home/island.jpg",
-    label: "The island",
-    caption: "Palm Beach, from the air",
+    src: "/reels/home/view.mp4",
+    poster: "/reels/home/view.jpg",
+    label: "The terrace",
+    caption: "Out to the Atlantic",
     drop: 18,
   },
 ];
