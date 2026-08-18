@@ -31,10 +31,10 @@ const FILMS = [
     drop: 44,
   },
   {
-    src: "/reels/home/grounds.mp4",
-    poster: "/reels/home/grounds.jpg",
+    src: "/reels/home/pool.mp4",
+    poster: "/reels/home/pool.jpg",
     label: "The grounds",
-    caption: "Oceanfront cabana and pool",
+    caption: "Guest house and pool cabana",
     drop: 18,
   },
 ];
@@ -109,6 +109,34 @@ function Film({
   onToggle: () => void;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  // the clip has enough of itself to paint a moving frame
+  const [ready, setReady] = useState(false);
+
+  /* Fetch it well before it is wanted. preload="none" meant the download
+     did not begin until the film was already on screen and play() had been
+     called, and the gap between the poster being dropped and the first frame
+     arriving is the flicker. This starts the fetch 900px out.
+
+     It has to be state, not el.preload = "auto": React owns that attribute
+     and puts it back to "none" on the next render, which is why setting it
+     on the element did nothing. */
+  const [warm, setWarm] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || warm) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setWarm(true);
+      },
+      { rootMargin: "900px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [warm]);
+
+  useEffect(() => {
+    if (warm) ref.current?.load();
+  }, [warm]);
 
   useEffect(() => {
     const el = ref.current;
@@ -139,8 +167,20 @@ function Film({
         type="button"
         onClick={onToggle}
         aria-label={audible ? `Mute ${caption}` : `Play sound for ${caption}`}
-        className="portal group relative block aspect-[3/4.05] w-full cursor-pointer overflow-hidden bg-mist ring-1 ring-navy/12"
+        className="portal group relative isolate block aspect-[3/4.05] w-full cursor-pointer overflow-hidden bg-mist ring-1 ring-navy/12"
       >
+        {/* The clip's own first frame, underneath, always. The film fades up
+            onto its own still, so there is never a moment with nothing in
+            the arch — and because the still IS frame one, the handover is
+            not a transition anyone can see. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={poster}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
         <video
           ref={ref}
           src={src}
@@ -148,8 +188,12 @@ function Film({
           muted
           loop
           playsInline
-          preload="none"
-          className="h-full w-full object-cover"
+          preload={warm ? "auto" : "none"}
+          onPlaying={() => setReady(true)}
+          onCanPlay={() => setReady(true)}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out ${
+            ready ? "opacity-100" : "opacity-0"
+          }`}
         />
 
         {/* the ask, legible on anything, never in the way of the picture */}
