@@ -31,10 +31,10 @@ const FILMS = [
     drop: 44,
   },
   {
-    src: "/reels/home/view.mp4",
-    poster: "/reels/home/view.jpg",
-    label: "The terrace",
-    caption: "Out to the Atlantic",
+    src: "/reels/home/grounds.mp4",
+    poster: "/reels/home/grounds.jpg",
+    label: "The grounds",
+    caption: "Oceanfront cabana and pool",
     drop: 18,
   },
 ];
