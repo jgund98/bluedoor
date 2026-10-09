@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { listVisits } from "@/lib/queries";
 import { PageHeader, Card, Pill, EmptyState, Button } from "@/components/ui/primitives";
-import { ATTENTION, fmtTime, relTime, pluralize, thumb } from "@/lib/format";
+import { ATTENTION, fmtTime, relTime, pluralize } from "@/lib/format";
 import { ArrowRight, Camera } from "lucide-react";
 
 export const metadata = { title: "Approvals" };
@@ -29,7 +29,7 @@ export default async function ApprovalsPage() {
             const att = ATTENTION[r.report?.attention ?? "none"];
             return (
               <Link key={r.visit.id} href={`/visits/${r.visit.id}`} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition hover:border-primary/40 hover:shadow-md">
-                <div className="relative h-32 bg-muted bg-cover bg-center" style={r.photos[0] ? { backgroundImage: `url(${thumb(r.photos[0].url)})` } : r.estate.coverImage ? { backgroundImage: `url(${thumb(r.estate.coverImage)})` } : undefined}>
+                <div className="relative h-32 bg-muted bg-cover bg-center" style={r.photos[0] ? { backgroundImage: `url(${r.photos[0].url})` } : r.estate.coverImage ? { backgroundImage: `url(${r.estate.coverImage})` } : undefined}>
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-abyss/70 to-transparent p-3 text-porcelain">
                     <div>
                       <p className="text-sm font-semibold">{r.estate.name}</p>
