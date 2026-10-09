@@ -206,7 +206,7 @@ export default function CulturePage() {
                 <RevealPlate key={m.name} delay={i * 0.07}>
                   <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: m.pos }} />
+                    <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: m.pos, transform: m.zoom, transformOrigin: "50% 40%" }} />
                   </div>
                   <p className="answer mt-4 text-[17px] leading-[1.35] text-ink">{m.name}</p>
                   <p className="label mt-1.5 text-navy/60">{m.title}</p>

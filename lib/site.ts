@@ -27,7 +27,9 @@ export const site = {
   team: [
     {
       name: "Lisa Palmisciano",
-      pos: "50% 48%",
+      // her face sits lower and smaller in the frame than Majic; zoom and lift it level
+      pos: "50% 50%",
+      zoom: "translateY(-9%) scale(1.22)",
       title: "Chief Financial Officer",
       photo: "/images/team-lisa.jpg",
       short:
@@ -36,7 +38,8 @@ export const site = {
     },
     {
       name: "Majic Noone",
-      pos: "50% 22%",
+      pos: "50% 50%",
+      zoom: "none",
       title: "Director of Operations",
       photo: "/images/team-majic.jpg",
       short:
