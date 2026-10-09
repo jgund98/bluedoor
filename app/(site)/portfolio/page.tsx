@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { gallery, site } from "@/lib/site";
+import { gallery, site, type Plate } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
 
 export const metadata: Metadata = {
@@ -10,13 +10,53 @@ export const metadata: Metadata = {
 };
 
 /** A hang, not a grid — the rhythm repeats every five plates. */
-const SHAPE = [
-  { span: "lg:col-span-5", ratio: "aspect-[3/4]", lift: "lg:mt-0" },
-  { span: "lg:col-span-7", ratio: "aspect-[4/3]", lift: "lg:mt-24" },
-  { span: "lg:col-span-7", ratio: "aspect-[16/10]", lift: "lg:mt-0" },
-  { span: "lg:col-span-5", ratio: "aspect-[3/4]", lift: "lg:mt-20" },
-  { span: "lg:col-span-12", ratio: "aspect-[21/9]", lift: "lg:mt-6" },
-];
+/* The hang is built from the photographs, not imposed on them: a portrait
+   only ever gets a portrait frame, a landscape a landscape frame, and a
+   wide shot the full width at its own proportion. Nothing is cropped into
+   a ceiling. Portraits alternate sides so the rhythm staggers. */
+type Slot = { plate: Plate; span: string; ratio: string; lift: string };
+function hang(plates: readonly Plate[]): Slot[][] {
+  const left = [...plates];
+  const rows: Slot[][] = [];
+  let side = 0;
+  while (left.length) {
+    const a = left.shift()!;
+    if (a.shape === "wide") {
+      rows.push([{ plate: a, span: "lg:col-span-12", ratio: "aspect-[16/9]", lift: "lg:mt-6" }]);
+      continue;
+    }
+    const want = a.shape === "portrait" ? "landscape" : "portrait";
+    let j = left.findIndex((x) => x.shape === want);
+    if (j < 0) j = left.findIndex((x) => x.shape !== "wide");
+    if (j < 0) {
+      rows.push([
+        {
+          plate: a,
+          span: a.shape === "portrait" ? "lg:col-span-5 lg:col-start-4" : "lg:col-span-8 lg:col-start-3",
+          ratio: a.shape === "portrait" ? "aspect-[4/5]" : "aspect-[3/2]",
+          lift: "lg:mt-6",
+        },
+      ]);
+      continue;
+    }
+    const b = left.splice(j, 1)[0];
+    const slot = (x: Plate, big: boolean): Slot => ({
+      plate: x,
+      span: big ? "lg:col-span-7" : "lg:col-span-5",
+      ratio: x.shape === "portrait" ? "aspect-[4/5]" : big ? "aspect-[3/2]" : "aspect-[4/3]",
+      lift: "",
+    });
+    // the portrait takes the narrow column; two landscapes split 7 and 5
+    const pair =
+      a.shape === "portrait" ? [slot(a, false), slot(b, true)] : b.shape === "portrait" ? [slot(b, false), slot(a, true)] : [slot(a, true), slot(b, false)];
+    if (side % 2) pair.reverse();
+    pair[1].lift = "lg:mt-20";
+    rows.push(pair);
+    side++;
+  }
+  return rows;
+}
+
 
 export default function PortfolioPage() {
   return (
@@ -59,20 +99,19 @@ export default function PortfolioPage() {
       {/* the hang */}
       <section className="bg-porcelain pb-24 lg:pb-32">
         <div className="mx-auto grid max-w-[1560px] grid-cols-1 gap-10 px-5 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-4 lg:px-12">
-          {gallery.map((g, i) => {
-            const s = SHAPE[i % SHAPE.length];
-            return (
-              <div key={g.src} className={`${s.span} ${s.lift}`}>
+          {hang(gallery)
+            .flat()
+            .map((s) => (
+              <div key={s.plate.src} className={`${s.span} ${s.lift}`}>
                 <RevealPlate>
-                  <div className={`portal-shallow overflow-hidden plate ${g.ratio ?? s.ratio}`}>
+                  <div className={`portal-shallow overflow-hidden plate ${s.ratio}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={g.src} alt={g.caption} loading="lazy" style={g.pos ? { objectPosition: g.pos } : undefined} />
+                    <img src={s.plate.src} alt={s.plate.caption} loading="lazy" style={s.plate.pos ? { objectPosition: s.plate.pos } : undefined} />
                   </div>
-                  <p className="answer mt-4 text-[15px] leading-[1.4] text-ink/55">{g.caption}</p>
+                  <p className="answer mt-4 text-[15px] leading-[1.4] text-ink/55">{s.plate.caption}</p>
                 </RevealPlate>
               </div>
-            );
-          })}
+            ))}
         </div>
       </section>
 
