@@ -109,7 +109,7 @@ const RISE = [0.16, 1, 0.3, 1] as const;
 
 export default function HeroProcession() {
   const stage = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ w: 1440, mobile: false, reduced: false, ready: false });
+  const [box, setBox] = useState({ w: 1440, h: 0, mobile: false, reduced: false, ready: false });
 
   useMeasure(() => {
     const el = stage.current;
@@ -120,10 +120,15 @@ export default function HeroProcession() {
       if (!w) return;
       // Width only. A phone's stage changes height as the URL bar collapses,
       // and reacting to that mid-scroll is what read as the hero animating.
+      // The visible height is read once per width, in pixels, and locked.
+      // Viewport units disagree between browsers (Safari counts the area
+      // under its floating toolbar), and reacting to the URL bar is what
+      // made the hero look like it was shrinking.
+      const h = window.innerHeight;
       setBox((prev) =>
         Math.round(w) === Math.round(prev.w) && prev.ready
           ? prev
-          : { w, mobile: w < 1024, reduced, ready: true },
+          : { w, h, mobile: w < 1024, reduced, ready: true },
       );
     };
     measure();
@@ -299,6 +304,7 @@ export default function HeroProcession() {
     <section
       ref={stage}
       className="relative h-[100svh] w-full overflow-hidden bg-porcelain grain lg:h-screen"
+      style={box.ready && box.mobile && box.h ? { height: box.h } : undefined}
     >
       {/* the plate, full bleed and full strength — click to turn the page */}
       <button
