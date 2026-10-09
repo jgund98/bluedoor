@@ -134,7 +134,7 @@ export default function ProcessPage() {
           src="/images/siobhan-site.jpg"
           alt="A stair under construction, mid-supervision"
           loading="lazy"
-          style={{ objectPosition: "50% 52%" }}
+          style={{ objectPosition: "50% 38%" }}
         />
         <div className="veil-bl absolute inset-x-0 bottom-0 h-[68%]" />
         <div className="absolute inset-0 flex items-end">
@@ -161,7 +161,44 @@ export default function ProcessPage() {
         </div>
       </section>
 
-      {/* 03 — the hand-off */}
+      {/* 03 — the office. The field is only half the company. */}
+      <section className="bg-porcelain py-16 grain lg:py-24">
+        <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-6">
+              <Stage n="03" title="Fully staffed, on site and in the office" />
+              <Reveal delay={0.06}>
+                <p className="prose-lux mt-7">{site.copy.office}</p>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 border-t border-navy/20 pt-7 sm:grid-cols-3">
+                  {["Contracts and budgets", "Procurement and bids", "Permits and approvals", "Vendor agreements", "Cost reporting", "Client correspondence"].map((item) => (
+                    <li key={item} className="answer text-[17px] leading-[1.35] text-ink/75">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </div>
+            <div className="lg:col-span-5 lg:col-start-8">
+              <div className="grid grid-cols-2 gap-5">
+                {site.team.map((m, i) => (
+                  <RevealPlate key={m.name} className={i === 1 ? "lg:mt-12" : ""}>
+                    <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: "50% 20%" }} />
+                    </div>
+                    <p className="answer mt-3 text-[16px] leading-[1.35] text-ink/80">{m.name}</p>
+                    <p className="label mt-1 text-navy/60">{m.title}</p>
+                  </RevealPlate>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 04 — the hand-off */}
       <section className="bg-chalk py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
@@ -169,15 +206,15 @@ export default function ProcessPage() {
               <RevealPlate className="portal aspect-[4/4.6] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/stairhall-2.jpg"
-                  alt="A finished stair hall"
+                  src="/images/living-coastal.jpg"
+                  alt="A finished living room, ready for its owners"
                   loading="lazy"
-                  style={{ objectPosition: "50% 48%" }}
+                  style={{ objectPosition: "50% 50%" }}
                 />
               </RevealPlate>
             </div>
             <div className="lg:col-span-6 lg:col-start-7">
-              <Stage n="03" title="The hand-off" />
+              <Stage n="04" title="The hand-off" />
               <Reveal delay={0.06}>
                 <p className="prose-lux mt-7">{site.copy.handOff}</p>
               </Reveal>

@@ -49,11 +49,13 @@ const PLATES: readonly Plate[] = [
     caption: "Mediterranean elevation, oceanfront",
   },
   {
-    src: "/images/hero-stairhall.jpg",
-    pos: "50% 52%",
-    // the stair is dead centre and the hall is symmetric about it
+    // Her note: the travertine stair hall reads cold. The stone stair to the
+    // garden door is warmer and still a staircase; it also opens the phone
+    // sequence, being the one portrait composition.
+    src: "/images/hall-door.jpg",
+    pos: "50% 60%",
     posM: "50% 50%",
-    caption: "A double stair hall in cut travertine",
+    caption: "Stair to the garden door",
   },
   {
     src: "/images/kitchen-brass.jpg",
@@ -100,9 +102,11 @@ const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
  * a house should change the way a page is turned by a careful person, not
  * perform. No wipe, no slide, no zoom on the turn.
  */
-const FADE_S = 1.05;
-const HOLD_DESK = 6000;
-const HOLD_PHONE = 7200;
+// She hates photographs that move fast. Each plate rests for a long beat
+// and the crossfade is slow enough to read as a dissolve, not a cut.
+const FADE_S = 1.9;
+const HOLD_DESK = 9500;
+const HOLD_PHONE = 10500;
 
 /** A long decelerating settle — everything arrives quickly and stops slowly. */
 const RISE = [0.16, 1, 0.3, 1] as const;

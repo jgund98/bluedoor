@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
-import { Reveal, RevealPlate, Signature } from "@/components/motion";
+import { Reveal, RevealPlate } from "@/components/motion";
 
 export const metadata: Metadata = {
-  title: "Culture — Siobhan Zerilla and the studio",
+  title: "Culture — the studio behind every Bluedoor home",
   description:
-    "Siobhan Zerilla, principal of Bluedoor Building, and the small studio behind her: how a boutique Palm Beach builder is run.",
+    "The small studio behind Bluedoor Building, how it runs a project, and the people in the field and in the office.",
 };
 
 const DISCIPLINES = [
@@ -22,11 +22,15 @@ export default function CulturePage() {
       <section className="bg-porcelain pb-16 pt-[132px] grain lg:pb-24 lg:pt-[184px]">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <Reveal>
-            <span className="label text-navy/75">The Principal</span>
+            <span className="label text-navy/75">Culture</span>
             <h1 className="mt-4 lg:mt-3">
-              <Signature className="script block whitespace-nowrap text-[clamp(52px,11vw,80px)] text-navy lg:text-[clamp(86px,7.4vw,124px)]">
-                Siobhan Zerilla
-              </Signature>
+              <span className="display block text-[clamp(34px,8vw,44px)] text-ink lg:text-[clamp(48px,4vw,70px)]">
+                A small studio,
+              </span>
+              <span className="answer mt-0.5 block text-[clamp(36px,8.4vw,46px)] text-navy lg:mt-1 lg:text-[clamp(50px,4.2vw,74px)]">
+                built from the ground up.
+              </span>
+              <span className="label mt-6 block text-navy/60">Siobhan Zerilla, Principal</span>
             </h1>
           </Reveal>
 
@@ -101,7 +105,7 @@ export default function CulturePage() {
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <Reveal>
             <div className="max-w-[980px]">
-              <span className="label text-ceramic/70">In Siobhan’s words</span>
+              <span className="label text-ceramic/70">From the principal</span>
               <p className="answer mt-6 text-[23px] leading-[1.42] text-porcelain lg:text-[38px] lg:leading-[1.32]">
                 “{site.principal.quote}”
               </p>
@@ -114,7 +118,7 @@ export default function CulturePage() {
       <section className="bg-chalk py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <div className="flex items-center gap-5">
-            <span className="label shrink-0 text-navy/75">How Siobhan runs a project</span>
+            <span className="label shrink-0 text-navy/75">How Bluedoor runs a project</span>
             <span className="hair h-px flex-1" />
           </div>
 
@@ -126,7 +130,7 @@ export default function CulturePage() {
                     Daily on the site,
                   </span>
                   <span className="answer mt-0.5 block text-[clamp(29px,6.8vw,34px)] text-navy lg:mt-1 lg:text-[clamp(32px,2.6vw,44px)]">
-                    not from an office.
+                    backed by the office.
                   </span>
                 </h2>
               </Reveal>
@@ -137,6 +141,13 @@ export default function CulturePage() {
                   <p className="prose-lux mt-4 text-[16px] lg:text-[17px]">
                     {site.copy.supervision}
                   </p>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.11}>
+                <div className="mt-8 border-t border-navy/20 pt-7">
+                  <span className="label block text-navy/70">{site.copy.officeLabel}</span>
+                  <p className="prose-lux mt-4 text-[16px] lg:text-[17px]">{site.copy.office}</p>
                 </div>
               </Reveal>
 
@@ -160,9 +171,47 @@ export default function CulturePage() {
               </RevealPlate>
               <Reveal delay={0.1}>
                 <p className="answer mt-4 text-[15px] leading-[1.45] text-ink/50">
-                  A site Siobhan is on most days, mid-construction.
+                  A site the team is on every day, mid-construction.
                 </p>
               </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* the team. Portraits drop into site.team as they arrive. */}
+      <section className="bg-porcelain py-16 grain lg:py-24">
+        <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
+          <div className="flex items-center gap-5">
+            <span className="label shrink-0 text-navy/75">{site.copy.teamLabel}</span>
+            <span className="hair h-px flex-1" />
+          </div>
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-4">
+              <Reveal>
+                <h2>
+                  <span className="display block text-[clamp(27px,6.4vw,32px)] text-ink lg:text-[clamp(30px,2.4vw,40px)]">
+                    In the field,
+                  </span>
+                  <span className="answer mt-0.5 block text-[clamp(29px,6.8vw,34px)] text-navy lg:mt-1 lg:text-[clamp(32px,2.6vw,44px)]">
+                    and in the office.
+                  </span>
+                </h2>
+                <p className="prose-lux mt-7 max-w-[380px]">{site.copy.teamIntro}</p>
+              </Reveal>
+            </div>
+            <div className="grid grid-cols-2 gap-6 lg:col-span-6 lg:col-start-6 lg:gap-10">
+              {site.team.map((m, i) => (
+                <RevealPlate key={m.name} delay={i * 0.07}>
+                  <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: "50% 20%" }} />
+                  </div>
+                  <p className="answer mt-4 text-[17px] leading-[1.35] text-ink">{m.name}</p>
+                  <p className="label mt-1.5 text-navy/60">{m.title}</p>
+                  <p className="prose-lux mt-3 text-[15px] leading-[1.6]">{m.short}</p>
+                </RevealPlate>
+              ))}
             </div>
           </div>
         </div>

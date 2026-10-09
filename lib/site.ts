@@ -180,13 +180,19 @@ export const site = {
     supervision:
       "Project management and site supervision are key factors in our ability to deliver successful projects. We take these components seriously and do not leave projects unsupervised. Daily monitoring of the site, subcontractors, field conditions, plans, communication, security, and cleanliness are included in every project we execute. Attention to detail is a top priority. We typically have 3–4 project managers on staff at all times to effectively manage, monitor and execute the day to day activities on site.",
     siobhanBio1:
-      "Siobhan discovered her passion for construction after completing graduate school and realizing her initial career path didn't align with her aspirations. Determined to pursue meaningful work, she started as a laborer, immersing herself in the fundamentals of the industry. Over the years, she honed her skills and gained a comprehensive understanding of construction operations, identifying inefficiencies and areas where improvement was needed.",
+      "Bluedoor is led by Siobhan Zerilla, who came to construction after graduate school and learned the industry from its foundations up. Her starting point was as a laborer, and that grounding still shapes how the company works: a comprehensive understanding of construction operations, an eye for inefficiency, and a habit of fixing what others leave alone.",
     siobhanBio2:
       "With decades of experience, Siobhan brings a unique combination of expertise in business management, project organization, and exceptional communication skills. Her meticulous attention to detail and commitment to high-quality standards are evident in every project, both in the finished product and throughout the construction process. She emphasizes maintaining a clean and organized job site, believing it fosters clarity and efficiency.",
     siobhanBio3:
       "Siobhan's portfolio reflects her versatility and ability to adapt to diverse client needs, from large-scale builds to intricate renovations. Known for her creative problem-solving and ability to deliver innovative solutions to complex challenges, she has earned a reputation for excellence in execution and client satisfaction.",
     siobhanBio4:
-      "Under her leadership, the firm prioritizes precision, professionalism, and a collaborative approach, ensuring each project is completed with unmatched craftsmanship and care.",
+      "The firm prioritizes precision, professionalism, and a collaborative approach, ensuring each project is completed with unmatched craftsmanship and care.",
+    officeLabel: "The Office",
+    office:
+      "Bluedoor is fully staffed in the field and behind the scenes. While project managers are on site every day, the office carries the rest of the build: contracts and budgets, procurement and bid comparisons, permits and vendor agreements, scheduling, cost reporting, and client correspondence. Nothing waits on a job site for an answer, and nothing on a job site is left to chance.",
+    teamLabel: "The Team",
+    teamIntro:
+      "A small studio by design. Everyone here has been on the inside of a build, and everyone answers the phone.",
     publicationsIntro:
       "At Bluedoor Building, our commitment to craftsmanship, innovation, and excellence has earned recognition in some of the most respected design publications. Here we highlight our recent features, press mentions, and collaborative projects that showcase the artistry behind every home we build.",
   },
@@ -211,7 +217,7 @@ export const nav = {
   full: [
     { label: "Portfolio", href: "/portfolio/", line: "Selected work" },
     { label: "Process", href: "/process/", line: "How a home is made" },
-    { label: "Culture", href: "/culture/", line: "Siobhan, and the studio" },
+    { label: "Culture", href: "/culture/", line: "The studio, and how it works" },
     { label: "Press", href: "/media/", line: "Features and recognition" },
     { label: "Build with Bluedoor", href: "/build-with-bluedoor/", line: "Begin a conversation" },
   ],
@@ -255,12 +261,12 @@ export const portals = [
   {
     index: "II",
     label: "Historic Renovation",
-    line: "The delicate art",
-    answer: "of restoration.",
+    line: "Historic homes,",
+    answer: "carefully renewed.",
     copy: site.services[1].copy,
-    image: "/images/hall-door.jpg",
-    pos: "50% 46%",
-    href: "/process/",
+    image: "/images/estate-colonial.jpg",
+    pos: "50% 56%",
+    href: "",
     ground: "mist",
   },
   {
@@ -271,34 +277,46 @@ export const portals = [
     copy: site.services[2].copy,
     image: "/images/pantry-blue.jpg",
     pos: "50% 50%",
-    href: "/portfolio/",
+    href: "",
     ground: "porcelain",
   },
 ] as const;
 
 /** Portfolio plates. Captions stay descriptive — no names, no addresses. */
-export const gallery = [
-  { src: "/images/hero-stairhall.jpg", caption: "A double stair hall in cut travertine", tall: true },
-  { src: "/images/greatroom.jpg", caption: "Great room, framed to the Atlantic" },
+export type Plate = { src: string; caption: string; pos?: string; ratio?: string };
+export const gallery: readonly Plate[] = [
+  { src: "/images/greatroom.jpg", caption: "Great room, framed to the Atlantic", pos: "50% 55%" },
   { src: "/images/estate-palms.jpg", caption: "Mediterranean elevation, oceanfront" },
-  { src: "/images/kitchen-brass.jpg", caption: "Kitchen in blue and unlacquered brass", tall: true },
+  { src: "/images/kitchen-brass.jpg", caption: "Kitchen in blue and unlacquered brass" },
+  { src: "/images/door-arched.jpg", caption: "Arched entry, bougainvillea in season", pos: "50% 0%", ratio: "aspect-[4/5]" },
   { src: "/images/loggia-ocean.jpg", caption: "Loggia under a cypress ceiling" },
-  { src: "/images/door-arched.jpg", caption: "Arched entry, bougainvillea in season" },
-  { src: "/images/stairhall-2.jpg", caption: "The same hall, finished", tall: true },
+  { src: "/images/hall-door.jpg", caption: "Stair to the garden door", pos: "50% 40%" },
+  { src: "/images/kitchen-scallop.jpg", caption: "Kitchen in sea glass and brass" },
   { src: "/images/living-coastal.jpg", caption: "Living room, natural light held all day" },
+  { src: "/images/estate-bougainvillea.jpg", caption: "Entry court in bougainvillea" },
+  { src: "/images/entry-hall.jpg", caption: "Entry hall in stone and glass", pos: "50% 30%" },
   { src: "/images/loggia-pool.jpg", caption: "Pool terrace and cabana" },
   { src: "/images/pantry-blue.jpg", caption: "Scullery in painted cabinetry" },
   { src: "/images/estate-colonial.jpg", caption: "Colonial elevation with louvered shutters" },
-  { src: "/images/hallway-gallery.jpg", caption: "Gallery corridor, oceanside", tall: true },
+  { src: "/images/kitchen-living.jpg", caption: "Kitchen open to the ocean room" },
+  { src: "/images/hallway-gallery.jpg", caption: "Gallery corridor, oceanside" },
+  { src: "/images/loggia-bar.jpg", caption: "Loggia bar, open to the surf" },
+  { src: "/images/hero-stairhall.jpg", caption: "Double stair hall in cut travertine", pos: "50% 60%" },
   { src: "/images/oceanfront-entry.jpg", caption: "Motor court and entry" },
+  { src: "/images/poolhouse-modern.jpg", caption: "Pool house and lawn to the water" },
+  { src: "/images/console-vases.jpg", caption: "Entry console in pale oak", pos: "50% 30%" },
+  { src: "/images/dining-modern.jpg", caption: "Dining room, lit for evening" },
+  { src: "/images/door-modern.jpg", caption: "Modern entry in coral stone", pos: "50% 35%" },
   { src: "/images/loggia-stone.jpg", caption: "Stone colonnade under construction" },
   { src: "/images/courtyard-modern.jpg", caption: "Courtyard, planted for shade" },
+  { src: "/images/house-stone.jpg", caption: "Stone elevation, in town" },
   { src: "/images/bunkroom-green.jpg", caption: "Bunk room, painted millwork" },
   { src: "/images/gate-pineapple.jpg", caption: "Lattice gate and pineapple finials" },
   { src: "/images/living-ocean.jpg", caption: "Seating room open to the terrace" },
+  { src: "/images/aerial-oceanfront.jpg", caption: "Oceanfront, from above" },
   { src: "/images/house-shingle.jpg", caption: "Shingled elevation, in town" },
   { src: "/images/detail-stone-column.jpg", caption: "Cast column, hand-finished" },
-] as const;
+];
 
 /** Copy written for this site. Her register: plain, exact, no flourish. */
 export const written = {
@@ -314,14 +332,14 @@ export const written = {
   portalsAnswer: "one standard.",
 
   principalLabel: "The Principal",
-  principalLine: "Siobhan began as a laborer.",
-  principalAnswer: "She still walks every site.",
+  principalLine: "Built from the ground up.",
+  principalAnswer: "On every site, every day.",
 
   atelierLabel: "The Studio",
-  atelierLine: "Every home is painted",
-  atelierAnswer: "before it is poured.",
+  atelierLine: "Every home, painted",
+  atelierAnswer: "once it is finished.",
   atelierCopy:
-    "Each project begins as a watercolor — a study of proportion, light, and setting, drawn before a single line is staked on the lot.",
+    "Each completed home is recorded as a watercolor — a study of proportion, light, and setting, painted once the last trade has left and the house is at rest.",
 
   pressLabel: "Recognition",
   pressLine: "Featured in",

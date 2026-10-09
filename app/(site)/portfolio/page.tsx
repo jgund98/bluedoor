@@ -64,9 +64,9 @@ export default function PortfolioPage() {
             return (
               <div key={g.src} className={`${s.span} ${s.lift}`}>
                 <RevealPlate>
-                  <div className={`portal-shallow overflow-hidden plate ${s.ratio}`}>
+                  <div className={`portal-shallow overflow-hidden plate ${g.ratio ?? s.ratio}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={g.src} alt={g.caption} loading="lazy" />
+                    <img src={g.src} alt={g.caption} loading="lazy" style={g.pos ? { objectPosition: g.pos } : undefined} />
                   </div>
                   <p className="answer mt-4 text-[15px] leading-[1.4] text-ink/55">{g.caption}</p>
                 </RevealPlate>

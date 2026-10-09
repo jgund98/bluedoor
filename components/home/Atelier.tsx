@@ -237,7 +237,7 @@ function Held({
             transition={{ duration: 0.7, delay: 0.58, ease: [0.19, 1, 0.22, 1] }}
           >
             <span className="label label-sheet order-1 text-balance text-center leading-[1.9] text-ink/50 lg:order-2 lg:whitespace-nowrap lg:leading-normal">
-              Study {STUDY[index]} — watercolor, before the line was staked
+              Study {STUDY[index]} — watercolor, painted on completion
             </span>
 
             <div className="order-2 flex items-center gap-10 lg:contents">

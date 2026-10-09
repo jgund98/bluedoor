@@ -122,9 +122,11 @@ function Panel({
 
             <p className="prose-lux mt-7 max-w-[390px]">{portal.copy}</p>
 
-            <Link href={portal.href} className="quiet-link mt-9 inline-block text-navy">
-              See the work
-            </Link>
+            {portal.href ? (
+              <Link href={portal.href} className="quiet-link mt-9 inline-block text-navy">
+                See the work
+              </Link>
+            ) : null}
           </div>
 
           {/* the opening, with the medallion set into its crown */}
@@ -162,9 +164,11 @@ function Panel({
 
           <p className="prose-lux mt-4 text-[15px] leading-[1.62]">{portal.copy}</p>
 
-          <Link href={portal.href} className="quiet-link mt-6 inline-block self-start text-navy">
-            See the work
-          </Link>
+          {portal.href ? (
+            <Link href={portal.href} className="quiet-link mt-6 inline-block self-start text-navy">
+              See the work
+            </Link>
+          ) : null}
 
           <div className="relative mt-9 min-h-0 flex-1">
             <div className="portal absolute inset-0 overflow-hidden plate ring-1 ring-navy/12">
