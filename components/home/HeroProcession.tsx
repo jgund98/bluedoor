@@ -415,52 +415,57 @@ export default function HeroProcession() {
       {/* The words are set on the page one line at a time, the way a
           compositor sets them — eyebrow, the roman line, its italic answer,
           then the way in. */}
-      {/* The words no longer fight the house. They sit on a navy plate —
-          the blue door against the white facade, which is the brand's own
-          image — so the type is porcelain on navy whatever the photograph
-          is doing behind it, and the way in is a real button on the plate. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-[64px] px-5 pb-5 text-left lg:bottom-[76px] lg:px-12 lg:pb-10">
-        <motion.div
+      <div className="pointer-events-none absolute inset-x-0 bottom-[64px] px-5 pb-8 text-left lg:bottom-[76px] lg:px-12 lg:pb-12">
+        {/* The trade and the place, set as a masthead credit: what she does
+            and where she does it, before the claim she makes about it. On a
+            desk they sit on one line with a rule between them. A phone has
+            no room for that, so they become two credit lines and the rule
+            goes — left to wrap, it strands itself at the end of the first
+            line and reads as a stray dash. */}
+        <motion.span
           {...setting(0)}
-          className="pointer-events-auto relative inline-block w-full max-w-[720px] bg-navy px-6 pb-7 pt-7 text-porcelain lg:px-12 lg:pb-11 lg:pt-11"
-          style={{ boxShadow: "0 40px 80px -30px rgba(14,29,52,0.55)" }}
+          className="hero-ink flex flex-col items-start gap-y-[6px] text-porcelain lg:flex-row lg:items-center lg:gap-x-4 lg:gap-y-0"
         >
-          {/* the panel line of a door leaf, inset from the edge */}
-          <div className="pointer-events-none absolute inset-[9px] border border-porcelain/[0.14] lg:inset-[14px]" />
+          {/* Tracked caps at 10px over a sunlit facade are the weakest thing
+              on the screen. The answer is weight on the letter, not more
+              shadow under it and not a darker picture. */}
+          <span className="label label-sheet font-semibold">{written.heroEyebrow}</span>
+          <span className="hidden h-px w-8 shrink-0 bg-porcelain/55 lg:block" />
+          <span className="label label-sheet font-semibold">{written.heroPlace}</span>
+        </motion.span>
 
-          <span className="flex flex-col items-start gap-y-[6px] text-porcelain/70 lg:flex-row lg:items-center lg:gap-x-4 lg:gap-y-0">
-            <span className="label font-semibold">{written.heroEyebrow}</span>
-            <span className="hidden h-px w-8 shrink-0 bg-porcelain/35 lg:block" />
-            <span className="label font-semibold">{written.heroPlace}</span>
-          </span>
+        <h1 className="hero-ink mt-6 text-porcelain lg:mt-7">
+          <motion.span
+            {...setting(1)}
+            className="display block text-[clamp(24px,7.8vw,44px)] tracking-[-0.018em] lg:text-[clamp(50px,4.3vw,74px)]"
+          >
+            {written.heroLine}
+          </motion.span>
+          <motion.span
+            {...setting(2)}
+            className="answer mt-[3px] block text-[clamp(25px,8.1vw,46px)] text-porcelain/92 lg:mt-1 lg:text-[clamp(52px,4.5vw,78px)]"
+          >
+            {written.heroAnswer}
+          </motion.span>
+        </h1>
 
-          <h1 className="mt-5 text-porcelain lg:mt-6">
-            <motion.span
-              {...setting(1)}
-              className="display block text-[clamp(22px,6.3vw,40px)] tracking-[-0.018em] lg:text-[clamp(44px,3.6vw,62px)]"
-            >
-              {written.heroLine}
-            </motion.span>
-            <motion.span
-              {...setting(2)}
-              className="answer mt-[3px] block text-[clamp(23px,6.6vw,42px)] text-porcelain/88 lg:mt-1 lg:text-[clamp(46px,3.8vw,66px)]"
-            >
-              {written.heroAnswer}
-            </motion.span>
-          </h1>
-
-          <motion.div {...setting(3)} className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4 lg:mt-9">
-            <Link
-              href="/build-with-bluedoor/"
-              className="group inline-flex h-12 items-center bg-porcelain px-7 text-navy transition-colors duration-500 hover:bg-ceramic lg:h-[52px] lg:px-9"
-            >
-              <span className="label font-semibold">{written.inviteCta}</span>
-            </Link>
-            <Link href="/portfolio/" className="label group inline-flex items-center gap-3 font-semibold text-porcelain/75 transition-colors duration-500 hover:text-porcelain">
-              View the work
-              <span className="block h-px w-10 bg-porcelain/40 transition-all duration-700 group-hover:w-14 group-hover:bg-porcelain" />
-            </Link>
-          </motion.div>
+        {/* The way in. A rule either side read as ornament and pointed
+            nowhere; one rule, running out to the right from under the words,
+            reads as a direction. On hover the words step forward and the
+            rule runs on ahead of them. Never a pill, never a fill. */}
+        <motion.div {...setting(3)}>
+          <Link
+            href="/build-with-bluedoor/"
+            className="group pointer-events-auto mt-8 inline-flex items-center lg:mt-10"
+          >
+            <span className="label label-sheet hero-ink whitespace-nowrap font-semibold text-porcelain transition-transform duration-[900ms] ease-out group-hover:translate-x-[3px]">
+              {written.inviteCta}
+            </span>
+            <span className="relative ml-5 block h-px w-14 overflow-hidden lg:ml-7 lg:w-24">
+              <span className="absolute inset-0 bg-porcelain/40" />
+              <span className="absolute inset-y-0 left-0 w-full origin-left scale-x-[0.34] bg-porcelain transition-transform duration-[900ms] ease-out group-hover:scale-x-100" />
+            </span>
+          </Link>
         </motion.div>
       </div>
 
