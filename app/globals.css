@@ -380,7 +380,7 @@ body {
 
 /* ------------------------------------------------------------------ *
  * Estate-management portal. Tokens are global (Tailwind needs them to
- * generate utilities); everything else is scoped under .portal.
+ * generate utilities); everything else is scoped under .estate-app.
  * ------------------------------------------------------------------ */
 :root {
   --background: #f7f6f2;
@@ -432,7 +432,7 @@ body {
   --color-info-soft: var(--info-soft);
 }
 
-.portal {
+.estate-app {
   --radius: 1rem;
   --radius-sm: calc(var(--radius) - 8px);
   --radius-md: calc(var(--radius) - 4px);
@@ -449,48 +449,48 @@ body {
   overflow-x: clip;
 }
 
-.portal * {
+.estate-app * {
   border-color: var(--border);
 }
 
-.portal ::selection {
+.estate-app ::selection {
   background: var(--primary);
   color: var(--primary-foreground);
 }
 
 /* Grid and flex children must be allowed to shrink or long text widens the page on phones. */
-.portal .grid > *,
-.portal .flex > * {
+.estate-app .grid > *,
+.estate-app .flex > * {
   min-width: 0;
 }
 
-.portal input,
-.portal select,
-.portal textarea {
+.estate-app input,
+.estate-app select,
+.estate-app textarea {
   font: inherit;
   color: inherit;
 }
 
-.portal input::placeholder,
-.portal textarea::placeholder {
+.estate-app input::placeholder,
+.estate-app textarea::placeholder {
   color: var(--subtle);
 }
 
-.portal .scroll-thin {
+.estate-app .scroll-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
 
-.portal .tabular {
+.estate-app .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-.portal .display {
+.estate-app .display {
   line-height: 1.08;
   letter-spacing: -0.005em;
 }
 
-.portal .eyebrow {
+.estate-app .eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -508,15 +508,15 @@ body {
   }
 }
 
-.portal .rise {
+.estate-app .rise {
   animation: portal-rise 0.4s ease both;
 }
 
-.portal .rise-2 {
+.estate-app .rise-2 {
   animation: portal-rise 0.4s 0.06s ease both;
 }
 
-.portal .rise-3 {
+.estate-app .rise-3 {
   animation: portal-rise 0.4s 0.12s ease both;
 }
 
@@ -530,15 +530,15 @@ body {
   }
 }
 
-.portal .live-dot {
+.estate-app .live-dot {
   animation: portal-pulse 1.8s ease-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce), (max-width: 1023px) {
-  .portal .rise,
-  .portal .rise-2,
-  .portal .rise-3,
-  .portal .live-dot {
+  .estate-app .rise,
+  .estate-app .rise-2,
+  .estate-app .rise-3,
+  .estate-app .live-dot {
     animation: none;
   }
 }
