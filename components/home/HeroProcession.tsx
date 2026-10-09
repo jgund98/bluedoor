@@ -211,7 +211,9 @@ export default function HeroProcession() {
   // page below is drawn up over the plate, the way a flyleaf is pulled
   // over a photograph in a portfolio case. Transform only.
   const { scrollY } = useScroll();
-  const plateY = useTransform(scrollY, [0, 900], box.reduced ? [0, 0] : [0, 380], {
+  // No parallax on phones: a translating full-bleed image inside a clipped stage
+  // reads as the hero shrinking and glitching while the URL bar moves.
+  const plateY = useTransform(scrollY, [0, 900], box.reduced || box.mobile ? [0, 0] : [0, 380], {
     clamp: true,
   });
 

@@ -364,3 +364,15 @@ body {
     animation: none;
   }
 }
+
+/* Phones: no breathe zoom and no grain on full-screen stages. Both cost a
+   full-screen composite every frame and read as flicker while scrolling. */
+@media (max-width: 1023px) {
+  .breathe {
+    animation: none;
+    will-change: auto;
+  }
+  .grain::after {
+    display: none;
+  }
+}
