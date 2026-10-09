@@ -104,24 +104,17 @@ export default function Header() {
             </nav>
           </div>
 
-          {/* far right — the ask on a desk, the way in on a phone */}
-          {/* Over the hero the mark stands between two nav groups and nothing
-              else, so it is balanced by what is around it rather than merely
-              centred in the window — an "Inquire" alone at the far right, with
-              four hundred empty pixels facing it, pulls the whole masthead
-              over. The hero makes that invitation itself, and better. Once the
-              hero is behind you the header takes the job back. */}
+          {/* far right — the way in for clients. It stays over the hero:
+              the hero makes the invitation itself, so the one word up here
+              is the door for people who already have a key. */}
           <Link
-            href="/build-with-bluedoor/"
-            aria-hidden={light}
-            tabIndex={light ? -1 : undefined}
-            className={`label z-10 ml-auto hidden transition-all duration-700 lg:block ${
-              light
-                ? "pointer-events-none translate-x-1 opacity-0"
-                : "text-navy opacity-100 hover:opacity-60"
+            href={nav.clientLogin.href}
+            className={`label z-10 ml-auto hidden items-center gap-3 transition-colors duration-700 lg:inline-flex ${
+              light ? "hero-ink font-semibold text-porcelain hover:text-porcelain/70" : "text-navy hover:opacity-60"
             }`}
           >
-            Inquire
+            {nav.clientLogin.label}
+            <span className={`block h-px w-6 ${light ? "bg-porcelain/60" : "bg-navy/40"}`} />
           </Link>
 
           <button
@@ -296,6 +289,9 @@ function DoorIndex({ onClose }: { onClose: () => void }) {
           >
             {site.instagramHandle}
           </a>
+          <Link href={nav.clientLogin.href} onClick={onClose} className="label text-porcelain/80 transition-colors duration-500 hover:text-porcelain">
+            {nav.clientLogin.label}
+          </Link>
           <button onClick={onClose} className="quiet-link text-porcelain/70">
             Close
           </button>

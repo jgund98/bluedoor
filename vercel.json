@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/login", "destination": "https://bluedoor-estates.vercel.app/login", "permanent": false },
+    { "source": "/login/", "destination": "https://bluedoor-estates.vercel.app/login", "permanent": false }
+  ]
+}
