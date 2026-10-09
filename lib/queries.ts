@@ -326,8 +326,40 @@ export async function getVendorByToken(token: string) {
 
 export async function listServiceTypes(orgId: string) {
   const db = await getDb();
-  const [types, rows] = await Promise.all([db.select().from(s.serviceTypes).where(eq(s.serviceTypes.orgId, orgId)).orderBy(asc(s.serviceTypes.trade), asc(s.serviceTypes.name)), listVisits(orgId)]);
-  return types.map((service) => ({ service, uses: rows.filter((r) => r.visit.serviceTypeId === service.id).length }));
+  const [types, rows, vendors, recurring] = await Promise.all([
+    db.select().from(s.serviceTypes).where(eq(s.serviceTypes.orgId, orgId)).orderBy(asc(s.serviceTypes.trade), asc(s.serviceTypes.name)),
+    listVisits(orgId),
+    db.select().from(s.vendors).where(eq(s.vendors.orgId, orgId)),
+    db.select().from(s.recurringSchedules).where(and(eq(s.recurringSchedules.orgId, orgId), eq(s.recurringSchedules.active, true))),
+  ]);
+  return types.map((service) => ({
+    service,
+    uses: rows.filter((r) => r.visit.serviceTypeId === service.id).length,
+    vendors: vendors.filter((v) => v.trade === service.trade && v.status === "active"),
+    houses: new Set(recurring.filter((r) => r.serviceTypeId === service.id).map((r) => r.estateId)).size,
+  }));
+}
+
+/** Everything around one service: who performs it, where it is set up, and what it can be added to. */
+export async function serviceContext(serviceId: string) {
+  const db = await getDb();
+  const [service] = await db.select().from(s.serviceTypes).where(eq(s.serviceTypes.id, serviceId));
+  if (!service) return null;
+  const d = await dictionaries(service.orgId);
+  const [assignments, recurring, rows] = await Promise.all([
+    db.select().from(s.estateVendors).where(and(eq(s.estateVendors.orgId, service.orgId), eq(s.estateVendors.trade, service.trade))),
+    db.select().from(s.recurringSchedules).where(and(eq(s.recurringSchedules.orgId, service.orgId), eq(s.recurringSchedules.serviceTypeId, serviceId))),
+    listVisits(service.orgId),
+  ]);
+  const vendors = d.vendorList.filter((v) => v.trade === service.trade).sort((a, b) => a.name.localeCompare(b.name));
+  return {
+    service,
+    vendors: vendors.map((v) => ({ vendor: v, houses: assignments.filter((a) => a.vendorId === v.id).length, visits: rows.filter((r) => r.visit.vendorId === v.id && r.visit.serviceTypeId === serviceId).length })),
+    recurring: recurring.map((r) => ({ recurring: r, estate: d.estates.get(r.estateId)!, vendor: d.vendors.get(r.vendorId)! })).filter((r) => r.estate && r.vendor),
+    recent: rows.filter((r) => r.visit.serviceTypeId === serviceId).slice(0, 8),
+    estates: d.estateList.sort((a, b) => a.name.localeCompare(b.name)),
+    assignments,
+  };
 }
 
 export async function getServiceType(id: string) {

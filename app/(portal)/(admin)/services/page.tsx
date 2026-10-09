@@ -11,9 +11,9 @@ export default async function ServicesPage() {
   const rows = (await listServiceTypes(user.orgId)).sort((a, b) => a.service.name.localeCompare(b.service.name));
   return (
     <div>
-      <PageHeader eyebrow="Services" title="Checklists" description="Step-by-step checklists vendors follow on their phone." actions={<Button href="/services/new">New checklist</Button>} />
+      <PageHeader eyebrow="Services" title="Checklists" description="Each checklist belongs to a trade. Vendors in that trade perform it; a house gets it on a schedule with its usual vendor." actions={<Button href="/services/new">New checklist</Button>} />
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {rows.map(({ service, uses }) => (
+        {rows.map(({ service, uses, vendors, houses }) => (
           <Link key={service.id} href={`/services/${service.id}`} className="rounded-2xl border border-border bg-card p-4 shadow-xs transition hover:border-primary/40 hover:shadow-md">
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-semibold">{service.name}</p>
@@ -27,6 +27,10 @@ export default async function ServicesPage() {
                 <Camera className="h-3 w-3" /> {service.minPhotos}+ photos
               </span>
               <span>{uses} visits</span>
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{vendors.length ? vendors.map((v) => v.name).join(", ") : "No vendor yet"}</span>
+              {houses ? ` · set up at ${houses} ${houses === 1 ? "house" : "houses"}` : " · not set up at any house"}
             </p>
             <ol className="mt-3 space-y-1">
               {service.checklist.slice(0, 4).map((c, n) => (
