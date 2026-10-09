@@ -47,3 +47,7 @@ next-env.d.ts
 _*.mjs
 shot97.mjs
 dev-server.log
+
+.data/
+shots*/
+.env*.local

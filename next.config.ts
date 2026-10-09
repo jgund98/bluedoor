@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
+  serverExternalPackages: ["@electric-sql/pglite"],
+  outputFileTracingIncludes: {
+    "/**": ["./drizzle/**"],
+  },
 };
 
 export default nextConfig;

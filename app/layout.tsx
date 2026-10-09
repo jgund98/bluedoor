@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Marcellus, Cormorant_Garamond, Herr_Von_Muellerhoff, Figtree } from "next/font/google";
+import { Marcellus, Cormorant_Garamond, Herr_Von_Muellerhoff, Figtree, Inter } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
-import Header from "@/components/chrome/Header";
-import Footer from "@/components/chrome/Footer";
 
 const marcellus = Marcellus({
   weight: "400",
@@ -26,6 +24,8 @@ const script = Herr_Von_Muellerhoff({
   variable: "--font-script-face",
   display: "swap",
 });
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -93,16 +93,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${cormorant.variable} ${script.variable} ${figtree.variable}`}
+      className={`${marcellus.variable} ${cormorant.variable} ${script.variable} ${figtree.variable} ${inter.variable}`}
     >
       <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
