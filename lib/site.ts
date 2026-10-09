@@ -27,6 +27,7 @@ export const site = {
   team: [
     {
       name: "Lisa Palmisciano",
+      pos: "50% 48%",
       title: "Chief Financial Officer",
       photo: "/images/team-lisa.jpg",
       short:
@@ -35,6 +36,7 @@ export const site = {
     },
     {
       name: "Majic Noone",
+      pos: "50% 22%",
       title: "Director of Operations",
       photo: "/images/team-majic.jpg",
       short:

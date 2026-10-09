@@ -186,7 +186,7 @@ export default function ProcessPage() {
                   <RevealPlate key={m.name} className={i === 1 ? "lg:mt-12" : ""}>
                     <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: "50% 20%" }} />
+                      <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: m.pos }} />
                     </div>
                     <p className="answer mt-3 text-[16px] leading-[1.35] text-ink/80">{m.name}</p>
                     <p className="label mt-1 text-navy/60">{m.title}</p>
