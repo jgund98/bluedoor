@@ -64,9 +64,10 @@ export default function CulturePage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/siobhan-site.jpg"
-                    alt="A stair under construction"
+                    alt="Siobhan on a stair under construction"
                     loading="lazy"
-                    style={{ objectPosition: "52% 50%" }}
+                    // a 3:2 frame in a 4:5 slot keeps only the middle; she stands at the right edge
+                    style={{ objectPosition: "92% 50%" }}
                   />
                 </RevealPlate>
               </div>
