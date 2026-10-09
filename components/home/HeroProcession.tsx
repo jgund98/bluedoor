@@ -418,25 +418,7 @@ export default function HeroProcession() {
           compositor sets them — eyebrow, the roman line, its italic answer,
           then the way in. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-[64px] px-5 pb-8 text-left lg:bottom-[76px] lg:px-12 lg:pb-12">
-        {/* The trade and the place, set as a masthead credit: what she does
-            and where she does it, before the claim she makes about it. On a
-            desk they sit on one line with a rule between them. A phone has
-            no room for that, so they become two credit lines and the rule
-            goes — left to wrap, it strands itself at the end of the first
-            line and reads as a stray dash. */}
-        <motion.span
-          {...setting(0)}
-          className="hero-ink flex flex-col items-start gap-y-[6px] text-porcelain lg:flex-row lg:items-center lg:gap-x-4 lg:gap-y-0"
-        >
-          {/* Tracked caps at 10px over a sunlit facade are the weakest thing
-              on the screen. The answer is weight on the letter, not more
-              shadow under it and not a darker picture. */}
-          <span className="label label-sheet font-semibold">{written.heroEyebrow}</span>
-          <span className="hidden h-px w-8 shrink-0 bg-porcelain/55 lg:block" />
-          <span className="label label-sheet font-semibold">{written.heroPlace}</span>
-        </motion.span>
-
-        <h1 className="hero-ink mt-6 text-porcelain lg:mt-7">
+        <h1 className="hero-ink text-porcelain">
           <motion.span
             {...setting(1)}
             className="display block text-[clamp(24px,7.8vw,44px)] tracking-[-0.018em] lg:text-[clamp(50px,4.3vw,74px)]"
@@ -460,8 +442,9 @@ export default function HeroProcession() {
             href="/build-with-bluedoor/"
             className="group pointer-events-auto mt-8 inline-flex items-center lg:mt-10"
           >
-            <span className="label label-sheet hero-ink whitespace-nowrap font-semibold text-porcelain transition-transform duration-[900ms] ease-out group-hover:translate-x-[3px]">
+            <span className="display hero-ink relative whitespace-nowrap text-[19px] text-porcelain transition-transform duration-[900ms] ease-out group-hover:translate-x-[3px] lg:text-[22px]">
               {written.inviteCta}
+              <span className="absolute -bottom-[5px] left-0 h-px w-full bg-porcelain/80" />
             </span>
             <span className="relative ml-5 block h-px w-14 overflow-hidden lg:ml-7 lg:w-24">
               <span className="absolute inset-0 bg-porcelain/40" />
@@ -506,23 +489,15 @@ export default function HeroProcession() {
 
         <div className="relative flex h-full items-center justify-between px-5 lg:px-12">
           <span className="relative overflow-visible text-left">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={shown}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: 0.45, ease: [0.19, 1, 0.22, 1] }}
-                className="label label-sheet block whitespace-nowrap text-ink/50"
-              >
-                {/* A caption under a full-page photograph names the picture.
-                    On a phone the numeral is the part worth dropping — the
-                    marks already say which plate this is — so the caption
-                    itself survives instead. */}
-                <span className="hidden md:inline">Plate {NUMERALS[shown]} — </span>
-                {PLATES[seq[shown]].caption}
-              </motion.span>
-            </AnimatePresence>
+            {/* The trade and the place. They used to sit on the photograph
+                above the headline, where tracked caps over a bright room
+                were the hardest thing on the screen to read. On paper they
+                read at a glance. */}
+            <span className="label block text-ink/60">
+              {written.heroEyebrow}
+              <span className="mx-2 hidden text-ink/30 sm:inline">—</span>
+              <span className="block sm:inline">{written.heroPlace}</span>
+            </span>
           </span>
 
           {/* The marks keep the clock. The lit one is a rule that fills as
