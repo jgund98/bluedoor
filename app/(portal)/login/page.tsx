@@ -28,11 +28,7 @@ export default async function LoginPage() {
         <p className="text-sm text-subtle">Vendors and homeowners receive private links by text or email. They do not sign in here.</p>
       </section>
       <section className="relative hidden lg:block">
-        <Image src="/estates/estate-palms.jpg" alt="" fill priority className="object-cover" sizes="60vw" />
-        <div className="absolute inset-0 bg-gradient-to-t from-abyss/70 via-abyss/10 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-12 text-porcelain">
-          <p className="eyebrow text-porcelain/70">Casa Palma · Manalapan</p>
-        </div>
+        <Image src="/images/door-arched.jpg" alt="" fill priority className="object-cover" sizes="60vw" style={{ objectPosition: "50% 45%" }} />
       </section>
     </div>
   );

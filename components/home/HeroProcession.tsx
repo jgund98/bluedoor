@@ -49,13 +49,13 @@ const PLATES: readonly Plate[] = [
     caption: "Mediterranean elevation, oceanfront",
   },
   {
-    // Her note: the travertine stair hall reads cold. The stone stair to the
-    // garden door is warmer and still a staircase; it also opens the phone
-    // sequence, being the one portrait composition.
-    src: "/images/hall-door.jpg",
-    pos: "50% 60%",
+    // Her note: the stair halls read cold, and she kept asking for "the aerial".
+    // This is it: the oceanfront house from above, the most colour in the set.
+    // Desktop only; a 16:9 drone shot cropped to a phone goes soft.
+    src: "/images/aerial-oceanfront.jpg",
+    pos: "50% 55%",
     posM: "50% 50%",
-    caption: "Stair to the garden door",
+    caption: "Oceanfront, from above",
   },
   {
     src: "/images/kitchen-brass.jpg",
@@ -91,7 +91,7 @@ const ALL = [0, 1, 2, 3, 4] as const;
  * wide that slice is 386 native pixels doing the work of 780: the one plate
  * in the set that cannot be sharp on a phone.
  */
-const MOBILE = [1, 2, 4, 3] as const;
+const MOBILE = [2, 4, 3] as const;
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
 
@@ -346,6 +346,7 @@ export default function HeroProcession() {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
+                    decoding="async"
                     src={plate.src}
                     alt={plate.caption}
                     className="absolute inset-0 h-full w-full object-cover"

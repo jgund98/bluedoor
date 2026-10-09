@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { and, desc, eq, inArray, asc } from "drizzle-orm";
 import { getDb, schema as s } from "./db";
 import type {
@@ -30,18 +31,20 @@ export type VisitRow = {
   photos: Photo[];
 };
 
-export async function getOrg(): Promise<Organization> {
+/* Reads are memoized per request with React cache(): the shell and the page
+   both ask for the same tables, and a page may ask twice. One trip each. */
+export const getOrg = cache(async (): Promise<Organization> => {
   const db = await getDb();
   const [org] = await db.select().from(s.organizations).limit(1);
   return org;
-}
+});
 
 export async function listUsers(orgId: string): Promise<User[]> {
   const db = await getDb();
   return db.select().from(s.users).where(eq(s.users.orgId, orgId)).orderBy(asc(s.users.createdAt));
 }
 
-async function dictionaries(orgId: string) {
+const dictionaries = cache(async (orgId: string) => {
   const db = await getDb();
   const [estates, vendors, services] = await Promise.all([
     db.select().from(s.estates).where(eq(s.estates.orgId, orgId)),
@@ -56,7 +59,7 @@ async function dictionaries(orgId: string) {
     vendorList: vendors,
     serviceList: services,
   };
-}
+});
 
 async function hydrate(orgId: string, visitRows: Visit[]): Promise<VisitRow[]> {
   if (!visitRows.length) return [];
@@ -81,7 +84,19 @@ async function hydrate(orgId: string, visitRows: Visit[]): Promise<VisitRow[]> {
     .filter((r): r is VisitRow => Boolean(r));
 }
 
+const allVisitRows = cache(async (orgId: string) => {
+  const db = await getDb();
+  return db.select().from(s.visits).where(eq(s.visits.orgId, orgId)).orderBy(desc(s.visits.scheduledFor));
+});
+
+/** Every visit in the org, hydrated once per request. Filters run in memory. */
+const hydrateAll = cache(async (orgId: string) => hydrate(orgId, await allVisitRows(orgId)));
+
 export async function listVisits(orgId: string, opts?: { status?: string[]; estateId?: string; vendorId?: string }): Promise<VisitRow[]> {
+  if (!opts) return hydrateAll(orgId);
+  if (!opts.status && (opts.estateId || opts.vendorId)) {
+    return (await hydrateAll(orgId)).filter((r) => (!opts.estateId || r.visit.estateId === opts.estateId) && (!opts.vendorId || r.visit.vendorId === opts.vendorId));
+  }
   const db = await getDb();
   const conds = [eq(s.visits.orgId, orgId)];
   if (opts?.status?.length) conds.push(inArray(s.visits.status, opts.status));

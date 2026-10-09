@@ -228,13 +228,22 @@ export async function seed(db: DB) {
     { estate: lakeway, vendorTrade: "Roof", service: "Storm preparation", day: 5, hour: 9, status: "requested", requestedBy: "office", requestNote: "Tom asked for a roof look before the next front comes through." },
   ];
 
-  for (const vs of visitSeeds) {
+  // Everything below is buffered and written in one statement per table.
+  // The reset runs on every sign-in, so round trips are the whole cost.
+  type Ins<T extends { $inferInsert: unknown }> = T["$inferInsert"];
+  const bufActivity: Ins<typeof s.activity>[] = [];
+  const bufNotes: Ins<typeof s.notifications>[] = [];
+  const bufReports: Ins<typeof s.reports>[] = [];
+  const bufPhotos: Ins<typeof s.photos>[] = [];
+  const bufResponses: Ins<typeof s.responses>[] = [];
+  const bufTasks: Ins<typeof s.tasks>[] = [];
+
+  const prepared = visitSeeds.map((vs) => {
     const vendor = V[vs.vendorTrade];
     const service = S[vs.service];
     const scheduledFor = at(vs.day, vs.hour);
     const duration = vs.durationMin ?? service.durationMin;
     const done = ["sent", "approved", "submitted", "closed"].includes(vs.status);
-    // Realistic variation: most vendors arrive within minutes, one window company runs late.
     const seq = visitSeeds.indexOf(vs);
     const lateMin = vs.vendorTrade === "Windows" ? 48 : vs.vendorTrade === "Landscape" && seq % 2 ? 24 : [3, 7, 11, 2, 15, 6, 9][seq % 7];
     const lagMin = vs.vendorTrade === "Pool" ? [2, 3, 5][seq % 3] : vs.vendorTrade === "HVAC" ? 12 : [4, 8, 6, 18, 5][seq % 5];
@@ -242,10 +251,13 @@ export async function seed(db: DB) {
     const completedAt = done ? new Date(arrivedAt!.getTime() + duration * 60000) : null;
     const submittedAt = done ? new Date(completedAt!.getTime() + lagMin * 60000) : null;
     const approvedAt = vs.status === "sent" ? new Date(submittedAt!.getTime() + [38, 12, 55, 21][seq % 4] * 60000) : null;
+    return { vs, vendor, service, scheduledFor, done, arrivedAt, completedAt, submittedAt, approvedAt };
+  });
 
-    const [visit] = await db
-      .insert(s.visits)
-      .values({
+  const visitRows = await db
+    .insert(s.visits)
+    .values(
+      prepared.map(({ vs, vendor, service, scheduledFor, arrivedAt, completedAt, submittedAt, approvedAt }) => ({
         orgId,
         estateId: vs.estate.id,
         vendorId: vendor.id,
@@ -261,26 +273,23 @@ export async function seed(db: DB) {
         submittedAt,
         approvedAt,
         sentAt: approvedAt,
-      })
-      .returning();
+      })),
+    )
+    .returning();
 
-    await db.insert(s.activity).values({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "scheduled", message: `${service.name} scheduled with ${vendor.name}`, actor: vs.requestedBy === "owner" ? "owner" : "office", createdAt: new Date(scheduledFor.getTime() - 3 * 86400000) });
+  prepared.forEach((pr, idx) => {
+    const { vs, vendor, service, scheduledFor, done, arrivedAt, completedAt, submittedAt, approvedAt } = pr;
+    const visit = visitRows[idx];
+    bufActivity.push({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "scheduled", message: `${service.name} scheduled with ${vendor.name}`, actor: vs.requestedBy === "owner" ? "owner" : "office", createdAt: new Date(scheduledFor.getTime() - 3 * 86400000) });
 
-    // Dispatch text logged for everything that was scheduled
     if (vs.status !== "requested") {
       const body = vendorDispatchSms({ orgName: org.name, vendorContact: vendor.contactName ?? vendor.name, estateName: vs.estate.name, address: `${vs.estate.address1}, ${vs.estate.city}`, scheduledFor, window: vs.window ?? "morning", serviceName: service.name, baseUrl, vendorToken: visit.vendorToken });
       const when = new Date(scheduledFor.getTime() - 15 * 3600000);
-      if (vendor.notifySms && vendor.phone) {
-        await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "vendor", channel: "sms", to: vendor.phone, toName: vendor.contactName, body, status: "sent", ruleKey: "vendor_dispatch", createdAt: when });
-      }
-      if (vendor.notifyEmail && vendor.email) {
-        await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "vendor", channel: "email", to: vendor.email, toName: vendor.contactName, subject: `${service.name} at ${vs.estate.name}`, body, status: "sent", ruleKey: "vendor_dispatch", createdAt: when });
-      }
+      if (vendor.notifySms && vendor.phone) bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "vendor", channel: "sms", to: vendor.phone, toName: vendor.contactName, body, status: "sent", ruleKey: "vendor_dispatch", createdAt: when });
+      if (vendor.notifyEmail && vendor.email) bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "vendor", channel: "email", to: vendor.email, toName: vendor.contactName, subject: `${service.name} at ${vs.estate.name}`, body, status: "sent", ruleKey: "vendor_dispatch", createdAt: when });
     }
 
-    if (arrivedAt) {
-      await db.insert(s.activity).values({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "arrived", message: `${vendor.name} checked in on site`, actor: "vendor", createdAt: arrivedAt });
-    }
+    if (arrivedAt) bufActivity.push({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "arrived", message: `${vendor.name} checked in on site`, actor: "vendor", createdAt: arrivedAt });
 
     if (done) {
       const attention = vs.attention ?? "none";
@@ -290,19 +299,18 @@ export async function seed(db: DB) {
         checklist: service.checklist, items: vs.items ?? [], vendorNote: vs.note ?? null, attention, attentionNote: vs.attentionNote ?? null,
       });
       const decision = defaultDecision(attention, vs.attentionNote ?? null);
-      await db.insert(s.reports).values({
+      bufReports.push({
         visitId: visit.id, items: vs.items ?? [], vendorNote: vs.note ?? null, attention, attentionNote: vs.attentionNote ?? null,
         recapDraft: recap, recapFinal: vs.status === "sent" ? recap : null, ownerAction,
         decisionPrompt: decision.prompt || null, decisionOptions: decision.options, approvedBy: vs.status === "sent" ? lauren.name : null,
         createdAt: submittedAt!, updatedAt: approvedAt ?? submittedAt!,
       });
-      const photoRows = (vs.photos ?? []).map((p, n) => ({ visitId: visit.id, url: p.url, caption: p.caption, sort: n, createdAt: completedAt! }));
-      if (photoRows.length) await db.insert(s.photos).values(photoRows);
-      await db.insert(s.activity).values({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "filed", message: `${vendor.name} filed the report${attention === "urgent" ? " and flagged it urgent" : attention === "decision" ? " with a decision for the owner" : ""}`, actor: "vendor", createdAt: submittedAt! });
+      (vs.photos ?? []).forEach((ph, n) => bufPhotos.push({ visitId: visit.id, url: ph.url, caption: ph.caption, sort: n, createdAt: completedAt! }));
+      bufActivity.push({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "filed", message: `${vendor.name} filed the report${attention === "urgent" ? " and flagged it urgent" : attention === "decision" ? " with a decision for the owner" : ""}`, actor: "vendor", createdAt: submittedAt! });
       if (attention === "urgent") {
-        await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "office", channel: "sms", to: siobhan.phone!, toName: siobhan.name, body: `${org.name}: URGENT at ${vs.estate.name}. ${vendor.name} flagged: ${vs.attentionNote} ${baseUrl}/visits/${visit.id}`, status: "sent", ruleKey: "urgent_to_principal", createdAt: submittedAt! });
+        bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "office", channel: "sms", to: siobhan.phone!, toName: siobhan.name, body: `${org.name}: URGENT at ${vs.estate.name}. ${vendor.name} flagged: ${vs.attentionNote} ${baseUrl}/visits/${visit.id}`, status: "sent", ruleKey: "urgent_to_principal", createdAt: submittedAt! });
       }
-      await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "office", channel: "email", to: lauren.email, toName: lauren.name, subject: `Report filed: ${service.name} at ${vs.estate.name}`, body: `${vendor.name} filed a report for ${vs.estate.name}. Review it: ${baseUrl}/visits/${visit.id}`, status: "sent", ruleKey: "report_filed_office", createdAt: submittedAt! });
+      bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "office", channel: "email", to: lauren.email, toName: lauren.name, subject: `Report filed: ${service.name} at ${vs.estate.name}`, body: `${vendor.name} filed a report for ${vs.estate.name}. Review it: ${baseUrl}/visits/${visit.id}`, status: "sent", ruleKey: "report_filed_office", createdAt: submittedAt! });
 
       if (vs.status === "sent") {
         const contact = primary(vs.estate.id);
@@ -310,22 +318,25 @@ export async function seed(db: DB) {
           baseUrl, orgName: org.name, orgPhone: org.phone, estateName: vs.estate.name, serviceName: service.name, vendorName: vendor.name,
           completedAt, recap, ownerAction, decisionPrompt: decision.prompt, decisionOptions: decision.options, photos: vs.photos ?? [], ownerToken: visit.ownerToken, contactName: contact.name,
         };
-        await db.insert(s.activity).values({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "approved", message: `${lauren.name} approved the report and it was sent to ${contact.name}`, actor: "office", createdAt: approvedAt! });
-        if (contact.smsOptIn && contact.phone) {
-          await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "owner", channel: "sms", to: contact.phone, toName: contact.name, body: ownerSms(input), status: "sent", ruleKey: "approved_send_owner", createdAt: approvedAt! });
-        }
-        if (contact.emailOptIn && contact.email) {
-          await db.insert(s.notifications).values({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "owner", channel: "email", to: contact.email, toName: contact.name, subject: ownerEmailSubject(input), body: recap, html: ownerEmailHtml(input), status: "sent", ruleKey: "approved_send_owner", createdAt: approvedAt! });
-        }
+        bufActivity.push({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "approved", message: `${lauren.name} approved the report and it was sent to ${contact.name}`, actor: "office", createdAt: approvedAt! });
+        if (contact.smsOptIn && contact.phone) bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "owner", channel: "sms", to: contact.phone, toName: contact.name, body: ownerSms(input), status: "sent", ruleKey: "approved_send_owner", createdAt: approvedAt! });
+        if (contact.emailOptIn && contact.email) bufNotes.push({ orgId, visitId: visit.id, estateId: vs.estate.id, audience: "owner", channel: "email", to: contact.email, toName: contact.name, subject: ownerEmailSubject(input), body: recap, html: ownerEmailHtml(input), status: "sent", ruleKey: "approved_send_owner", createdAt: approvedAt! });
         if (vs.response) {
           const respondedAt = new Date(approvedAt!.getTime() + 52 * 60000);
-          await db.insert(s.responses).values({ visitId: visit.id, contactId: contact.id, channel: "sms", choice: vs.response.choice, message: vs.response.message ?? null, createdAt: respondedAt });
-          await db.insert(s.activity).values({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "replied", message: `${contact.name} replied: ${vs.response.choice}`, actor: "owner", createdAt: respondedAt });
-          await db.insert(s.tasks).values({ orgId, estateId: vs.estate.id, visitId: visit.id, title: `Order guest bath linens for ${vs.estate.name}`, detail: `${contact.name} approved the replacement set (about $640). Order from the usual supplier and schedule delivery with Priya.`, status: "done", source: "owner_reply", createdAt: respondedAt, doneAt: new Date(respondedAt.getTime() + 3 * 3600000) });
+          bufResponses.push({ visitId: visit.id, contactId: contact.id, channel: "sms", choice: vs.response.choice, message: vs.response.message ?? null, createdAt: respondedAt });
+          bufActivity.push({ orgId, estateId: vs.estate.id, visitId: visit.id, kind: "replied", message: `${contact.name} replied: ${vs.response.choice}`, actor: "owner", createdAt: respondedAt });
+          bufTasks.push({ orgId, estateId: vs.estate.id, visitId: visit.id, title: `Order guest bath linens for ${vs.estate.name}`, detail: `${contact.name} approved the replacement set (about $640). Order from the usual supplier and schedule delivery with Priya.`, status: "done", source: "owner_reply", createdAt: respondedAt, doneAt: new Date(respondedAt.getTime() + 3 * 3600000) });
         }
       }
     }
-  }
+  });
+
+  if (bufReports.length) await db.insert(s.reports).values(bufReports);
+  if (bufPhotos.length) await db.insert(s.photos).values(bufPhotos);
+  if (bufResponses.length) await db.insert(s.responses).values(bufResponses);
+  if (bufNotes.length) await db.insert(s.notifications).values(bufNotes);
+  if (bufActivity.length) await db.insert(s.activity).values(bufActivity);
+  if (bufTasks.length) await db.insert(s.tasks).values(bufTasks);
 
   // Open tasks
   await db.insert(s.tasks).values([
