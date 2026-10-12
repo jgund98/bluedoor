@@ -79,7 +79,19 @@ const PLATES: readonly Plate[] = [
     posM: "49% 50%",
     caption: "Great room, framed to the Atlantic",
   },
+  {
+    // phones only: the brand's own image, and a true portrait original
+    src: "/images/door-arched.jpg",
+    pos: "50% 50%",
+    posM: "50% 50%",
+    caption: "Arched entry, bougainvillea in season",
+  },
 ];
+
+/** Every plate is built from her full-resolution original. A phone shows a
+ *  tall slice of a wide photograph, so phones load a slice cut for them
+ *  (name-m.jpg, 2600px tall) instead of stretching the desktop file. */
+const phoneSrc = (src: string) => src.replace(/\.jpg$/, "-m.jpg");
 
 const ALL = [0, 1, 2, 3, 4] as const;
 
@@ -91,7 +103,7 @@ const ALL = [0, 1, 2, 3, 4] as const;
  * wide that slice is 386 native pixels doing the work of 780: the one plate
  * in the set that cannot be sharp on a phone.
  */
-const MOBILE = [2, 4, 3] as const;
+const MOBILE = [0, 2, 5, 3] as const;
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
 
@@ -213,7 +225,7 @@ export default function HeroProcession() {
   // the next plate is developed before it is needed
   useEffect(() => {
     const img = new Image();
-    img.src = PLATES[seq[(current + 1) % seq.length]].src;
+    { const nx = PLATES[seq[(current + 1) % seq.length]].src; img.src = box.mobile ? phoneSrc(nx) : nx; }
   }, [current, seq]);
 
   // As the page begins to scroll, the photograph moves at half speed — the
@@ -260,7 +272,7 @@ export default function HeroProcession() {
       animate(grade, target, { duration: 0.9, ease: [0.4, 0, 0.2, 1] });
     };
 
-    img.src = p.src;
+    img.src = box.mobile ? phoneSrc(p.src) : p.src;
     if (img.complete) meter();
     else img.addEventListener("load", meter, { once: true });
     return () => img.removeEventListener("load", meter);
@@ -278,7 +290,7 @@ export default function HeroProcession() {
     img.addEventListener("load", raise, { once: true });
     // a picture that will not load must not hold the page shut
     img.addEventListener("error", raise, { once: true });
-    img.src = PLATES[seq[0]].src;
+    img.src = box.mobile ? phoneSrc(PLATES[seq[0]].src) : PLATES[seq[0]].src;
     if (img.complete) raise();
     const bell = setTimeout(raise, 2600);
     return () => {
@@ -347,7 +359,7 @@ export default function HeroProcession() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     decoding="async"
-                    src={plate.src}
+                    src={box.mobile ? phoneSrc(plate.src) : plate.src}
                     alt={plate.caption}
                     className="absolute inset-0 h-full w-full object-cover"
                     fetchPriority="high"
@@ -366,7 +378,7 @@ export default function HeroProcession() {
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={next.src}
+                        src={box.mobile ? phoneSrc(next.src) : next.src}
                         alt=""
                         className="absolute inset-0 h-full w-full object-cover"
                         style={{

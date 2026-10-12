@@ -296,7 +296,6 @@ export const gallery: readonly Plate[] = [
   { src: "/images/door-arched.jpg", caption: "Arched entry, bougainvillea in season", shape: "portrait"  },
   { src: "/images/loggia-ocean.jpg", caption: "Loggia under a cypress ceiling", shape: "landscape"  },
   { src: "/images/hall-door.jpg", caption: "Stair to the garden door", shape: "portrait" , pos: "50% 45%" },
-  { src: "/images/kitchen-scallop.jpg", caption: "Kitchen in sea glass and brass", shape: "landscape"  },
   { src: "/images/living-coastal.jpg", caption: "Living room, natural light held all day", shape: "landscape"  },
   { src: "/images/estate-bougainvillea.jpg", caption: "Entry court in bougainvillea", shape: "wide"  },
   { src: "/images/entry-hall.jpg", caption: "Entry hall in stone and glass", shape: "portrait" , pos: "50% 45%" },
@@ -319,6 +318,7 @@ export const gallery: readonly Plate[] = [
   { src: "/images/gate-pineapple.jpg", caption: "Lattice gate and pineapple finials", shape: "portrait" , pos: "50% 40%" },
   { src: "/images/living-ocean.jpg", caption: "Seating room open to the terrace", shape: "landscape"  },
   { src: "/images/house-shingle.jpg", caption: "Shingled elevation, in town", shape: "landscape"  },
+  { src: "/images/detail-stone-column.jpg", caption: "Cast column, hand-finished", shape: "portrait" },
   { src: "/images/aerial-oceanfront.jpg", caption: "Oceanfront, from above", shape: "wide"  },
 ];
 
