@@ -25,7 +25,7 @@ export default function Inquiry() {
               Thank you — your note has been received.
             </p>
             <p className="prose-lux mx-auto mt-4 max-w-[380px] text-[16px]">
-              Siobhan reads every inquiry herself. You will hear back from the studio shortly.
+              Every inquiry is read personally. You will hear back from the studio shortly.
             </p>
             <button onClick={() => setSent(false)} className="quiet-link mt-9 inline-block text-navy">
               Write another

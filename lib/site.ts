@@ -187,9 +187,9 @@ export const site = {
     siobhanBio1:
       "Bluedoor is led by Siobhan Zerilla, who came to construction after graduate school and learned the industry from its foundations up. That grounding still shapes how the company works: a comprehensive understanding of construction operations, an eye for inefficiency, and a habit of fixing what others leave alone.",
     siobhanBio2:
-      "With decades of experience, Siobhan brings a unique combination of expertise in business management, project organization, and exceptional communication skills. Her meticulous attention to detail and commitment to high-quality standards are evident in every project, both in the finished product and throughout the construction process. She emphasizes maintaining a clean and organized job site, believing it fosters clarity and efficiency.",
+      "Decades of experience inform how Bluedoor runs: business management, project organization, and clear communication with every client and trade. The same attention to detail shows in the finished home and throughout the build, starting with a clean and organized job site that keeps every team clear and efficient.",
     siobhanBio3:
-      "Siobhan's portfolio reflects her versatility and ability to adapt to diverse client needs, from large-scale builds to intricate renovations. Known for her creative problem-solving and ability to deliver innovative solutions to complex challenges, she has earned a reputation for excellence in execution and client satisfaction.",
+      "The portfolio spans large-scale builds and intricate renovations, each shaped around the client it was built for. Creative problem-solving on complex challenges has earned the firm a reputation for excellence in execution and client satisfaction.",
     siobhanBio4:
       "The firm prioritizes precision, professionalism, and a collaborative approach, ensuring each project is completed with unmatched craftsmanship and care.",
     officeLabel: "The Office",
