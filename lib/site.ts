@@ -185,7 +185,7 @@ export const site = {
     supervision:
       "Project management and site supervision are key factors in our ability to deliver successful projects. We take these components seriously and do not leave projects unsupervised. Daily monitoring of the site, subcontractors, field conditions, plans, communication, security, and cleanliness are included in every project we execute. Attention to detail is a top priority. We typically have 3–4 project managers on staff at all times to effectively manage, monitor and execute the day to day activities on site.",
     siobhanBio1:
-      "Bluedoor is led by Siobhan Zerilla, who came to construction after graduate school and learned the industry from its foundations up. Her starting point was as a laborer, and that grounding still shapes how the company works: a comprehensive understanding of construction operations, an eye for inefficiency, and a habit of fixing what others leave alone.",
+      "Bluedoor is led by Siobhan Zerilla, who came to construction after graduate school and learned the industry from its foundations up. That grounding still shapes how the company works: a comprehensive understanding of construction operations, an eye for inefficiency, and a habit of fixing what others leave alone.",
     siobhanBio2:
       "With decades of experience, Siobhan brings a unique combination of expertise in business management, project organization, and exceptional communication skills. Her meticulous attention to detail and commitment to high-quality standards are evident in every project, both in the finished product and throughout the construction process. She emphasizes maintaining a clean and organized job site, believing it fosters clarity and efficiency.",
     siobhanBio3:

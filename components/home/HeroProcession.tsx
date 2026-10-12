@@ -94,7 +94,8 @@ const PLATES: readonly Plate[] = [
  *  (name-m.jpg, 2600px tall) instead of stretching the desktop file. */
 const phoneSrc = (src: string) => src.replace(/\.jpg$/, "-m.jpg");
 
-const ALL = [0, 1, 2, 3, 4] as const;
+// Opens on the kitchen with the blue pendants, at her request.
+const ALL = [2, 0, 1, 3, 4] as const;
 
 /**
  * The phone runs its own edit. It opens on the stair hall — symmetric, and
@@ -104,7 +105,7 @@ const ALL = [0, 1, 2, 3, 4] as const;
  * wide that slice is 386 native pixels doing the work of 780: the one plate
  * in the set that cannot be sharp on a phone.
  */
-const MOBILE = [0, 2, 5, 3] as const;
+const MOBILE = [2, 0, 5, 3] as const;
 
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"] as const;
 
