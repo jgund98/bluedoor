@@ -73,11 +73,11 @@ const PLATES: readonly Plate[] = [
     caption: "Colonial elevation with louvered shutters",
   },
   {
-    src: "/images/greatroom.jpg",
-    pos: "50% 45%",
-    // on the window and the water beyond it
-    posM: "49% 50%",
-    caption: "Great room, framed to the Atlantic",
+    // the pineapple gate in bougainvillea, built from her 8688px original
+    src: "/images/bougainvillea-hero.jpg",
+    pos: "50% 70%",
+    posM: "50% 50%",
+    caption: "Garden gate, bougainvillea in season",
   },
   {
     // phones only: the brand's own image, and a true portrait original
