@@ -50,13 +50,12 @@ const PLATES: readonly Plate[] = [
     caption: "Mediterranean elevation, oceanfront",
   },
   {
-    // Her note: the stair halls read cold, and she kept asking for "the aerial".
-    // This is it: the oceanfront house from above, the most colour in the set.
-    // Desktop only; a 16:9 drone shot cropped to a phone goes soft.
-    src: "/images/aerial-oceanfront.jpg",
-    pos: "50% 55%",
+    // The stone loggia at dusk: warm, and the lawn and shadowed columns at
+    // lower left give the headline a dark field to sit on. Desktop only.
+    src: "/images/loggia-stone.jpg",
+    pos: "50% 62%",
     posM: "50% 50%",
-    caption: "Oceanfront, from above",
+    caption: "Coral stone loggia at dusk",
   },
   {
     src: "/images/kitchen-brass.jpg",
