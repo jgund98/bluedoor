@@ -44,7 +44,8 @@ type Plate = {
 const PLATES: readonly Plate[] = [
   {
     src: "/images/estate-palms-hero.jpg",
-    pos: "50% 50%",
+    // anchored low so the arcade and terrace clear the bottom band under the drift
+    pos: "50% 88%",
     posM: "50% 50%",
     caption: "Mediterranean elevation, oceanfront",
   },
