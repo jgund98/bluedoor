@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { site, written } from "@/lib/site";
 import { Reveal } from "@/components/motion";
+import SwipeHint from "@/components/SwipeHint";
 
 /**
  * The tearsheets are scans, and some are very small — the Luxury Home cover
@@ -34,6 +35,18 @@ export default function Press() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
+  // The sheets drift against the scroll on a desk only. On a phone they sit
+  // in a sideways strip, and drifting there pushed them past the strip's
+  // edge, which is what let a downward swipe catch on it.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const read = () => setWide(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
+
   return (
     <section ref={ref} className="relative overflow-hidden bg-mist pb-20 pt-20 grain lg:pb-28 lg:pt-24">
       <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
@@ -61,7 +74,7 @@ export default function Press() {
         </div>
 
         {/* the tearsheets, at the size they were printed */}
-        <div className="mt-14 flex snap-x snap-mandatory items-end gap-7 overflow-x-auto pb-6 lg:mt-20 lg:gap-12 lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="swipe-strip mt-14 flex snap-x snap-proximity items-end gap-7 overflow-x-auto pb-6 lg:mt-20 lg:gap-12 lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {site.publications.map((pub, i) => (
             <Sheet
               key={pub.title}
@@ -69,9 +82,11 @@ export default function Press() {
               set={SET[i % SET.length]}
               i={i}
               progress={scrollYProgress}
+              wide={wide}
             />
           ))}
         </div>
+        <SwipeHint className="mt-1" />
       </div>
     </section>
   );
@@ -82,18 +97,20 @@ function Sheet({
   set,
   i,
   progress,
+  wide,
 }: {
   pub: (typeof site.publications)[number];
   set: (typeof SET)[number];
   i: number;
   progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  wide: boolean;
 }) {
   const y = useTransform(progress, (v) => (v - 0.5) * set.float);
 
   return (
     <motion.div
       className="group shrink-0 snap-center"
-      style={{ y }}
+      style={{ y: wide ? y : 0 }}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}

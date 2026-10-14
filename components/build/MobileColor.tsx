@@ -18,6 +18,7 @@
 
 import { Reveal, RevealPlate } from "@/components/motion";
 import { srcSetFor } from "@/lib/img";
+import SwipeHint from "@/components/SwipeHint";
 
 /** A door, held open, before the page asks for anything. */
 export function Threshold() {
@@ -67,7 +68,7 @@ export function Ribbon() {
       </div>
 
       <div
-        className="mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="swipe-strip mt-6 flex snap-x snap-proximity gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {RIBBON.map((r) => (
@@ -82,6 +83,7 @@ export function Ribbon() {
         {/* a hair of run-out so the last plate can sit clear of the edge */}
         <span aria-hidden className="w-1 shrink-0" />
       </div>
+      <SwipeHint className="mx-5 mt-3" />
     </Reveal>
   );
 }

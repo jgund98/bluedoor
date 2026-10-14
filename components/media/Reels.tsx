@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
 import { Reveal } from "@/components/motion";
+import SwipeHint from "@/components/SwipeHint";
 
 const DROP = [0, 46, 14, 28, 0, 40];
 
@@ -46,7 +47,7 @@ export default function Reels() {
             `hidden` is still a <video> in the document, and a display:none
             video goes on playing its audio. Two copies of a clip unmuting
             together is two soundtracks a few hundred milliseconds apart. */}
-        <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0 xl:gap-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="swipe-strip mt-10 flex snap-x snap-proximity gap-4 overflow-x-auto pb-2 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0 xl:gap-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {site.reels.map((r, i) => (
             <div
               key={r.src}
@@ -61,6 +62,7 @@ export default function Reels() {
             </div>
           ))}
         </div>
+        <SwipeHint className="mt-3" />
       </div>
     </section>
   );

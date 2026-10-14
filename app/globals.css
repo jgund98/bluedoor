@@ -569,3 +569,30 @@ body {
     }
   }
 }
+
+/* Sideways strips on phones (10-14). A strip that scrolls on x would also
+   scroll on y the moment anything in it pokes past its edge (a tilted
+   tearsheet, a shadow, a drifting watercolour), so a downward swipe that
+   started on it moved the strip instead of the page. y is shut, the strip
+   stops at its ends instead of passing the gesture on (no accidental
+   back-swipe), and both pans stay native. */
+@media (max-width: 1023.98px) {
+  /* phones and tablets only: on a desk these are open hangs, not strips */
+  .swipe-strip {
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+  }
+}
+
+/* the hint under a strip: the word bows out once the strip has been moved */
+.swipe-word { transition: opacity 0.7s ease; }
+.swipe-word[data-moved] { opacity: 0; }
+@keyframes swipe-nudge {
+  0%, 60%, 100% { transform: translateX(0); }
+  30% { transform: translateX(5px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .swipe-arrow { animation: swipe-nudge 2.6s ease-in-out infinite; }
+  .swipe-word[data-moved] .swipe-arrow { animation: none; }
+}

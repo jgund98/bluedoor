@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { written } from "@/lib/site";
 import { Reveal } from "@/components/motion";
+import SwipeHint from "@/components/SwipeHint";
 
 /** Her own watercolors, hung from a picture rail. */
 const HANGS = [
@@ -85,7 +86,7 @@ export default function Atelier() {
             and then ten elements claim five layoutIds — framer cannot tell
             which is the lead, and hides the wrong ones on the way out. That
             is what made the paintings vanish on close. */}
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 pt-8 lg:mx-auto lg:max-w-[1560px] lg:snap-none lg:items-start lg:justify-between lg:gap-6 lg:overflow-visible lg:px-12 lg:pb-0 lg:pt-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="swipe-strip flex snap-x snap-proximity gap-4 overflow-x-auto px-5 pb-6 pt-8 lg:mx-auto lg:max-w-[1560px] lg:snap-none lg:items-start lg:justify-between lg:gap-6 lg:overflow-visible lg:px-12 lg:pb-0 lg:pt-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {HANGS.map((h, i) => (
             <Hang
               key={h.src}
@@ -98,6 +99,7 @@ export default function Atelier() {
             />
           ))}
         </div>
+        <SwipeHint className="mx-5 mt-1" />
       </div>
 
       <Held index={held} onClose={() => setHeld(null)} onStep={step} />
