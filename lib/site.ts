@@ -68,8 +68,9 @@ export const site = {
       { name: "Environmental Design Group", url: "https://www.environmentdesigngroup.com" },
       { name: "KWD Landscape Architecture", url: "https://www.kwdlandscapearchitecture.com" },
       { name: "Nievera Williams Design", url: "https://www.nieverawilliams.com" },
-      // added at her request 2026-10-14; name as she said it, website still to confirm
-      { name: "Vertex Landscape Architecture", url: undefined },
+      // added at her request 2026-10-14 (she said it aloud; the transcripts heard "Vertex").
+      // Brian and Molly Vertesch, Palm Beach practice since 1995, FL Lic 6666691.
+      { name: "Vertesch Landscape Architecture", url: "https://verteschla.com" },
     ],
   },
   publications: [
@@ -392,8 +393,9 @@ export const written = {
   portalsAnswer: "one standard.",
 
   // The homepage snapshot (10-14). Replaces her Principal section on home;
-  // her story lives on Culture only. All five lines are DRAFTS for her
-  // approval, written so none repeats the three stacked sections above it.
+  // her story lives on Culture only. Written in her own vocabulary from her
+  // original site ("to the final touches", "a clean and organized job site"),
+  // and so that none repeats the three stacked sections above it.
   whatLabel: "What we do",
   whatLine: "Building, renovating,",
   whatAnswer: "and caring for homes.",
@@ -401,12 +403,12 @@ export const written = {
     {
       n: "I",
       name: "New Construction",
-      copy: "New custom homes, managed from the first drawings through the final walkthrough.",
+      copy: "Custom homes built new, managed from the first drawings to the final touches.",
     },
     {
       n: "II",
       name: "Renovation",
-      copy: "Renovations and additions held to the same standard as a new build, on a clean and organized site.",
+      copy: "Renovations and additions held to the standard of a new build, on a clean and organized job site.",
     },
     {
       n: "III",
@@ -416,7 +418,7 @@ export const written = {
     {
       n: "IV",
       name: "Historic Renovation",
-      copy: "Older houses brought up to today's standard, keeping the character that made them worth saving.",
+      copy: "Historic and landmark homes brought up to today's standard without losing their character.",
     },
     {
       n: "V",

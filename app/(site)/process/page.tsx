@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
+import Supervision from "@/components/process/Supervision";
 
 export const metadata: Metadata = {
   title: "Process — How a home is made",
@@ -129,39 +130,8 @@ export default function ProcessPage() {
         </div>
       </section>
 
-      {/* 02 — supervision, as a chapter plate */}
-      <section className="relative h-[86svh] min-h-[520px] w-full overflow-hidden plate">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/siobhan-site.jpg"
-          alt="A stair under construction, mid-supervision"
-          loading="lazy"
-          style={{ objectPosition: "50% 38%" }}
-        />
-        <div className="veil-bl absolute inset-x-0 bottom-0 h-[68%]" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-[1560px] px-5 pb-12 lg:px-12 lg:pb-16">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-end lg:gap-14">
-              <div className="lg:col-span-6">
-                <span className="label on-photo text-ceramic">02 — {site.copy.supervisionLabel}</span>
-                <h2 className="on-photo mt-5 text-porcelain">
-                  <span className="display block text-[clamp(27px,6.4vw,34px)] lg:text-[clamp(34px,2.8vw,48px)]">
-                    We do not leave
-                  </span>
-                  <span className="answer mt-0.5 block text-[clamp(29px,6.8vw,36px)] text-ceramic lg:mt-1 lg:text-[clamp(36px,3vw,52px)]">
-                    projects unsupervised.
-                  </span>
-                </h2>
-              </div>
-              <div className="lg:col-span-5 lg:col-start-8">
-                <p className="on-photo answer text-[16px] leading-[1.6] text-porcelain/90 lg:text-[17px]">
-                  {site.copy.supervision}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 02 — supervision. Rebuilt 10-14: no text on the photograph. */}
+      <Supervision />
 
       {/* 03 — the office. The field is only half the company. */}
       <section className="bg-porcelain py-16 grain lg:py-24">

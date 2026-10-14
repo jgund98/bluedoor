@@ -542,3 +542,30 @@ body {
     animation: none;
   }
 }
+
+/* Painter's tape, as on the treads in the supervision photograph (Process 02):
+   a flat blue with a faint fibre and a slightly lighter top edge. */
+.tape {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 5px),
+    #2c5fb6;
+  will-change: transform;
+}
+
+/* The supervision photograph opens from a single taped line as it scrolls in.
+   CSS scroll-driven, so the compositor runs it (phones included); browsers
+   without view timelines, and anyone asking for less motion, see it whole. */
+@keyframes tape-open {
+  from { clip-path: inset(47% 0 47% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .tape-open {
+      animation: tape-open linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 42%;
+    }
+  }
+}

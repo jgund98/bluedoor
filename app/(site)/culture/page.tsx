@@ -201,18 +201,14 @@ export default function CulturePage() {
                   <ul className="mt-5 space-y-3">
                     {d.firms.map((f) => (
                       <li key={f.name}>
-                        {f.url ? (
-                          <a
-                            href={f.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="answer text-[17px] leading-[1.4] text-ink/72 transition-colors duration-500 hover:text-navy"
-                          >
-                            {f.name}
-                          </a>
-                        ) : (
-                          <span className="answer text-[17px] leading-[1.4] text-ink/72">{f.name}</span>
-                        )}
+                        <a
+                          href={f.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="answer text-[17px] leading-[1.4] text-ink/72 transition-colors duration-500 hover:text-navy"
+                        >
+                          {f.name}
+                        </a>
                       </li>
                     ))}
                   </ul>
