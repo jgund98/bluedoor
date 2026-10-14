@@ -146,7 +146,7 @@ export default function Threshold() {
           <motion.div className="absolute inset-0" style={{ transform: look }}>
             <motion.img
               src={BEYOND}
-              alt="A coral stone loggia at dusk"
+              alt="A stone loggia at dusk"
               className="h-full w-full object-cover"
               loading="lazy"
               decoding="async"

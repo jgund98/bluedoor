@@ -25,7 +25,7 @@ const shots = [
   ["process-funnel", "/process/", "The builder as the funnel", -0.15],
   ["process-handoff", "/process/", "The hand-off", -0.15],
   ["build-head", "/build-with-bluedoor/", "A select few homes,", -0.2],
-  ["build-sign", "/build-with-bluedoor/", "Siobhan Zerilla", -0.5],
+  ["build-sign", "/build-with-bluedoor/", "Bluedoor Building", -0.5],
 ];
 
 const browser = await puppeteer.launch({

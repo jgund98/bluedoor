@@ -90,15 +90,15 @@ export default function BuildPage() {
             {/* her brightest work, swipeable — a phone shouldn't end on type */}
             <Ribbon />
 
-            {/* signed. 10-14: her name in the plain display serif, not a script,
-                so nobody has to guess how it is spelled. */}
+            {/* signed by the firm (10-14: no cursive, and less of her; the address
+                block just above already gives the city) */}
             <Reveal delay={0.2}>
               <div className="mt-12 border-t border-navy/15 pt-9 lg:mt-16">
                 <span className="display block whitespace-nowrap text-[clamp(28px,7vw,34px)] tracking-[0.02em] text-navy lg:text-[40px]">
-                  Siobhan Zerilla
+                  {site.name}
                 </span>
                 <span className="label mt-1 block text-ink/45">
-                  {site.principal.title}, {site.name}
+                  {written.heroEyebrow}
                 </span>
               </div>
             </Reveal>
