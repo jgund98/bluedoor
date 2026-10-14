@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { portals, written } from "@/lib/site";
+import { srcSetFor } from "@/lib/img";
 
 type Portal = (typeof portals)[number];
 
@@ -135,8 +136,11 @@ function Panel({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={portal.image}
+                srcSet={srcSetFor(portal.image)}
+                sizes="(min-width: 1024px) 38vw, 100vw"
                 alt=""
                 loading="lazy"
+                decoding="async"
                 style={{ objectPosition: portal.pos }}
               />
             </div>
@@ -173,7 +177,7 @@ function Panel({
           <div className="relative mt-9 min-h-0 flex-1">
             <div className="portal absolute inset-0 overflow-hidden plate ring-1 ring-navy/12">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={portal.image} alt="" loading="lazy" style={{ objectPosition: portal.pos }} />
+              <img src={portal.image} srcSet={srcSetFor(portal.image)} sizes="100vw" alt="" loading="lazy" decoding="async" style={{ objectPosition: portal.pos }} />
             </div>
             <Keystone ground={portal.ground} small />
           </div>

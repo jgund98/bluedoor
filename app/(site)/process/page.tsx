@@ -3,6 +3,7 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
 import Supervision from "@/components/process/Supervision";
+import { srcSetFor } from "@/lib/img";
 
 export const metadata: Metadata = {
   title: "Process — How a home is made",
@@ -123,7 +124,7 @@ export default function ProcessPage() {
                   A true portrait, so it gets an arch at its own proportion. */}
               <RevealPlate className="portal aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/siobhan-arch.jpg" alt="An arched opening on a house under construction" loading="lazy" style={{ objectPosition: "50% 55%" }} />
+                <img src="/images/siobhan-arch.jpg" srcSet={srcSetFor("/images/siobhan-arch.jpg")} sizes="(min-width: 1024px) 40vw, 100vw" alt="An arched opening on a house under construction" loading="lazy" decoding="async" style={{ objectPosition: "50% 55%" }} />
               </RevealPlate>
             </div>
           </div>
@@ -146,8 +147,11 @@ export default function ProcessPage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/living-coastal.jpg"
+                  srcSet={srcSetFor("/images/living-coastal.jpg")}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   alt="A finished living room, ready for its owners"
                   loading="lazy"
+                  decoding="async"
                   style={{ objectPosition: "50% 50%" }}
                 />
               </RevealPlate>

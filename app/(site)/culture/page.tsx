@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
+import { srcSetFor } from "@/lib/img";
 
 export const metadata: Metadata = {
   title: "Culture — the studio behind every Bluedoor home",
@@ -58,8 +59,11 @@ export default function CulturePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/siobhan-site.jpg"
+                  srcSet={srcSetFor("/images/siobhan-site.jpg")}
+                  sizes="(min-width: 1024px) 48vw, 100vw"
                   alt="A stair hall under construction"
                   loading="lazy"
+                  decoding="async"
                   style={{ objectPosition: "50% 50%" }}
                 />
               </RevealPlate>
@@ -75,6 +79,8 @@ export default function CulturePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/siobhan-measuring.jpg"
+                  srcSet={srcSetFor("/images/siobhan-measuring.jpg")}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   alt="Measuring on site"
                   style={{ objectPosition: "40% 50%" }}
                 />
@@ -152,8 +158,11 @@ export default function CulturePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/loggia-arcade.jpg"
+                  srcSet={srcSetFor("/images/loggia-arcade.jpg")}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
                   alt="A loggia arcade, finished and handed over"
                   loading="lazy"
+                  decoding="async"
                   style={{ objectPosition: "50% 50%" }}
                 />
               </RevealPlate>

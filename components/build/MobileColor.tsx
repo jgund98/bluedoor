@@ -17,6 +17,7 @@
  */
 
 import { Reveal, RevealPlate } from "@/components/motion";
+import { srcSetFor } from "@/lib/img";
 
 /** A door, held open, before the page asks for anything. */
 export function Threshold() {
@@ -25,6 +26,9 @@ export function Threshold() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/entry-fanlight.jpg"
+        srcSet={srcSetFor("/images/entry-fanlight.jpg")}
+        sizes="100vw"
+        decoding="async"
         alt="An entry stair rising to a fanlight door"
         // 10-14: the blue arched door already opens the phone hero
         style={{ objectPosition: "50% 58%" }}
@@ -70,7 +74,7 @@ export function Ribbon() {
           <figure key={r.src} className="w-[76vw] shrink-0 snap-start">
             <div className="h-[52vw] overflow-hidden plate ring-1 ring-navy/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={r.src} alt="" loading="lazy" style={{ objectPosition: r.pos }} />
+              <img src={r.src} srcSet={srcSetFor(r.src)} sizes="76vw" alt="" loading="lazy" decoding="async" style={{ objectPosition: r.pos }} />
             </div>
             <figcaption className="label mt-3 text-ink/40">{r.label}</figcaption>
           </figure>

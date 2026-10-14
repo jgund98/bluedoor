@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { site } from "@/lib/site";
 import { Reveal } from "@/components/motion";
+import { srcSetFor } from "@/lib/img";
 
 /**
  * 02 — Project management and site supervision.
@@ -36,8 +37,11 @@ export default function Supervision() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/siobhan-site.jpg"
+            srcSet={srcSetFor("/images/siobhan-site.jpg")}
+            sizes="(min-width: 1024px) 94vw, 100vw"
             alt="A stone stair under construction, its treads papered and edged in blue tape"
             loading="lazy"
+            decoding="async"
           />
         </div>
 

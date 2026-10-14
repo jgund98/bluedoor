@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
 import Inquiry from "@/components/build/Inquiry";
+import { srcSetFor } from "@/lib/img";
 import { Ribbon, Threshold } from "@/components/build/MobileColor";
 
 export const metadata: Metadata = {
@@ -21,6 +22,10 @@ export default function BuildPage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/gate-pineapple.jpg"
+                srcSet={srcSetFor("/images/gate-pineapple.jpg")}
+                sizes="32vw"
+                loading="lazy"
+                decoding="async"
                 alt="A lattice gate at the entrance to a Palm Beach house"
                 style={{ objectPosition: "50% 52%" }}
               />

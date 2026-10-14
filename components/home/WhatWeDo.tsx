@@ -2,6 +2,7 @@
 
 import { written } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
+import { srcSetFor } from "@/lib/img";
 
 /**
  * Her ask (10-14): take her off the homepage and give a visitor the snapshot,
@@ -34,7 +35,7 @@ export default function WhatWeDo() {
 
             <RevealPlate delay={0.08} className="portal mt-9 aspect-[4/5] overflow-hidden plate ring-1 ring-navy/12 lg:mt-10 lg:aspect-[3/4]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/foyer-arched.jpg" alt="An arched foyer looking to the front door" loading="lazy" style={{ objectPosition: "50% 50%" }} />
+              <img src="/images/foyer-arched.jpg" srcSet={srcSetFor("/images/foyer-arched.jpg")} sizes="(min-width: 1024px) 40vw, 100vw" alt="An arched foyer looking to the front door" loading="lazy" decoding="async" style={{ objectPosition: "50% 50%" }} />
             </RevealPlate>
           </div>
 

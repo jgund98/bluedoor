@@ -77,8 +77,8 @@ export default function Atelier() {
       </div>
 
       {/* the picture rail */}
-      <div className="relative mt-16 lg:mt-24">
-        <div className="hair absolute inset-x-0 top-0 h-px" />
+      <div className="relative mt-7 lg:mt-14">
+        <div className="hair absolute inset-x-0 top-0 hidden h-px lg:block" />
 
         {/* ONE hang, two layouts: a swipe on a phone, a salon hang on a desk.
             It must stay one list. A second copy behind `hidden` still mounts,

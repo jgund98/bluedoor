@@ -225,11 +225,17 @@ export default function HeroProcession() {
     };
   }, [current, incoming, turn, hold, held]);
 
-  // the next plate is developed before it is needed
+  // the next plate is developed before it is needed. Waits for the measure,
+  // or a phone would first fetch the 1MB desktop file before switching to its
+  // own slice; and decodes off the main thread, so the dissolve never stalls
+  // on a decode.
   useEffect(() => {
+    if (!box.ready) return;
     const img = new Image();
-    { const nx = PLATES[seq[(current + 1) % seq.length]].src; img.src = box.mobile ? phoneSrc(nx) : nx; }
-  }, [current, seq]);
+    const nx = PLATES[seq[(current + 1) % seq.length]].src;
+    img.src = box.mobile ? phoneSrc(nx) : nx;
+    img.decode().catch(() => {});
+  }, [current, seq, box.ready, box.mobile]);
 
   // As the page begins to scroll, the photograph moves at half speed — the
   // page below is drawn up over the plate, the way a flyleaf is pulled
@@ -275,10 +281,12 @@ export default function HeroProcession() {
       animate(grade, target, { duration: 0.9, ease: [0.4, 0, 0.2, 1] });
     };
 
+    // decode() hands the work to the decoder thread, so the meter's canvas
+    // draw never decodes a full-size photograph on the main thread
+    let alive = true;
     img.src = box.mobile ? phoneSrc(p.src) : p.src;
-    if (img.complete) meter();
-    else img.addEventListener("load", meter, { once: true });
-    return () => img.removeEventListener("load", meter);
+    img.decode().then(() => { if (alive) meter(); }).catch(() => {});
+    return () => { alive = false; };
   }, [shown, seq, box.ready, box.w, box.mobile, grade]);
 
   /* ---- the curtain ---- *
@@ -382,6 +390,7 @@ export default function HeroProcession() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={box.mobile ? phoneSrc(next.src) : next.src}
+                        decoding="async"
                         alt=""
                         className="absolute inset-0 h-full w-full object-cover"
                         style={{

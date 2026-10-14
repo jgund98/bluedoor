@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { gallery, site, type Plate } from "@/lib/site";
 import { Reveal, RevealPlate } from "@/components/motion";
+import { srcSetFor } from "@/lib/img";
 
 export const metadata: Metadata = {
   title: "Portfolio — Selected Work",
@@ -116,7 +117,7 @@ export default function PortfolioPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={s.plate.src}
-                      srcSet={`${s.plate.src.replace("/images/", "/images/g/")} 1200w, ${s.plate.src} 2400w`}
+                      srcSet={srcSetFor(s.plate.src)}
                       sizes={sizesFor(s.span)}
                       alt={s.plate.caption}
                       loading="lazy"
