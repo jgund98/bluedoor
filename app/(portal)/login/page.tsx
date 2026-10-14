@@ -25,7 +25,8 @@ export default async function LoginPage() {
             <LoginForm />
           </div>
         </div>
-        <p className="text-sm text-subtle">Vendors and homeowners receive private links by text or email. They do not sign in here.</p>
+        {/* keeps the form centred between the logo and the foot of the column */}
+        <div aria-hidden className="h-11" />
       </section>
       <section className="relative hidden lg:block">
         <Image src="/images/door-arched.jpg" alt="" fill priority className="object-cover" sizes="60vw" style={{ objectPosition: "50% 45%" }} />
