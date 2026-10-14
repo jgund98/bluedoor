@@ -50,12 +50,14 @@ const PLATES: readonly Plate[] = [
     caption: "Mediterranean elevation, oceanfront",
   },
   {
-    // The stone loggia at dusk: warm, and the lawn and shadowed columns at
-    // lower left give the headline a dark field to sit on. Desktop only.
-    src: "/images/loggia-stone.jpg",
-    pos: "50% 62%",
+    // 10-14: an oceanfront estate from above (she kept asking for an aerial).
+    // The planting and road at lower left are the darkest field in the set
+    // under the headline. The stone loggia stays where it belongs, behind
+    // the door at the finale, so no photograph shows twice. Desktop only.
+    src: "/images/aerial-estate-hero.jpg",
+    pos: "50% 60%",
     posM: "50% 50%",
-    caption: "Coral stone loggia at dusk",
+    caption: "Oceanfront estate, from above",
   },
   {
     src: "/images/kitchen-brass.jpg",

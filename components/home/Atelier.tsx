@@ -65,26 +65,15 @@ export default function Atelier() {
       className="relative overflow-hidden bg-porcelain pb-14 pt-16 grain lg:pb-28 lg:pt-24"
     >
       <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-          <Reveal className="max-w-[560px]">
-            <div className="flex items-center gap-4">
-              <span className="h-px w-10 bg-navy/30" />
-              <span className="label text-navy/75">{written.atelierLabel}</span>
-            </div>
-            <h2 className="mt-6">
-              <span className="display block text-[clamp(28px,6.4vw,34px)] text-ink lg:text-[clamp(32px,2.6vw,44px)]">
-                {written.atelierLine}
-              </span>
-              <span className="answer mt-0.5 block text-[clamp(30px,6.8vw,36px)] text-navy lg:mt-1 lg:text-[clamp(34px,2.8vw,48px)]">
-                {written.atelierAnswer}
-              </span>
-            </h2>
-          </Reveal>
-
-          <Reveal delay={0.1} className="max-w-[420px]">
-            <p className="prose-lux">{written.atelierCopy}</p>
-          </Reveal>
-        </div>
+        {/* 10-14, her words: "I love the photos and keeping them there. I just
+            don't know that we actually even need to say anything. Or if we do,
+            it's minimal." So: one quiet label, no headline, no claim. */}
+        <Reveal>
+          <div className="flex items-center gap-5">
+            <span className="label shrink-0 text-navy/75">{written.atelierLabel}</span>
+            <span className="hair h-px flex-1" />
+          </div>
+        </Reveal>
       </div>
 
       {/* the picture rail */}
@@ -237,7 +226,7 @@ function Held({
             transition={{ duration: 0.7, delay: 0.58, ease: [0.19, 1, 0.22, 1] }}
           >
             <span className="label label-sheet order-1 text-balance text-center leading-[1.9] text-ink/50 lg:order-2 lg:whitespace-nowrap lg:leading-normal">
-              Study {STUDY[index]} — watercolor, painted on completion
+              Study {STUDY[index]} — watercolor
             </span>
 
             <div className="order-2 flex items-center gap-10 lg:contents">

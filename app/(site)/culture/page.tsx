@@ -6,7 +6,7 @@ import { Reveal, RevealPlate } from "@/components/motion";
 export const metadata: Metadata = {
   title: "Culture — the studio behind every Bluedoor home",
   description:
-    "The small studio behind Bluedoor Building, how it runs a project, and the people in the field and in the office.",
+    "The boutique studio behind Bluedoor Building, how it runs a project, and the firms it builds with.",
 };
 
 const DISCIPLINES = [
@@ -24,13 +24,15 @@ export default function CulturePage() {
           <Reveal>
             <span className="label text-navy/75">Culture</span>
             <h1 className="mt-4 lg:mt-3">
+              {/* her words (10-14): "boutique by design instead of a small studio",
+                  and keep "built from the ground up". No name label: her name
+                  is in the first line of the bio, once. */}
               <span className="display block text-[clamp(34px,8vw,44px)] text-ink lg:text-[clamp(48px,4vw,70px)]">
-                A small studio,
+                Boutique by design.
               </span>
               <span className="answer mt-0.5 block text-[clamp(36px,8.4vw,46px)] text-navy lg:mt-1 lg:text-[clamp(50px,4.2vw,74px)]">
-                built from the ground up.
+                Built from the ground up.
               </span>
-              <span className="label mt-6 block text-navy/60">Siobhan Zerilla, Principal</span>
             </h1>
           </Reveal>
 
@@ -49,47 +51,32 @@ export default function CulturePage() {
                 <p className="prose-lux mt-7">{site.copy.siobhanBio2}</p>
               </Reveal>
 
-              {/* two studies, sitting under the copy so the column carries its own weight */}
-              <div className="mt-9 grid grid-cols-2 gap-5">
-                <RevealPlate delay={0.06} className="aspect-[4/5] overflow-hidden plate ring-1 ring-navy/12">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/images/siobhan-measuring.jpg"
-                    alt="Measuring on site"
-                    loading="lazy"
-                    style={{ objectPosition: "48% 46%" }}
-                  />
-                </RevealPlate>
-                <RevealPlate delay={0.12} className="aspect-[4/5] overflow-hidden plate ring-1 ring-navy/12">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/images/siobhan-site.jpg"
-                    alt="Siobhan on a stair under construction"
-                    loading="lazy"
-                    // a 3:2 frame in a 4:5 slot keeps only the middle; she stands at the right edge
-                    style={{ objectPosition: "92% 50%" }}
-                  />
-                </RevealPlate>
-              </div>
+              {/* The stair under construction, shown whole at its own 3:2 so
+                  the site reads before the person in it. (10-14: the drafting
+                  portrait is gone; these two site photos carry the spread.) */}
+              <RevealPlate delay={0.06} className="mt-9 aspect-[3/2] overflow-hidden plate ring-1 ring-navy/12">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/siobhan-site.jpg"
+                  alt="A stair hall under construction"
+                  loading="lazy"
+                  style={{ objectPosition: "50% 50%" }}
+                />
+              </RevealPlate>
 
-              {/* The closing line sits under the studies rather than at the
-                  foot of the portrait column. It is the shortest paragraph
-                  of the four, and it is the only one that can move without
-                  breaking the reading — which is what lets the two columns
-                  finish together instead of stranding 198px of empty page
-                  under the photographs. */}
               <Reveal delay={0.16}>
                 <p className="prose-lux mt-8 text-[16px] leading-[1.7]">{site.copy.siobhanBio4}</p>
               </Reveal>
             </div>
 
             <div className="lg:col-span-5 lg:col-start-8">
+              {/* a true portrait in the arch: measuring out on the slab */}
               <RevealPlate className="portal aspect-[3/4.42] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/siobhan-drafting.jpg"
-                  alt="Siobhan Zerilla reviewing drawings"
-                  style={{ objectPosition: "50% 40%" }}
+                  src="/images/siobhan-measuring.jpg"
+                  alt="Measuring on site"
+                  style={{ objectPosition: "40% 50%" }}
                 />
               </RevealPlate>
 
@@ -164,15 +151,15 @@ export default function CulturePage() {
               <RevealPlate className="portal aspect-[4/5] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/loggia-stone.jpg"
-                  alt="A stone colonnade under construction"
+                  src="/images/loggia-arcade.jpg"
+                  alt="A loggia arcade, finished and handed over"
                   loading="lazy"
-                  style={{ objectPosition: "50% 52%" }}
+                  style={{ objectPosition: "50% 50%" }}
                 />
               </RevealPlate>
               <Reveal delay={0.1}>
                 <p className="answer mt-4 text-[15px] leading-[1.45] text-ink/50">
-                  A site the team is on every day, mid-construction.
+                  Loggia arcade, finished and handed over.
                 </p>
               </Reveal>
             </div>
@@ -180,43 +167,9 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* the team. Portraits drop into site.team as they arrive. */}
-      <section className="bg-porcelain py-16 grain lg:py-24">
-        <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
-          <div className="flex items-center gap-5">
-            <span className="label shrink-0 text-navy/75">{site.copy.teamLabel}</span>
-            <span className="hair h-px flex-1" />
-          </div>
-          <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-4">
-              <Reveal>
-                <h2>
-                  <span className="display block text-[clamp(27px,6.4vw,32px)] text-ink lg:text-[clamp(30px,2.4vw,40px)]">
-                    In the field,
-                  </span>
-                  <span className="answer mt-0.5 block text-[clamp(29px,6.8vw,34px)] text-navy lg:mt-1 lg:text-[clamp(32px,2.6vw,44px)]">
-                    and in the office.
-                  </span>
-                </h2>
-                <p className="prose-lux mt-7 max-w-[380px]">{site.copy.teamIntro}</p>
-              </Reveal>
-            </div>
-            <div className="grid grid-cols-2 gap-6 lg:col-span-6 lg:col-start-6 lg:gap-10">
-              {site.team.map((m, i) => (
-                <RevealPlate key={m.name} delay={i * 0.07}>
-                  <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: m.pos, transform: m.zoom, transformOrigin: "50% 40%" }} />
-                  </div>
-                  <p className="answer mt-4 text-[17px] leading-[1.35] text-ink">{m.name}</p>
-                  <p className="label mt-1.5 text-navy/60">{m.title}</p>
-                  <p className="prose-lux mt-3 text-[15px] leading-[1.6]">{m.short}</p>
-                </RevealPlate>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* The team section was removed 2026-10-14 at her request (the team has
+          changed). It returns once she sends group photos; site.team holds the
+          old entries and nothing renders them. */}
 
       {/* who we build with */}
       <section className="bg-porcelain py-16 grain lg:py-24">
@@ -248,14 +201,18 @@ export default function CulturePage() {
                   <ul className="mt-5 space-y-3">
                     {d.firms.map((f) => (
                       <li key={f.name}>
-                        <a
-                          href={f.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="answer text-[17px] leading-[1.4] text-ink/72 transition-colors duration-500 hover:text-navy"
-                        >
-                          {f.name}
-                        </a>
+                        {f.url ? (
+                          <a
+                            href={f.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="answer text-[17px] leading-[1.4] text-ink/72 transition-colors duration-500 hover:text-navy"
+                          >
+                            {f.name}
+                          </a>
+                        ) : (
+                          <span className="answer text-[17px] leading-[1.4] text-ink/72">{f.name}</span>
+                        )}
                       </li>
                     ))}
                   </ul>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Marcellus, Cormorant_Garamond, Herr_Von_Muellerhoff, Figtree } from "next/font/google";
+import { Marcellus, Cormorant_Garamond, Figtree } from "next/font/google";
 import "../globals.css";
 import { site } from "@/lib/site";
 import Header from "@/components/chrome/Header";
@@ -17,13 +17,6 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-cormorant",
-  display: "swap",
-});
-
-const script = Herr_Von_Muellerhoff({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-script-face",
   display: "swap",
 });
 
@@ -95,7 +88,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${cormorant.variable} ${script.variable} ${figtree.variable}`}
+      className={`${marcellus.variable} ${cormorant.variable} ${figtree.variable}`}
     >
       <body className="antialiased">
         <script

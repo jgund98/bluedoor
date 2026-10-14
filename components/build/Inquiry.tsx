@@ -3,10 +3,36 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const PROJECTS = ["New construction", "Renovation", "Historic restoration", "Not yet decided"];
+// 10-14: the same five things the homepage says Bluedoor does
+const PROJECTS = ["New construction", "Renovation", "Condominium", "Historic renovation", "Estate management", "Not yet decided"];
+
+type State = "idle" | "sending" | "sent" | "failed";
 
 export default function Inquiry() {
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<State>("idle");
+  const sent = state === "sent";
+
+  // 10-14: this used to flip to "thank you" without sending anything. It now
+  // posts to /api/inquiry/, which emails the studio; if that fails, the
+  // visitor is told so instead of being thanked for a note nobody received.
+  async function submit(form: HTMLFormElement) {
+    setState("sending");
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch("/api/inquiry/", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean };
+      if (res.ok && json.ok) {
+        form.reset();
+        setState("sent");
+      } else setState("failed");
+    } catch {
+      setState("failed");
+    }
+  }
 
   return (
     <div className="relative">
@@ -27,7 +53,7 @@ export default function Inquiry() {
             <p className="prose-lux mx-auto mt-4 max-w-[380px] text-[16px]">
               Every inquiry is read personally. You will hear back from the studio shortly.
             </p>
-            <button onClick={() => setSent(false)} className="quiet-link mt-9 inline-block text-navy">
+            <button onClick={() => setState("idle")} className="quiet-link mt-9 inline-block text-navy">
               Write another
             </button>
           </motion.div>
@@ -39,9 +65,9 @@ export default function Inquiry() {
             transition={{ duration: 0.6 }}
             onSubmit={(e) => {
               e.preventDefault();
-              setSent(true);
+              if (state !== "sending") submit(e.currentTarget);
             }}
-            className="border border-navy/15 bg-porcelain px-6 py-9 lg:px-10 lg:py-11"
+            className="relative border border-navy/15 bg-porcelain px-6 py-9 lg:px-10 lg:py-11"
           >
             <div className="grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2">
               <Field label="Name" name="name" required />
@@ -64,6 +90,12 @@ export default function Inquiry() {
               </div>
             </div>
 
+            {/* unseen by people; a bot that fills it is thanked and ignored */}
+            <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+              <label htmlFor="company">Company</label>
+              <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
+
             <div className="mt-7">
               <label htmlFor="message" className="label block text-navy/70">
                 A little about it
@@ -80,14 +112,21 @@ export default function Inquiry() {
             <div className="mt-9 flex items-center justify-between gap-6">
               <button
                 type="submit"
-                className="label bg-navy px-8 py-4 text-porcelain transition-opacity duration-500 hover:opacity-85"
+                disabled={state === "sending"}
+                className="label bg-navy px-8 py-4 text-porcelain transition-opacity duration-500 hover:opacity-85 disabled:opacity-60"
               >
-                Send
+                {state === "sending" ? "Sending" : "Send"}
               </button>
               <span className="answer hidden text-[14px] leading-[1.4] text-ink/45 sm:block">
                 We reply to every inquiry.
               </span>
             </div>
+
+            {state === "failed" && (
+              <p role="alert" className="answer mt-6 text-[16px] leading-[1.5] text-ink/80">
+                Your note could not be sent just now. Please try again in a moment.
+              </p>
+            )}
           </motion.form>
         )}
       </AnimatePresence>

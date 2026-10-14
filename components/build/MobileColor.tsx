@@ -24,9 +24,10 @@ export function Threshold() {
     <RevealPlate className="portal relative -mx-5 mb-11 h-[42svh] overflow-hidden plate lg:hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/door-arched.jpg"
-        alt="An arched entry door flanked by white lattice gates and bougainvillea"
-        style={{ objectPosition: "50% 46%" }}
+        src="/images/entry-fanlight.jpg"
+        alt="An entry stair rising to a fanlight door"
+        // 10-14: the blue arched door already opens the phone hero
+        style={{ objectPosition: "50% 58%" }}
       />
       {/* the chalk of the page, rising into the plate, so the eyebrow beneath
           it doesn't sit on a hard edge */}
@@ -42,12 +43,14 @@ export function Threshold() {
   );
 }
 
+// 10-14: five photographs seen nowhere else outside the portfolio (four of
+// the old five repeated the hero).
 const RIBBON = [
-  { src: "/images/estate-bougainvillea.jpg", label: "Bougainvillea", pos: "50% 55%" },
-  { src: "/images/loggia-pool.jpg", label: "The loggia", pos: "50% 50%" },
-  { src: "/images/estate-palms.jpg", label: "Under the palms", pos: "50% 58%" },
-  { src: "/images/kitchen-scallop.jpg", label: "The kitchen", pos: "50% 50%" },
-  { src: "/images/aerial-oceanfront.jpg", label: "Oceanfront", pos: "50% 50%" },
+  { src: "/images/pool-court.jpg", label: "The pool court", pos: "50% 60%" },
+  { src: "/images/dining-mural.jpg", label: "The dining room", pos: "50% 50%" },
+  { src: "/images/garden-room.jpg", label: "The garden room", pos: "50% 50%" },
+  { src: "/images/loggia-dining.jpg", label: "The loggia", pos: "50% 50%" },
+  { src: "/images/wine-room.jpg", label: "The wine room", pos: "50% 50%" },
 ];
 
 /** Her brightest work, swipeable, after the ask. */

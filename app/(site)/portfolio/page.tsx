@@ -58,6 +58,12 @@ function hang(plates: readonly Plate[]): Slot[][] {
 }
 
 
+/** How wide a plate draws, from its column span, so srcset can choose. */
+function sizesFor(span: string) {
+  const cols = Number(span.match(/col-span-(\d+)/)?.[1] ?? 12);
+  return `(min-width: 1024px) ${Math.round((cols / 12) * 96)}vw, 100vw`;
+}
+
 export default function PortfolioPage() {
   return (
     <>
@@ -105,8 +111,18 @@ export default function PortfolioPage() {
               <div key={s.plate.src} className={`${s.span} ${s.lift}`}>
                 <RevealPlate>
                   <div className={`portal-shallow overflow-hidden plate ${s.ratio}`}>
+                    {/* 10-14: 79 plates. A phone takes the 1200px copy in
+                        /images/g/; a desk still gets the full photograph. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.plate.src} alt={s.plate.caption} loading="lazy" style={s.plate.pos ? { objectPosition: s.plate.pos } : undefined} />
+                    <img
+                      src={s.plate.src}
+                      srcSet={`${s.plate.src.replace("/images/", "/images/g/")} 1200w, ${s.plate.src} 2400w`}
+                      sizes={sizesFor(s.span)}
+                      alt={s.plate.caption}
+                      loading="lazy"
+                      decoding="async"
+                      style={s.plate.pos ? { objectPosition: s.plate.pos } : undefined}
+                    />
                   </div>
                   <p className="answer mt-4 text-[15px] leading-[1.4] text-ink/55">{s.plate.caption}</p>
                 </RevealPlate>

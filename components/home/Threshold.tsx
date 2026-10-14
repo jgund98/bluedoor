@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 import { site, written } from "@/lib/site";
-import { DoorCase, DoorLeaf } from "@/components/Door";
+import { DOOR_RATIO, DoorCase, DoorLeaf } from "@/components/Door";
 
 const BEYOND = "/images/loggia-stone.jpg";
 
@@ -26,25 +26,30 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export default function Threshold() {
   const ref = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const head = useRef<HTMLHeadingElement>(null);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
-  const [box, setBox] = useState({ w: 1440, h: 900, mobile: false, ready: false });
+  const [box, setBox] = useState({ w: 1440, h: 900, headBottom: 300, mobile: false, ready: false });
   useMeasure(() => {
     const el = stage.current;
     if (!el) return;
-    const measure = () => {
+    const measure = (force = false) => {
       const r = el.getBoundingClientRect();
       if (!r.width || !r.height) return;
+      // where the headline ends, so the door (and its casing) can never ride up into it
+      const hb = head.current ? head.current.getBoundingClientRect().bottom - r.top : r.height * 0.36;
       setBox((prev) => {
         const mobile = r.width < 1024;
         // Same as the hero: a phone's stage changes height as the URL bar
         // collapses, and re-laying the door out mid-scroll reads as a glitch.
-        if (prev.ready && mobile && Math.round(r.width) === Math.round(prev.w)) return prev;
-        return { w: r.width, h: r.height, mobile, ready: true };
+        if (!force && prev.ready && mobile && Math.round(r.width) === Math.round(prev.w)) return prev;
+        return { w: r.width, h: r.height, headBottom: hb, mobile, ready: true };
       });
     };
     measure();
-    const ro = new ResizeObserver(measure);
+    // the display face can arrive after first paint and change the headline's height
+    document.fonts?.ready.then(() => measure(true));
+    const ro = new ResizeObserver(() => measure());
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
@@ -56,9 +61,22 @@ export default function Threshold() {
    * height does not, and on a phone the two drift apart the moment the URL
    * bar collapses — which is what let the room show above the doors.
    */
-  const doorW = box.mobile ? Math.min(box.w * 0.66, 340) : Math.min(box.w * 0.27, 386);
-  const doorHPct = box.mobile ? 50 : 56;
-  const sillPct = box.mobile ? 10 : 9;
+  /*
+   * 10-14: the door is drawn to a fixed architectural proportion (a true
+   * semicircular head on straight jambs), so its height and width move
+   * together in px. It takes the space between the headline and the sill,
+   * and never wider than the column allows.
+   */
+  const sillPct = box.mobile ? 9 : 7;
+  const casing = 0.07; // casing width as a share of the door width (see Door.tsx)
+  const gap = box.mobile ? 30 : 40;
+  const maxW = box.mobile ? Math.min(box.w * 0.62, 300) : Math.min(box.w * 0.24, 330);
+  const room = box.h * (1 - sillPct / 100) - box.headBottom - gap;
+  // the casing rises above the opening by its own width, so it counts against the room
+  const doorW = Math.max(120, Math.min(maxW, room / (DOOR_RATIO + casing)));
+  const doorH = doorW * DOOR_RATIO;
+  const doorHPct = (doorH / box.h) * 100;
+  const g = { W: doorW, H: doorH };
 
   /* the leaves swing */
   const swing = useTransform(p, (v) => easeInOut(seg(v, 0.06, 0.44)));
@@ -73,9 +91,9 @@ export default function Threshold() {
   const insetX = useTransform(bloom, (b) => (box.w - lerp(doorW, box.w, b)) / 2);
   const insetTop = useTransform(bloom, (b) => lerp(100 - doorHPct - sillPct, 0, b));
   const insetBottom = useTransform(bloom, (b) => lerp(sillPct, 0, b));
+  // a true semicircle: the same radius across and down, in px
   const rx = useTransform(bloom, (b) => lerp(doorW / 2, 0, b));
-  const ry = useTransform(bloom, (b) => lerp(doorHPct * 0.34, 0, b));
-  const clip = useMotionTemplate`inset(${insetTop}% ${insetX}px ${insetBottom}% ${insetX}px round ${rx}px ${rx}px 2px 2px / ${ry}% ${ry}% 0px 0px)`;
+  const clip = useMotionTemplate`inset(${insetTop}% ${insetX}px ${insetBottom}% ${insetX}px round ${rx}px ${rx}px 0px 0px)`;
 
   /* The doorway should look level into the room, not down at the floor —
      the picture rides down so the opening frames its middle, and settles
@@ -128,7 +146,7 @@ export default function Threshold() {
           <motion.div className="absolute inset-0" style={{ transform: look }}>
             <motion.img
               src={BEYOND}
-              alt="A stone colonnade, under construction"
+              alt="A coral stone loggia at dusk"
               className="h-full w-full object-cover"
               loading="lazy"
               decoding="async"
@@ -143,12 +161,14 @@ export default function Threshold() {
             className="absolute left-1/2 -translate-x-1/2"
             style={{
               width: doorW,
-              height: doorHPct + "%",
+              height: doorH,
               bottom: sillPct + "%",
               opacity: frameFade,
             }}
           >
-            <DoorCase medallion={box.mobile ? 42 : 52}>
+            {/* 10-14: no medallion on the door. It sat over "with a door." and
+                over the head of the arch; the seal closes the finale instead. */}
+            <DoorCase g={g}>
               {/* the leaves hang inside the arch and are cut by it, so the
                   curve runs unbroken across the pair */}
               <motion.div
@@ -160,8 +180,8 @@ export default function Threshold() {
                   opacity: leafFade,
                 }}
               >
-                <DoorLeaf side="left" turn={leftTurn} shade={shade} />
-                <DoorLeaf side="right" turn={rightTurn} shade={shade} />
+                <DoorLeaf side="left" turn={leftTurn} shade={shade} g={g} />
+                <DoorLeaf side="right" turn={rightTurn} shade={shade} g={g} />
               </motion.div>
             </DoorCase>
           </motion.div>
@@ -169,11 +189,11 @@ export default function Threshold() {
 
         {/* before */}
         <motion.div
-          className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center px-6 pt-[15svh] text-center"
+          className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center px-6 pt-[14svh] text-center lg:pt-[11vh]"
           style={{ opacity: openingFade }}
         >
           <span className="label text-navy/70">{written.inviteLabel}</span>
-          <h2 className="mt-6 text-ink">
+          <h2 ref={head} className="mt-6 text-ink">
             <span className="display block text-[clamp(28px,7vw,36px)] lg:text-[clamp(38px,3.2vw,54px)]">
               Every home begins
             </span>

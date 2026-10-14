@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { site, written } from "@/lib/site";
-import { Reveal, RevealPlate, Signature } from "@/components/motion";
+import { Reveal, RevealPlate } from "@/components/motion";
 import Inquiry from "@/components/build/Inquiry";
 import { Ribbon, Threshold } from "@/components/build/MobileColor";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function BuildPage() {
   return (
-    <section className="relative bg-chalk pb-20 pt-[124px] grain lg:pb-28 lg:pt-[168px]">
+    <section className="relative overflow-x-clip bg-chalk pb-20 pt-[124px] grain lg:pb-28 lg:pt-[168px]">
       <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
           {/* the door, held open */}
@@ -85,12 +85,13 @@ export default function BuildPage() {
             {/* her brightest work, swipeable — a phone shouldn't end on type */}
             <Ribbon />
 
-            {/* signed */}
+            {/* signed. 10-14: her name in the plain display serif, not a script,
+                so nobody has to guess how it is spelled. */}
             <Reveal delay={0.2}>
-              <div className="mt-12 lg:mt-16">
-                <Signature className="script block whitespace-nowrap text-[clamp(48px,11vw,66px)] text-navy lg:text-[78px]">
+              <div className="mt-12 border-t border-navy/15 pt-9 lg:mt-16">
+                <span className="display block whitespace-nowrap text-[clamp(28px,7vw,34px)] tracking-[0.02em] text-navy lg:text-[40px]">
                   Siobhan Zerilla
-                </Signature>
+                </span>
                 <span className="label mt-1 block text-ink/45">
                   {site.principal.title}, {site.name}
                 </span>

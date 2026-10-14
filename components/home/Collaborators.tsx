@@ -27,8 +27,8 @@ export default function Collaborators() {
             <a
               key={`${c.name}-${i}`}
               href={c.url}
-              target="_blank"
-              rel="noreferrer"
+              target={c.url ? "_blank" : undefined}
+              rel={c.url ? "noreferrer" : undefined}
               className="display shrink-0 whitespace-nowrap text-[19px] text-ink/45 transition-colors duration-500 hover:text-navy lg:text-[24px]"
             >
               {c.name}

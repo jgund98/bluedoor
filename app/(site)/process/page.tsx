@@ -118,9 +118,11 @@ export default function ProcessPage() {
               </Reveal>
             </div>
             <div className="lg:col-span-5 lg:col-start-8">
-              <RevealPlate className="portal-shallow aspect-[4/3] overflow-hidden plate ring-1 ring-navy/12">
+              {/* 10-14: her ask, a job site here instead of the drafting portrait.
+                  A true portrait, so it gets an arch at its own proportion. */}
+              <RevealPlate className="portal aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/siobhan-drafting.jpg" alt="Reviewing drawings" loading="lazy" />
+                <img src="/images/siobhan-arch.jpg" alt="An arched opening on a house under construction" loading="lazy" style={{ objectPosition: "50% 55%" }} />
               </RevealPlate>
             </div>
           </div>
@@ -170,29 +172,20 @@ export default function ProcessPage() {
               <Reveal delay={0.06}>
                 <p className="prose-lux mt-7">{site.copy.office}</p>
               </Reveal>
+            </div>
+            {/* 10-14: the portraits are gone (the team has changed). What the
+                office carries takes the column instead, as a ruled list. */}
+            <div className="lg:col-span-5 lg:col-start-8">
               <Reveal delay={0.12}>
-                <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 border-t border-navy/20 pt-7 sm:grid-cols-3">
+                <span className="label block text-navy/70">What the office carries</span>
+                <ul className="mt-5 border-t border-navy/20">
                   {["Contracts and budgets", "Procurement and bids", "Permits and approvals", "Vendor agreements", "Cost reporting", "Client correspondence"].map((item) => (
-                    <li key={item} className="answer text-[17px] leading-[1.35] text-ink/75">
+                    <li key={item} className="answer border-b border-navy/12 py-3.5 text-[18px] leading-[1.35] text-ink/80 lg:text-[20px]">
                       {item}
                     </li>
                   ))}
                 </ul>
               </Reveal>
-            </div>
-            <div className="lg:col-span-5 lg:col-start-8">
-              <div className="grid grid-cols-2 gap-5">
-                {site.team.map((m, i) => (
-                  <RevealPlate key={m.name} className={i === 1 ? "lg:mt-12" : ""}>
-                    <div className="portal-shallow aspect-[3/4] overflow-hidden plate ring-1 ring-navy/12">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={m.photo} alt={m.name} loading="lazy" style={{ objectPosition: m.pos, transform: m.zoom, transformOrigin: "50% 40%" }} />
-                    </div>
-                    <p className="answer mt-3 text-[16px] leading-[1.35] text-ink/80">{m.name}</p>
-                    <p className="label mt-1 text-navy/60">{m.title}</p>
-                  </RevealPlate>
-                ))}
-              </div>
             </div>
           </div>
         </div>
