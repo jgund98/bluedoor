@@ -392,9 +392,8 @@ export const written = {
   portalsAnswer: "one standard.",
 
   // The homepage snapshot (10-14). Replaces her Principal section on home;
-  // her story lives on Culture only. Historic line is her own wording; the
-  // New Construction line adapts her Luxury Residential copy. Renovation,
-  // Condominiums and Estate Management are DRAFTS for her approval.
+  // her story lives on Culture only. All five lines are DRAFTS for her
+  // approval, written so none repeats the three stacked sections above it.
   whatLabel: "What we do",
   whatLine: "Building, renovating,",
   whatAnswer: "and caring for homes.",
@@ -402,7 +401,7 @@ export const written = {
     {
       n: "I",
       name: "New Construction",
-      copy: "Luxury custom homes, from concept to completion, tailored to the way each client lives.",
+      copy: "New custom homes, managed from the first drawings through the final walkthrough.",
     },
     {
       n: "II",
@@ -412,12 +411,12 @@ export const written = {
     {
       n: "III",
       name: "Condominiums",
-      copy: "Condominium residences renovated and finished to the same standard, coordinated with the building from the first day.",
+      copy: "Condominium residences renovated and finished, coordinated with the building and its management from the first day.",
     },
     {
       n: "IV",
       name: "Historic Renovation",
-      copy: "Beyond the new and modern, the delicate art of historic and landmark homes, carefully renewed.",
+      copy: "Older houses brought up to today's standard, keeping the character that made them worth saving.",
     },
     {
       n: "V",
