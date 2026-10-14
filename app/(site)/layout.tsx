@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-bluedoor.jpg",
+        url: "/og-bluedoor-2.jpg",
         width: 1200,
         height: 630,
         alt: "Bluedoor Building",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bluedoor Building",
     description: "Boutique custom homes. Palm Beach.",
-    images: ["/og-bluedoor.jpg"],
+    images: ["/og-bluedoor-2.jpg"],
   },
   icons: { icon: "/images/logo.png", apple: "/apple-touch-icon.png" },
 };
