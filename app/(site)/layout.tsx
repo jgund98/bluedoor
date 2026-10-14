@@ -35,29 +35,30 @@ export const metadata: Metadata = {
     template: "%s | Bluedoor Building",
   },
   description: site.bio,
+  // The link preview (iMessage, SMS, social): the logo first, almost no words.
   openGraph: {
     title: "Bluedoor Building",
-    description: site.bio,
+    description: "Boutique custom homes. Palm Beach.",
     url: site.deployUrl,
     siteName: site.name,
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/og.jpg",
+        url: "/og-bluedoor.jpg",
         width: 1200,
         height: 630,
-        alt: "A Bluedoor Building home in Palm Beach, Florida",
+        alt: "Bluedoor Building",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Bluedoor Building",
-    description: site.bio,
-    images: ["/og.jpg"],
+    description: "Boutique custom homes. Palm Beach.",
+    images: ["/og-bluedoor.jpg"],
   },
-  icons: { icon: "/images/logo.png" },
+  icons: { icon: "/images/logo.png", apple: "/apple-touch-icon.png" },
 };
 
 const schema = {
