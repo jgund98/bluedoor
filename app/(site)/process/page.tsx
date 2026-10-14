@@ -163,11 +163,38 @@ export default function ProcessPage() {
         </div>
       </section>
 
-      {/* 10-14, video 10: "This needs to go away. These photos need to go away."
-          said as the office chapter and then its portraits were on screen. The
-          chapter is gone; its paragraph still lives on Culture under The Office. */}
+      {/* 03 — the office. The field is only half the company. */}
+      <section className="bg-porcelain py-16 grain lg:py-24">
+        <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-6">
+              <Stage n="03" title="Fully staffed, on site and in the office" />
+              <Reveal delay={0.06}>
+                <p className="prose-lux mt-7">{site.copy.office}</p>
+              </Reveal>
+            </div>
+            {/* 10-14: the portraits are gone (the team has changed). What the
+                office carries takes the column instead, as a ruled list.
+                The chapter itself stays: on 10-09 she asked for exactly this,
+                "a little blurb how we are fully staffed on the field and behind
+                the scenes in the office" before the hand-off. */}
+            <div className="lg:col-span-5 lg:col-start-8">
+              <Reveal delay={0.12}>
+                <span className="label block text-navy/70">What the office carries</span>
+                <ul className="mt-5 border-t border-navy/20">
+                  {["Contracts and budgets", "Procurement and bids", "Permits and approvals", "Vendor agreements", "Cost reporting", "Client correspondence"].map((item) => (
+                    <li key={item} className="answer border-b border-navy/12 py-3.5 text-[18px] leading-[1.35] text-ink/80 lg:text-[20px]">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      {/* 03 — the hand-off */}
+      {/* 04 — the hand-off */}
       <section className="bg-chalk py-16 grain lg:py-24">
         <div className="mx-auto max-w-[1560px] px-5 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
@@ -183,7 +210,7 @@ export default function ProcessPage() {
               </RevealPlate>
             </div>
             <div className="lg:col-span-6 lg:col-start-7">
-              <Stage n="03" title="The hand-off" />
+              <Stage n="04" title="The hand-off" />
               <Reveal delay={0.06}>
                 <p className="prose-lux mt-7">{site.copy.handOff}</p>
               </Reveal>

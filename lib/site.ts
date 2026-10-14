@@ -149,7 +149,7 @@ export const site = {
     {
       slug: "historic-renovation",
       name: "Historic Renovation",
-      copy: "Exceeding the boundaries of building only new and modern, our team has demonstrated proficiency in the delicate art of historic and landmark restoration.",
+      copy: "Exceeding the boundaries of building only new and modern, our team has demonstrated proficiency in the delicate art of historic and landmark renovation.",
       image: "/images/estate-bougainvillea.jpg",
     },
     {

@@ -213,8 +213,10 @@ function DoorIndex({ onClose }: { onClose: () => void }) {
         variants={{ shut: { x: "-100%" }, closed: { x: 0 } }}
         transition={{ duration: 0.92, ease: EASE }}
       >
-        <div className="pointer-events-none absolute inset-y-[13%] left-[14%] right-[7%] rounded-[3px] border border-porcelain/10" />
-        <div className="pointer-events-none absolute inset-y-[19%] left-[20%] right-[13%] rounded-[3px] border border-porcelain/[0.07]" />
+        {/* 10-14, her rule for the door: the frame is the same dimension on
+            every side. One inset all round, identical on both leaves. */}
+        <div className="pointer-events-none absolute inset-[clamp(20px,5.5vw,56px)] rounded-[3px] border border-porcelain/10" />
+        <div className="pointer-events-none absolute inset-[clamp(30px,8.5vw,86px)] rounded-[3px] border border-porcelain/[0.07]" />
       </motion.div>
 
       {/* right leaf */}
@@ -223,8 +225,8 @@ function DoorIndex({ onClose }: { onClose: () => void }) {
         variants={{ shut: { x: "100%" }, closed: { x: 0 } }}
         transition={{ duration: 0.92, ease: EASE }}
       >
-        <div className="pointer-events-none absolute inset-y-[13%] right-[14%] left-[7%] rounded-[3px] border border-porcelain/10" />
-        <div className="pointer-events-none absolute inset-y-[19%] right-[20%] left-[13%] rounded-[3px] border border-porcelain/[0.07]" />
+        <div className="pointer-events-none absolute inset-[clamp(20px,5.5vw,56px)] rounded-[3px] border border-porcelain/10" />
+        <div className="pointer-events-none absolute inset-[clamp(30px,8.5vw,86px)] rounded-[3px] border border-porcelain/[0.07]" />
       </motion.div>
 
       {/* the seam */}

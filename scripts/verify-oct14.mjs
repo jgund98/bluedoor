@@ -23,7 +23,7 @@ const shots = [
   ["culture-runs", "/culture/", "Daily on the site,", -0.1],
   ["culture-partners", "/culture/", "We keep close", -0.25],
   ["process-funnel", "/process/", "The builder as the funnel", -0.15],
-  ["process-handoff", "/process/", "The hand-off", -0.15],
+  ["process-office", "/process/", "Fully staffed, on site and in the office", -0.15],
   ["build-head", "/build-with-bluedoor/", "A select few homes,", -0.2],
   ["build-sign", "/build-with-bluedoor/", "Siobhan Zerilla", -0.5],
 ];
